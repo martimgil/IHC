@@ -5,6 +5,7 @@ import { Badge } from './components/ui/badge';
 import { useTheme } from './context/ThemeContext';
 import HelpSheet from './components/HelpSheet';
 import OnboardingTutorial from './components/OnboardingTutorial';
+import ScrollBounce from './components/ScrollBounce';
 
 export default function Root() {
   const location = useLocation();
@@ -97,10 +98,12 @@ export default function Root() {
         </header>
 
         {/* Main Content */}
-        <main id="main-content" className="flex-1 overflow-y-auto" role="main">
-          <div className="max-w-7xl mx-auto p-4 pb-20 md:pb-4">
-            <Outlet />
-          </div>
+        <main id="main-content" className="flex-1 flex flex-col min-h-0" role="main">
+          <ScrollBounce>
+            <div className="max-w-7xl mx-auto p-4 pb-20 md:pb-4">
+              <Outlet />
+            </div>
+          </ScrollBounce>
         </main>
 
         {/* Bottom Navigation - Mobile */}
