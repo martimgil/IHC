@@ -163,12 +163,12 @@ export default function HomePage() {
 
       {/* Search */}
       <div className="relative">
-        <label htmlFor="sport-search" className="sr-only">Pesquisar desporto</label>
+        <label htmlFor="sport-search" className="sr-only">Pesquisar outros desportos</label>
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" aria-hidden="true" />
         <Input
           id="sport-search"
           type="search"
-          placeholder="Pesquisar desporto..."
+          placeholder="Pesquisar outros desportos"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-9 h-10 text-sm"
@@ -184,31 +184,61 @@ export default function HomePage() {
         )}
       </div>
 
-      {/* Favourites – horizontal scroll chips */}
-      {!searchQuery && userInterestedSports.length > 0 && (
-        <section aria-labelledby="fav-heading">
-          <h3 id="fav-heading" className="text-sm font-semibold text-muted-foreground mb-2 px-0.5">
-            ⭐ Os teus favoritos
+      {/* Autocomplete Search Results or Favourites Table */}
+      {searchQuery ? (
+        <section aria-labelledby="search-heading" className="mt-4">
+          <h3 id="search-heading" className="text-sm font-semibold text-muted-foreground mb-3 px-0.5">
+            Resultados para "{searchQuery}"
           </h3>
-          <div
-            className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x snap-mandatory"
-            role="list"
-            aria-label="Desportos favoritos"
-          >
-            {userInterestedSports.map(sport => (
-              <button
-                key={sport.id}
-                role="listitem"
-                onClick={() => setSelectedSport(sport)}
-                className="flex items-center gap-2 shrink-0 snap-start px-3 py-2 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px]"
-                aria-label={`${sport.name} – toca para ver detalhes`}
-              >
-                <span className="text-xl" role="img" aria-label={sport.name}>{sport.icon}</span>
-                <span className="text-sm font-medium whitespace-nowrap">{sport.name}</span>
-              </button>
-            ))}
-          </div>
+          {filteredSports.length > 0 ? (
+            <div className="bg-card border rounded-xl overflow-hidden shadow-sm" role="list">
+              {filteredSports.map((sport, idx) => (
+                <div key={sport.id}>
+                  {idx > 0 && <Separator />}
+                  <button
+                    role="listitem"
+                    onClick={() => setSelectedSport(sport)}
+                    className="w-full flex items-center gap-3 p-3 bg-card hover:bg-muted/50 transition-colors text-left focus:outline-none focus:bg-muted"
+                  >
+                    <span className="text-2xl" role="img">{sport.icon}</span>
+                    <span className="text-sm font-medium flex-1">{sport.name}</span>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="py-8 text-center">
+                <p className="text-muted-foreground text-sm">Nenhum desporto encontrado.</p>
+                <Button variant="outline" className="mt-3 h-9 text-sm" onClick={() => setSearchQuery('')}>
+                  Limpar pesquisa
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </section>
+      ) : (
+        userInterestedSports.length > 0 && (
+          <section aria-labelledby="fav-heading" className="mt-4">
+            <h3 id="fav-heading" className="text-sm font-semibold text-muted-foreground mb-3 px-0.5">
+              ⭐ Os teus desportos
+            </h3>
+            <div className="grid grid-cols-2 gap-2" role="list">
+              {userInterestedSports.map(sport => (
+                <button
+                  key={sport.id}
+                  role="listitem"
+                  onClick={() => setSelectedSport(sport)}
+                  className="flex items-center gap-3 p-3 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left focus:outline-none focus:ring-2 focus:ring-primary min-h-[56px]"
+                >
+                  <span className="text-2xl shrink-0" role="img">{sport.icon}</span>
+                  <span className="text-sm font-medium leading-tight">{sport.name}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )
       )}
 
       {/* All Sports – compact grid */}

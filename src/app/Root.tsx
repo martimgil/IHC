@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router';
-import { Bell, Home, User, MapPin, Sun, Moon, HelpCircle, Map, Zap } from 'lucide-react';
+import { Home, Map, User, LogOut, Bell, HelpCircle, UserCircle2, Settings, Zap, ArrowRight, X, Calendar, Sun, Moon } from 'lucide-react';
 import { Badge } from './components/ui/badge';
 import { useTheme } from './context/ThemeContext';
 import { useUser } from './context/UserContext';
@@ -119,53 +119,62 @@ export default function Root() {
 
         {/* Bottom Navigation - Mobile */}
         <nav
-          className="bg-card border-t border-border px-2 py-2 md:hidden safe-area-bottom fixed bottom-0 left-0 right-0 shadow-lg"
+          className="bg-card border-t border-border px-1 py-1 md:hidden safe-area-bottom fixed bottom-0 left-0 right-0 shadow-lg z-50"
           aria-label="Navegação inferior"
         >
           <div className="flex justify-around items-center">
             <Link
               to="/"
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors min-h-[56px] min-w-[64px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/') && location.pathname === '/' ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
+              className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors min-h-[48px] min-w-[60px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/') && location.pathname === '/' ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
               aria-label="Página inicial"
               aria-current={isActive('/') && location.pathname === '/' ? 'page' : undefined}
             >
-              <Home className="w-6 h-6" aria-hidden="true" />
-              <span className="text-xs font-medium">Início</span>
+              <Home className="w-5 h-5 mb-0.5" aria-hidden="true" />
+              <span className="text-[10px] font-medium leading-none">Início</span>
             </Link>
             <Link
               to="/map"
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors min-h-[56px] min-w-[64px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/map') ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
+              className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors min-h-[48px] min-w-[60px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/map') ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
               aria-label="Mapa de locais"
               aria-current={isActive('/map') ? 'page' : undefined}
             >
-              <Map className="w-6 h-6" aria-hidden="true" />
-              <span className="text-xs font-medium">Mapa</span>
+              <Map className="w-5 h-5 mb-0.5" aria-hidden="true" />
+              <span className="text-[10px] font-medium leading-none">Mapa</span>
+            </Link>
+            <Link
+              to="/bookings"
+              className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors min-h-[48px] min-w-[60px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/bookings') ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
+              aria-label="Minhas Reservas"
+              aria-current={isActive('/bookings') ? 'page' : undefined}
+            >
+              <Calendar className="w-5 h-5 mb-0.5" aria-hidden="true" />
+              <span className="text-[10px] font-medium leading-none">Reservas</span>
             </Link>
             <Link
               to="/notifications"
-              className={`relative flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors min-h-[56px] min-w-[64px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/notifications') ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
+              className={`relative flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors min-h-[48px] min-w-[60px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/notifications') ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
               aria-label={`Alertas${unreadCount > 0 ? `, ${unreadCount} não lidas` : ''}`}
               aria-current={isActive('/notifications') ? 'page' : undefined}
             >
-              <Bell className="w-6 h-6" aria-hidden="true" />
+              <Bell className="w-5 h-5 mb-0.5" aria-hidden="true" />
               {unreadCount > 0 && (
                 <Badge
-                  className="absolute top-1 right-2 h-4 w-4 flex items-center justify-center p-0 text-xs"
+                  className="absolute top-0.5 right-2 h-3.5 w-3.5 flex items-center justify-center p-0 text-[9px]"
                   aria-label={`${unreadCount} alertas não lidos`}
                 >
                   {unreadCount}
                 </Badge>
               )}
-              <span className="text-xs font-medium">Alertas</span>
+              <span className="text-[10px] font-medium leading-none">Alertas</span>
             </Link>
             <Link
               to="/profile"
-              className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-colors min-h-[56px] min-w-[64px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/profile') ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
+              className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors min-h-[48px] min-w-[60px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/profile') ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
               aria-label="Perfil"
               aria-current={isActive('/profile') ? 'page' : undefined}
             >
-              <User className="w-6 h-6" aria-hidden="true" />
-              <span className="text-xs font-medium">Perfil</span>
+              <User className="w-5 h-5 mb-0.5" aria-hidden="true" />
+              <span className="text-[10px] font-medium leading-none">Perfil</span>
             </Link>
           </div>
         </nav>
