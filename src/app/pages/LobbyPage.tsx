@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { getLobbyById, getSportById, currentUser, lobbies } from '../data';
+import { useUser } from '../context/UserContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -128,11 +129,21 @@ function RatingSheet({ players, open, onClose }: { players: Lobby['currentPlayer
 export default function LobbyPage() {
   const { lobbyId } = useParams<{ lobbyId: string }>();
   const navigate = useNavigate();
-  const [hasJoined, setHasJoined] = useState(false);
+  const { sessionUser } = useUser();
+  const [hasJoined, setHasJoined] = useState(() => lobbyId === 'lobby-1' || lobbyId === 'lobby-2');
   const [isProcessing, setIsProcessing] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showRating, setShowRating] = useState(false);
   const [followed, setFollowed] = useState<Set<string>>(new Set());
+
+  // Sync state when navigating between lobbies
+  useEffect(() => {
+    if (lobbyId === 'lobby-1') setHasJoined(true);
+    else setHasJoined(false);
+    setShowChat(false);
+    setShowRating(false);
+  }, [lobbyId]);
+
   const [pendingRequests, setPendingRequests] = useState(() =>
     lobbyId === 'lobby-1'
       ? [
@@ -192,17 +203,30 @@ export default function LobbyPage() {
     );
   }
 
-  const spotsLeft = lobby.maxPlayers - lobby.currentPlayers.length;
-  const progressPercentage = (lobby.currentPlayers.length / lobby.maxPlayers) * 100;
+  const myName = sessionUser?.name || currentUser.name;
+
+  // Inject the active user if they have joined the lobby.
+  const displayPlayers = [...lobby.currentPlayers];
+  if (hasJoined && !displayPlayers.find(p => p.name.includes(myName))) {
+    displayPlayers.unshift({ id: 'me', name: `${myName} (Tu)`, level: 'intermedio', skillRating: 7 });
+  }
+
+  const spotsLeft = Math.max(0, lobby.maxPlayers - displayPlayers.length);
+  const progressPercentage = Math.min(100, (displayPlayers.length / lobby.maxPlayers) * 100);
   const canJoin = lobby.status !== 'full' && !hasJoined;
-  const isCreator = lobby.createdBy === currentUser.id;
+
+  const isCreator = !sessionUser && currentUser.id === lobby.createdBy;
 
   const handleJoin = async () => {
     setIsProcessing(true);
-    await new Promise(r => setTimeout(r, 1200));
+    await new Promise(r => setTimeout(r, 800));
     setIsProcessing(false);
     setHasJoined(true);
-    toast.success('Pedido enviado!', { description: 'O criador irá aprovar a tua entrada.' });
+    if (lobby.isUrgent) {
+      toast.success('Entraste no jogo!', { description: 'Sendo uma atividade urgente, a entrada é imediata.' });
+    } else {
+      toast.success('Pedido enviado!', { description: 'O criador irá aprovar a tua entrada.' });
+    }
   };
 
   const handleLeave = () => {
@@ -220,9 +244,9 @@ export default function LobbyPage() {
   };
 
   const generateTeams = () => {
-    if (lobby.currentPlayers.length < lobby.minPlayers) return null;
-    const sorted = [...lobby.currentPlayers].sort((a, b) => (b.skillRating || 0) - (a.skillRating || 0));
-    const t1: typeof lobby.currentPlayers = [], t2: typeof lobby.currentPlayers = [];
+    if (displayPlayers.length < lobby.minPlayers) return null;
+    const sorted = [...displayPlayers].sort((a, b) => (b.skillRating || 0) - (a.skillRating || 0));
+    const t1: typeof displayPlayers = [], t2: typeof displayPlayers = [];
     sorted.forEach((p, i) => { if (i % 2 === 0) t1.push(p); else t2.push(p); });
     return { t1, t2 };
   };
@@ -284,6 +308,52 @@ export default function LobbyPage() {
         </CardContent>
       </Card>
 
+      {/* Action Buttons (Moved to Top) */}
+      <div className="space-y-2">
+        {canJoin && (
+          <Button className="w-full h-12 text-sm md:text-base font-semibold" onClick={handleJoin} disabled={isProcessing}>
+            {isProcessing
+              ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />A enviar pedido...</>
+              : <><UserPlus className="w-5 h-5 mr-2" />Juntar-me ao Grupo</>}
+          </Button>
+        )}
+
+        {hasJoined && (
+          <>
+            {displayPlayers.length >= lobby.minPlayers && (
+              <Button className="w-full h-12 text-sm md:text-base font-semibold bg-green-600 hover:bg-green-700 text-white" onClick={() => {
+                toast.success('Pagamento confirmado!', { description: 'Vaga garantida!' });
+                navigate('/');
+              }}>
+                <Euro className="w-5 h-5 mr-2" />Confirmar Pagamento ({lobby.pricePerPerson.toFixed(2)}€)
+              </Button>
+            )}
+            <div className="flex gap-2">
+              <Button variant="outline" className="flex-1 h-10 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-700 text-xs md:text-sm font-semibold" onClick={() => setShowRating(true)}>
+                <Star className="w-4 h-4 mr-1.5" />Avaliar Formação
+              </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="outline" className="flex-1 h-10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/40 text-xs md:text-sm font-semibold">
+                    <LogOut className="w-4 h-4 mr-1.5" />Sair do Grupo
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Sair do grupo?</AlertDialogTitle>
+                    <AlertDialogDescription>A tua vaga ficará disponível para outros jogadores.</AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction className="bg-destructive text-destructive-foreground" onClick={handleLeave}>Sair</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          </>
+        )}
+      </div>
+
       {/* Alerts */}
       {lobby.isUrgent && (
         <Alert className="border-orange-200 bg-orange-50 dark:bg-orange-950/40 dark:border-orange-800">
@@ -332,11 +402,11 @@ export default function LobbyPage() {
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Jogadores no Grupo</CardTitle>
-          <CardDescription>{lobby.currentPlayers.length} de {lobby.maxPlayers} vagas</CardDescription>
+          <CardDescription>{displayPlayers.length} de {lobby.maxPlayers} vagas</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {lobby.currentPlayers.map((player, idx) => (
+            {displayPlayers.map((player, idx) => (
               <div key={player.id} className="flex items-center gap-3 py-1">
                 <Avatar className="w-9 h-9">
                   <AvatarFallback className="bg-primary/10 text-primary text-xs">
@@ -347,12 +417,12 @@ export default function LobbyPage() {
                   <p className="font-semibold text-sm truncate">{player.name}</p>
                   <p className="text-xs text-muted-foreground">{player.level}{player.skillRating ? ` · ⭐ ${player.skillRating}/10` : ''}</p>
                 </div>
-                {idx === 0 && (
+                {player.id === lobby.createdBy && (
                   <Badge variant="outline" className="text-xs shrink-0 border-amber-300 text-amber-700">
                     <Shield className="w-3 h-3 mr-1" />Criador
                   </Badge>
                 )}
-                {idx > 0 && (
+                {player.id !== lobby.createdBy && player.id !== 'me' && (
                   <button
                     onClick={() => {
                       setFollowed(prev => {
@@ -423,53 +493,8 @@ export default function LobbyPage() {
         )}
       </Card>
 
-      {/* Action Buttons */}
-      <div className="space-y-2 pb-4">
-        {canJoin && (
-          <Button className="w-full h-12" onClick={handleJoin} disabled={isProcessing}>
-            {isProcessing
-              ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />A enviar pedido...</>
-              : <><UserPlus className="w-4 h-4 mr-2" />Juntar-me ao Grupo</>}
-          </Button>
-        )}
-
-        {hasJoined && (
-          <>
-            {lobby.currentPlayers.length >= lobby.minPlayers && (
-              <Button className="w-full h-12" onClick={() => {
-                toast.success('Pagamento confirmado!', { description: 'Vaga garantida!' });
-                navigate('/');
-              }}>
-                <Euro className="w-4 h-4 mr-2" />Confirmar Pagamento ({lobby.pricePerPerson.toFixed(2)}€)
-              </Button>
-            )}
-            <Button variant="outline" className="w-full h-10 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-700" onClick={() => setShowRating(true)}>
-              <Star className="w-4 h-4 mr-2" />Avaliar Jogadores
-            </Button>
-            {/* Leave (R12) */}
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="ghost" className="w-full h-10 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40">
-                  <LogOut className="w-4 h-4 mr-2" />Sair do Grupo
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Sair do grupo?</AlertDialogTitle>
-                  <AlertDialogDescription>A tua vaga ficará disponível para outros jogadores.</AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction className="bg-destructive text-destructive-foreground" onClick={handleLeave}>Sair</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </>
-        )}
-      </div>
-
       {/* Rating Sheet (R21) */}
-      <RatingSheet players={lobby.currentPlayers} open={showRating} onClose={() => setShowRating(false)} />
+      <RatingSheet players={displayPlayers} open={showRating} onClose={() => setShowRating(false)} />
     </div>
   );
 }

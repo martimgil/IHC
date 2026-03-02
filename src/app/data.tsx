@@ -130,7 +130,7 @@ export const lobbies: Lobby[] = [
     maxPlayers: 12,
     pricePerPerson: 5,
     status: 'waiting',
-    createdBy: 'user-alice',
+    createdBy: 'p1',
   },
   {
     id: 'lobby-2',

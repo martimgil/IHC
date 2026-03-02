@@ -209,11 +209,11 @@ export default function ProfilePage() {
 
       {/* Hero Card */}
       <Card className="overflow-hidden border-0 shadow-md">
-        <div className="h-24 bg-gradient-to-r from-primary/80 to-primary" aria-hidden="true" />
-        <CardContent className="px-5 pb-5 -mt-12">
+        <div className="h-16 bg-gradient-to-r from-primary/80 to-primary" aria-hidden="true" />
+        <CardContent className="px-5 pb-5 -mt-8">
           <div className="flex items-end justify-between gap-3 mb-4">
-            <Avatar className="w-20 h-20 border-4 border-card shadow-lg">
-              <AvatarFallback className="bg-primary text-primary-foreground text-2xl font-bold">{initials}</AvatarFallback>
+            <Avatar className="w-16 h-16 border-4 border-card shadow-lg">
+              <AvatarFallback className="bg-primary text-primary-foreground text-xl font-bold">{initials}</AvatarFallback>
             </Avatar>
             <Button variant="outline" size="sm" className="mb-1 min-h-[40px]" onClick={() => setEditOpen(true)} aria-label="Editar perfil">
               <Edit2 className="w-4 h-4 mr-2" />Editar Perfil
@@ -241,67 +241,21 @@ export default function ProfilePage() {
       {/* Suggestions (R17) */}
       <SuggestionsSection />
 
-      {/* Bookings (R07 cancel) */}
-      <Card>
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-primary" />Próximas Reservas
-              </CardTitle>
-              <CardDescription>Toca para detalhes</CardDescription>
-            </div>
-            <Badge className="bg-green-600 text-white">{bookings.length} ativa{bookings.length !== 1 ? 's' : ''}</Badge>
+      <button
+        className="w-full flex items-center justify-between p-4 bg-card border rounded-xl shadow-sm hover:border-amber-500/50 hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-all text-left group focus:outline-none focus:ring-2 focus:ring-amber-400"
+        onClick={() => navigate('/achievements')}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center dark:bg-amber-900/40">
+            <Award className="w-5 h-5 text-amber-600 dark:text-amber-400" />
           </div>
-        </CardHeader>
-        <CardContent className="pt-0 space-y-2">
-          {bookings.length === 0 && (
-            <p className="text-sm text-muted-foreground text-center py-4">Sem reservas ativas.</p>
-          )}
-          {bookings.map((booking, idx) => {
-            const sport = sports.find(s => s.id === booking.sportId);
-            const dateLabel = new Date(booking.date).toLocaleDateString('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' });
-            return (
-              <div key={booking.id}>
-                <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-muted/40 transition-colors">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-xl shrink-0">{sport?.icon}</div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm">{sport?.name}</p>
-                    <p className="text-xs text-muted-foreground truncate">{booking.location}</p>
-                    <p className="text-xs text-primary font-medium">{dateLabel} · {booking.time}</p>
-                  </div>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <CheckCircle className="w-4 h-4 text-green-600" />
-                    {/* Cancel booking (R07) */}
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <button className="p-1 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors" aria-label={`Cancelar ${sport?.name}`}>
-                          <X className="w-4 h-4" />
-                        </button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Cancelar reserva?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Cancelas a reserva de {sport?.name} em {booking.location} no dia {dateLabel}. Serás reembolsado em 100% se cancelares com 24h+ de antecedência.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Manter Reserva</AlertDialogCancel>
-                          <AlertDialogAction className="bg-destructive text-destructive-foreground" onClick={() => cancelBooking(booking.id)}>
-                            Cancelar Reserva
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </div>
-                </div>
-                {idx < bookings.length - 1 && <Separator className="ml-14" />}
-              </div>
-            );
-          })}
-        </CardContent>
-      </Card>
+          <div>
+            <h3 className="font-bold text-sm">As Minhas Conquistas</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">Desbloqueaste 6/10 emblemas</p>
+          </div>
+        </div>
+        <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+      </button>
 
       {/* Sports (R04 - linking to edit) */}
       <Card>
@@ -341,8 +295,6 @@ export default function ProfilePage() {
         <CardHeader className="pb-2"><CardTitle className="text-base">Mais opções</CardTitle></CardHeader>
         <CardContent className="pt-0 space-y-1">
           {[
-            { label: 'Conquistas', icon: <Award className="w-5 h-5 text-amber-500" />, action: () => navigate('/achievements'), badge: '6/10' },
-            { label: 'Notificações', icon: <Bell className="w-5 h-5 text-blue-500" />, action: () => navigate('/notifications'), badge: '2 novas' },
             { label: 'Preferências de Notificação', icon: <Settings className="w-5 h-5 text-muted-foreground" />, action: () => toast.info('Em breve') },
             { label: 'Alterar Localização', icon: <MapPin className="w-5 h-5 text-muted-foreground" />, action: () => setEditOpen(true) },
           ].map(item => (
@@ -353,7 +305,6 @@ export default function ProfilePage() {
             >
               {item.icon}
               <span className="flex-1 font-medium text-sm">{item.label}</span>
-              {item.badge && <Badge variant="secondary" className="text-xs">{item.badge}</Badge>}
               <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
             </button>
           ))}

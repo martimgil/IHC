@@ -11,6 +11,7 @@ import AchievementsPage from "./pages/AchievementsPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MapPage from "./pages/MapPage";
+import BookingsPage from "./pages/BookingsPage";
 import Root from "./Root";
 
 export const router = createBrowserRouter([
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
       { path: "search-location", Component: SearchLocationPage },
       { path: "create-urgent", Component: CreateUrgentEventPage },
       { path: "achievements", Component: AchievementsPage },
+      { path: "bookings", Component: BookingsPage },
       { path: "map", Component: MapPage },
     ],
   },
