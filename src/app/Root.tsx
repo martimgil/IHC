@@ -3,14 +3,26 @@ import { Outlet, Link, useLocation } from 'react-router';
 import { Home, Map, User, LogOut, Bell, HelpCircle, UserCircle2, Settings, Zap, ArrowRight, X, Calendar, Sun, Moon } from 'lucide-react';
 import { Badge } from './components/ui/badge';
 import { useTheme } from './context/ThemeContext';
+import { useUser } from './context/UserContext';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import HelpSheet from './components/HelpSheet';
 import OnboardingTutorial from './components/OnboardingTutorial';
+import ScrollBounce from './components/ScrollBounce';
 
 export default function Root() {
   const location = useLocation();
+  const navigate = useNavigate();
   const unreadCount = 2;
+  const { sessionUser } = useUser();
   const { theme, toggleTheme } = useTheme();
   const [helpOpen, setHelpOpen] = useState(false);
+
+  useEffect(() => {
+    if (!sessionUser) {
+      navigate('/login');
+    }
+  }, [sessionUser, navigate]);
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/';
@@ -33,12 +45,12 @@ export default function Root() {
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <Link
               to="/"
-              className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg"
+              className="flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg group"
               aria-label="Ir para página inicial"
             >
-              <div className="text-2xl" role="img" aria-label="Logo matchIn">⚡</div>
-              <h1 className="text-xl font-bold text-foreground">
-                match<span className="text-primary">In</span>
+              <Zap className="w-6 h-6 text-primary fill-current transition-transform group-hover:scale-110" />
+              <h1 className="text-xl font-extrabold text-foreground tracking-tighter">
+                match<span className="text-primary italic">In</span>
               </h1>
             </Link>
 
@@ -97,10 +109,12 @@ export default function Root() {
         </header>
 
         {/* Main Content */}
-        <main id="main-content" className="flex-1 overflow-y-auto" role="main">
-          <div className="max-w-7xl mx-auto p-4 pb-20 md:pb-4">
-            <Outlet />
-          </div>
+        <main id="main-content" className="flex-1 flex flex-col min-h-0" role="main">
+          <ScrollBounce>
+            <div className="max-w-7xl mx-auto p-4 pb-20 md:pb-4">
+              <Outlet />
+            </div>
+          </ScrollBounce>
         </main>
 
         {/* Bottom Navigation - Mobile */}

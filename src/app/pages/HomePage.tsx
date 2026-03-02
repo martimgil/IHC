@@ -10,7 +10,7 @@ import { Badge } from '../components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { Separator } from '../components/ui/separator';
 import {
-  Search, MapPin, Clock, ChevronRight, Users, Dumbbell, X
+  Search, MapPin, Clock, ChevronRight, Users, Dumbbell, X, Zap
 } from 'lucide-react';
 
 function SportDetailSheet({
@@ -25,68 +25,74 @@ function SportDetailSheet({
 
   return (
     <Sheet open={!!sport} onOpenChange={(o) => { if (!o) onClose(); }}>
-      <SheetContent side="bottom" className="rounded-t-2xl pb-8 max-h-[70vh] overflow-y-auto">
-        <SheetHeader className="mb-4 text-left">
-          <div className="flex items-center gap-3">
-            <div className="text-4xl" role="img" aria-label={sport.name}>{sport.icon}</div>
+      <SheetContent
+        side="bottom"
+        className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+      >
+        <div className="overflow-y-auto max-h-[75vh] px-5">
+          <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
+          <SheetHeader className="mb-4 text-left">
+            <div className="flex items-center gap-3">
+              <div className="text-4xl" role="img" aria-label={sport.name}>{sport.icon}</div>
+              <div>
+                <SheetTitle className="text-xl">{sport.name}</SheetTitle>
+                <p className="text-sm text-muted-foreground mt-0.5">{sport.description}</p>
+              </div>
+            </div>
+          </SheetHeader>
+
+          <div className="space-y-4">
+            {/* Níveis */}
             <div>
-              <SheetTitle className="text-xl">{sport.name}</SheetTitle>
-              <p className="text-sm text-muted-foreground mt-0.5">{sport.description}</p>
-            </div>
-          </div>
-        </SheetHeader>
-
-        <div className="space-y-4">
-          {/* Níveis */}
-          <div>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Níveis disponíveis</p>
-            <div className="flex flex-wrap gap-2">
-              {sport.difficulty.map(d => (
-                <Badge key={d} variant="secondary" className="text-xs capitalize">{d}</Badge>
-              ))}
-            </div>
-          </div>
-
-          {/* Players + Materials */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-muted/50 rounded-xl p-3">
-              <div className="flex items-center gap-1.5 mb-1">
-                <Users className="w-4 h-4 text-primary" aria-hidden="true" />
-                <span className="text-xs font-semibold">Jogadores</span>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Níveis disponíveis</p>
+              <div className="flex flex-wrap gap-2">
+                {sport.difficulty.map(d => (
+                  <Badge key={d} variant="secondary" className="text-xs capitalize">{d}</Badge>
+                ))}
               </div>
-              <p className="text-sm font-bold">{sport.minPlayers}–{sport.maxPlayers}</p>
             </div>
-            <div className="bg-muted/50 rounded-xl p-3">
-              <div className="flex items-center gap-1.5 mb-1">
-                <Dumbbell className="w-4 h-4 text-primary" aria-hidden="true" />
-                <span className="text-xs font-semibold">Material</span>
+
+            {/* Players + Materials */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-muted/50 rounded-xl p-3">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <Users className="w-4 h-4 text-primary" aria-hidden="true" />
+                  <span className="text-xs font-semibold">Jogadores</span>
+                </div>
+                <p className="text-sm font-bold">{sport.minPlayers}–{sport.maxPlayers}</p>
               </div>
-              <p className="text-xs text-muted-foreground leading-snug">
-                {sport.requiredMaterials.slice(0, 2).join(', ')}
-                {sport.requiredMaterials.length > 2 ? '…' : ''}
-              </p>
+              <div className="bg-muted/50 rounded-xl p-3">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <Dumbbell className="w-4 h-4 text-primary" aria-hidden="true" />
+                  <span className="text-xs font-semibold">Material</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-snug">
+                  {sport.requiredMaterials.slice(0, 2).join(', ')}
+                  {sport.requiredMaterials.length > 2 ? '…' : ''}
+                </p>
+              </div>
             </div>
-          </div>
 
-          <Separator />
+            <Separator />
 
-          {/* Actions */}
-          <div className="flex gap-2">
-            <Button
-              className="flex-1"
-              onClick={() => { onClose(); navigate(`/sport/${sport.id}`); }}
-              aria-label={`Ver sessões de ${sport.name}`}
-            >
-              Ver Sessões
-            </Button>
-            <Button
-              variant="outline"
-              className="flex-1"
-              onClick={() => { onClose(); navigate(`/sport/${sport.id}?tab=lobby`); }}
-              aria-label={`Ver lobbies de ${sport.name}`}
-            >
-              Ver Lobbies
-            </Button>
+            {/* Actions */}
+            <div className="flex gap-2">
+              <Button
+                className="flex-1"
+                onClick={() => { onClose(); navigate(`/sport/${sport.id}`); }}
+                aria-label={`Ver sessões de ${sport.name}`}
+              >
+                Ver Sessões
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => { onClose(); navigate(`/sport/${sport.id}?tab=lobby`); }}
+                aria-label={`Ver lobbies de ${sport.name}`}
+              >
+                Ver Lobbies
+              </Button>
+            </div>
           </div>
         </div>
       </SheetContent>
@@ -113,13 +119,23 @@ export default function HomePage() {
     <div className="space-y-4">
       {/* Welcome banner */}
       <section
-        className="bg-primary rounded-2xl px-4 py-4 text-primary-foreground"
+        className="bg-primary rounded-3xl px-6 py-6 text-primary-foreground shadow-lg shadow-primary/20 relative overflow-hidden"
         aria-labelledby="welcome-heading"
       >
-        <h2 id="welcome-heading" className="font-bold text-lg leading-tight">
-          Olá, {firstName}! 👋
-        </h2>
-        <p className="text-sm opacity-80 mt-0.5">Pronto para praticar desporto?</p>
+        <div className="relative z-10 flex items-center justify-between">
+          <div>
+            <h2 id="welcome-heading" className="font-extrabold text-2xl leading-tight flex items-center gap-2">
+              Olá, {firstName}!
+              <Zap className="w-6 h-6 text-primary-foreground fill-current animate-pulse opacity-90" />
+            </h2>
+            <p className="text-sm font-medium opacity-90 mt-1">Pronto para o teu próximo jogo?</p>
+          </div>
+          <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
+            <Dumbbell className="w-6 h-6" />
+          </div>
+        </div>
+        {/* Abstract shapes for premium feel */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl" />
       </section>
 
       {/* Quick Actions – 2 compact cards */}
@@ -224,6 +240,39 @@ export default function HomePage() {
           </section>
         )
       )}
+
+      {/* All Sports – compact grid */}
+      <section aria-labelledby="all-heading">
+        <h3 id="all-heading" className="text-sm font-semibold text-muted-foreground mb-2 px-0.5">
+          {searchQuery ? `Resultados para "${searchQuery}"` : '🏅 Todos os desportos'}
+        </h3>
+
+        {filteredSports.length > 0 ? (
+          <div className="grid grid-cols-2 gap-4" role="list" aria-label="Lista de desportos">
+            {filteredSports.map(sport => (
+              <button
+                key={sport.id}
+                role="listitem"
+                onClick={() => setSelectedSport(sport)}
+                className="flex flex-col items-center justify-center p-6 bg-card border-2 border-border/50 rounded-[2rem] hover:border-primary hover:bg-primary/5 transition-all shadow-sm active:scale-[0.96] focus:outline-none focus:ring-2 focus:ring-primary aspect-square group"
+                aria-label={`${sport.name} – toca para ver detalhes`}
+              >
+                <span className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300" role="img" aria-label={sport.name}>{sport.icon}</span>
+                <span className="text-sm font-extrabold text-foreground tracking-tight text-center leading-tight">{sport.name}</span>
+              </button>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="py-8 text-center">
+              <p className="text-muted-foreground text-sm">Nenhum desporto encontrado.</p>
+              <Button variant="outline" className="mt-3 h-9 text-sm" onClick={() => setSearchQuery('')}>
+                Limpar pesquisa
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+      </section>
 
       {/* Sport Detail Sheet */}
       <SportDetailSheet sport={selectedSport} onClose={() => setSelectedSport(null)} />
