@@ -1,0 +1,286 @@
+import { useNavigate } from 'react-router';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Badge } from '../components/ui/badge';
+import { Button } from '../components/ui/button';
+import { ArrowLeft, Trophy, Lock, Star, Flame, Zap, Heart, MapPin, Users, Calendar } from 'lucide-react';
+
+interface Achievement {
+    id: string;
+    title: string;
+    description: string;
+    icon: React.ReactNode;
+    unlocked: boolean;
+    unlockedAt?: string;
+    category: string;
+    rarity: 'comum' | 'raro' | 'épico' | 'lendário';
+    progress?: { current: number; total: number };
+}
+
+const achievements: Achievement[] = [
+    // Atividade
+    {
+        id: 'first-session',
+        title: 'Primeira Sessão',
+        description: 'Participaste na tua primeira atividade desportiva',
+        icon: <Star className="w-6 h-6" />,
+        unlocked: true,
+        unlockedAt: '2026-01-10',
+        category: 'Atividade',
+        rarity: 'comum',
+    },
+    {
+        id: 'five-sessions',
+        title: 'Veterano',
+        description: 'Completa 5 sessões desportivas',
+        icon: <Flame className="w-6 h-6" />,
+        unlocked: true,
+        unlockedAt: '2026-02-05',
+        category: 'Atividade',
+        rarity: 'comum',
+        progress: { current: 5, total: 5 },
+    },
+    {
+        id: 'ten-sessions',
+        title: 'Entusiasta',
+        description: 'Completa 10 sessões desportivas',
+        icon: <Zap className="w-6 h-6" />,
+        unlocked: true,
+        unlockedAt: '2026-02-20',
+        category: 'Atividade',
+        rarity: 'raro',
+        progress: { current: 10, total: 10 },
+    },
+    {
+        id: 'twenty-sessions',
+        title: 'Maratonista',
+        description: 'Completa 20 sessões desportivas',
+        icon: <Trophy className="w-6 h-6" />,
+        unlocked: false,
+        category: 'Atividade',
+        rarity: 'épico',
+        progress: { current: 12, total: 20 },
+    },
+    // Social
+    {
+        id: 'first-lobby',
+        title: 'Espírito de Equipa',
+        description: 'Juntaste-te ao teu primeiro lobby',
+        icon: <Users className="w-6 h-6" />,
+        unlocked: true,
+        unlockedAt: '2026-01-15',
+        category: 'Social',
+        rarity: 'comum',
+    },
+    {
+        id: 'five-lobbies',
+        title: 'Jogador de Equipa',
+        description: 'Participa em 5 lobbies diferentes',
+        icon: <Users className="w-6 h-6" />,
+        unlocked: false,
+        category: 'Social',
+        rarity: 'raro',
+        progress: { current: 3, total: 5 },
+    },
+    {
+        id: 'create-lobby',
+        title: 'Organizador',
+        description: 'Cria o teu próprio lobby',
+        icon: <Calendar className="w-6 h-6" />,
+        unlocked: false,
+        category: 'Social',
+        rarity: 'raro',
+    },
+    // Exploração
+    {
+        id: 'first-sport',
+        title: 'Explorador',
+        description: 'Experimenta um novo desporto',
+        icon: <MapPin className="w-6 h-6" />,
+        unlocked: true,
+        unlockedAt: '2026-01-10',
+        category: 'Exploração',
+        rarity: 'comum',
+    },
+    {
+        id: 'three-sports',
+        title: 'Polivalente',
+        description: 'Pratica 3 desportos diferentes',
+        icon: <Heart className="w-6 h-6" />,
+        unlocked: true,
+        unlockedAt: '2026-02-01',
+        category: 'Exploração',
+        rarity: 'raro',
+    },
+    {
+        id: 'all-sports',
+        title: 'Atleta Completo',
+        description: 'Experimenta todos os desportos disponíveis',
+        icon: <Trophy className="w-6 h-6" />,
+        unlocked: false,
+        category: 'Exploração',
+        rarity: 'lendário',
+        progress: { current: 4, total: 6 },
+    },
+];
+
+const rarityConfig: Record<string, { label: string; colors: string }> = {
+    comum: { label: 'Comum', colors: 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300' },
+    raro: { label: 'Raro', colors: 'bg-blue-50 dark:bg-blue-950/50 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' },
+    épico: { label: 'Épico', colors: 'bg-purple-50 dark:bg-purple-950/50 border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300' },
+    lendário: { label: 'Lendário', colors: 'bg-amber-50 dark:bg-amber-950/50 border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300' },
+};
+
+const rarityBadgeColors: Record<string, string> = {
+    comum: 'bg-gray-500',
+    raro: 'bg-blue-600',
+    épico: 'bg-purple-600',
+    lendário: 'bg-amber-500',
+};
+
+export default function AchievementsPage() {
+    const navigate = useNavigate();
+    const categories = [...new Set(achievements.map(a => a.category))];
+    const unlockedCount = achievements.filter(a => a.unlocked).length;
+
+    return (
+        <div className="max-w-4xl mx-auto space-y-6">
+            {/* Back Button */}
+            <Button
+                variant="ghost"
+                onClick={() => navigate('/profile')}
+                className="mb-2 min-h-[44px]"
+                aria-label="Voltar ao perfil"
+            >
+                <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+                Voltar ao Perfil
+            </Button>
+
+            {/* Header */}
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                    <h1 className="text-2xl font-bold flex items-center gap-2">
+                        <Trophy className="w-7 h-7 text-amber-500" aria-hidden="true" />
+                        Conquistas
+                    </h1>
+                    <p className="text-muted-foreground mt-1">
+                        {unlockedCount} de {achievements.length} desbloqueadas
+                    </p>
+                </div>
+                {/* Overall Progress */}
+                <div className="flex items-center gap-3">
+                    <div className="w-32 h-3 bg-muted rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-amber-500 rounded-full transition-all"
+                            style={{ width: `${(unlockedCount / achievements.length) * 100}%` }}
+                            role="progressbar"
+                            aria-valuenow={unlockedCount}
+                            aria-valuemin={0}
+                            aria-valuemax={achievements.length}
+                            aria-label={`${unlockedCount} de ${achievements.length} conquistas desbloqueadas`}
+                        />
+                    </div>
+                    <span className="text-sm font-medium text-muted-foreground">
+                        {Math.round((unlockedCount / achievements.length) * 100)}%
+                    </span>
+                </div>
+            </div>
+
+            {/* Achievements by Category */}
+            {categories.map(category => {
+                const catAchievements = achievements.filter(a => a.category === category);
+                const catUnlocked = catAchievements.filter(a => a.unlocked).length;
+
+                return (
+                    <section key={category} aria-labelledby={`cat-${category}`}>
+                        <div className="flex items-center justify-between mb-3">
+                            <h2 id={`cat-${category}`} className="text-lg font-semibold">
+                                {category}
+                            </h2>
+                            <span className="text-sm text-muted-foreground">
+                                {catUnlocked}/{catAchievements.length}
+                            </span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {catAchievements.map(achievement => {
+                                const rarity = rarityConfig[achievement.rarity];
+                                return (
+                                    <Card
+                                        key={achievement.id}
+                                        className={`border-2 transition-all ${achievement.unlocked ? rarity.colors : 'opacity-60 border-border'}`}
+                                    >
+                                        <CardContent className="p-4">
+                                            <div className="flex items-start gap-3">
+                                                {/* Icon */}
+                                                <div
+                                                    className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center ${achievement.unlocked
+                                                            ? 'bg-white/70 dark:bg-black/20'
+                                                            : 'bg-muted'
+                                                        }`}
+                                                    aria-hidden="true"
+                                                >
+                                                    {achievement.unlocked ? (
+                                                        <span className={achievement.rarity === 'lendário' ? 'text-amber-600 dark:text-amber-400' :
+                                                            achievement.rarity === 'épico' ? 'text-purple-600 dark:text-purple-400' :
+                                                                achievement.rarity === 'raro' ? 'text-blue-600 dark:text-blue-400' :
+                                                                    'text-gray-600 dark:text-gray-300'}>
+                                                            {achievement.icon}
+                                                        </span>
+                                                    ) : (
+                                                        <Lock className="w-5 h-5 text-muted-foreground" />
+                                                    )}
+                                                </div>
+
+                                                {/* Content */}
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-start justify-between gap-2 mb-1">
+                                                        <h3 className="font-semibold text-sm leading-tight">
+                                                            {achievement.title}
+                                                        </h3>
+                                                        <Badge
+                                                            className={`text-xs shrink-0 text-white ${rarityBadgeColors[achievement.rarity]}`}
+                                                        >
+                                                            {rarity.label}
+                                                        </Badge>
+                                                    </div>
+                                                    <p className="text-xs text-muted-foreground mb-2 leading-snug">
+                                                        {achievement.description}
+                                                    </p>
+
+                                                    {/* Progress bar (if applicable and not unlocked) */}
+                                                    {achievement.progress && !achievement.unlocked && (
+                                                        <div className="space-y-1">
+                                                            <div className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
+                                                                <div
+                                                                    className="h-full bg-primary rounded-full transition-all"
+                                                                    style={{ width: `${(achievement.progress.current / achievement.progress.total) * 100}%` }}
+                                                                    role="progressbar"
+                                                                    aria-valuenow={achievement.progress.current}
+                                                                    aria-valuemin={0}
+                                                                    aria-valuemax={achievement.progress.total}
+                                                                />
+                                                            </div>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {achievement.progress.current}/{achievement.progress.total}
+                                                            </p>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Unlocked date */}
+                                                    {achievement.unlocked && achievement.unlockedAt && (
+                                                        <p className="text-xs text-muted-foreground/70">
+                                                            Desbloqueado em {new Date(achievement.unlockedAt).toLocaleDateString('pt-PT')}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </CardContent>
+                                    </Card>
+                                );
+                            })}
+                        </div>
+                    </section>
+                );
+            })}
+        </div>
+    );
+}

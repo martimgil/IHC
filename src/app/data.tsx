@@ -130,7 +130,7 @@ export const lobbies: Lobby[] = [
     maxPlayers: 12,
     pricePerPerson: 5,
     status: 'waiting',
-    createdBy: 'Eduardo OrangeTree',
+    createdBy: 'user-alice',
   },
   {
     id: 'lobby-2',
@@ -151,7 +151,7 @@ export const lobbies: Lobby[] = [
     maxPlayers: 10,
     pricePerPerson: 6,
     status: 'waiting',
-    createdBy: 'Eduardo OrangeTree',
+    createdBy: 'user-eduardo',
     isUrgent: true,
     tags: ['Urgente', 'Substituto'],
   },

@@ -1,15 +1,105 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { sports, currentUser } from '../data';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { useUser } from '../context/UserContext';
+import { Sport } from '../types';
+import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
-import { Search, TrendingUp, Clock } from 'lucide-react';
 import { Badge } from '../components/ui/badge';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
+import { Separator } from '../components/ui/separator';
+import {
+  Search, MapPin, Clock, ChevronRight, Users, Dumbbell, X
+} from 'lucide-react';
+
+function SportDetailSheet({
+  sport,
+  onClose,
+}: {
+  sport: Sport | null;
+  onClose: () => void;
+}) {
+  const navigate = useNavigate();
+  if (!sport) return null;
+
+  return (
+    <Sheet open={!!sport} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <SheetContent side="bottom" className="rounded-t-2xl pb-8 max-h-[70vh] overflow-y-auto">
+        <SheetHeader className="mb-4 text-left">
+          <div className="flex items-center gap-3">
+            <div className="text-4xl" role="img" aria-label={sport.name}>{sport.icon}</div>
+            <div>
+              <SheetTitle className="text-xl">{sport.name}</SheetTitle>
+              <p className="text-sm text-muted-foreground mt-0.5">{sport.description}</p>
+            </div>
+          </div>
+        </SheetHeader>
+
+        <div className="space-y-4">
+          {/* Níveis */}
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Níveis disponíveis</p>
+            <div className="flex flex-wrap gap-2">
+              {sport.difficulty.map(d => (
+                <Badge key={d} variant="secondary" className="text-xs capitalize">{d}</Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Players + Materials */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-muted/50 rounded-xl p-3">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Users className="w-4 h-4 text-primary" aria-hidden="true" />
+                <span className="text-xs font-semibold">Jogadores</span>
+              </div>
+              <p className="text-sm font-bold">{sport.minPlayers}–{sport.maxPlayers}</p>
+            </div>
+            <div className="bg-muted/50 rounded-xl p-3">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Dumbbell className="w-4 h-4 text-primary" aria-hidden="true" />
+                <span className="text-xs font-semibold">Material</span>
+              </div>
+              <p className="text-xs text-muted-foreground leading-snug">
+                {sport.requiredMaterials.slice(0, 2).join(', ')}
+                {sport.requiredMaterials.length > 2 ? '…' : ''}
+              </p>
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Actions */}
+          <div className="flex gap-2">
+            <Button
+              className="flex-1"
+              onClick={() => { onClose(); navigate(`/sport/${sport.id}`); }}
+              aria-label={`Ver sessões de ${sport.name}`}
+            >
+              Ver Sessões
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => { onClose(); navigate(`/sport/${sport.id}?tab=lobby`); }}
+              aria-label={`Ver lobbies de ${sport.name}`}
+            >
+              Ver Lobbies
+            </Button>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
 
 export default function HomePage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedSport, setSelectedSport] = useState<Sport | null>(null);
+  const { sessionUser } = useUser();
+  const firstName = (sessionUser?.name ?? currentUser.name).split(' ')[0];
 
   const filteredSports = sports.filter(sport =>
     sport.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -20,200 +110,126 @@ export default function HomePage() {
   );
 
   return (
-    <div className="space-y-6">
-      {/* Welcome Section */}
+    <div className="space-y-4">
+      {/* Welcome banner */}
       <section
-        className="bg-primary rounded-xl p-6 text-primary-foreground"
+        className="bg-primary rounded-2xl px-4 py-4 text-primary-foreground"
         aria-labelledby="welcome-heading"
       >
-        <h2 id="welcome-heading" className="text-2xl font-bold mb-2">
-          Olá, {currentUser.name}! 👋
+        <h2 id="welcome-heading" className="font-bold text-lg leading-tight">
+          Olá, {firstName}! 👋
         </h2>
-        <p className="opacity-90">Pronto para praticar desporto hoje?</p>
+        <p className="text-sm opacity-80 mt-0.5">Pronto para praticar desporto?</p>
       </section>
 
-      {/* Quick Actions */}
-      <section aria-labelledby="quick-actions-heading">
-        <h2 id="quick-actions-heading" className="sr-only">Ações rápidas</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card
-            className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98] border-2 border-orange-200 bg-orange-50 focus-within:ring-2 focus-within:ring-orange-500"
-            onClick={() => navigate('/create-urgent')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                navigate('/create-urgent');
-              }
-            }}
-            aria-label="Criar evento urgente para procurar substituto"
+      {/* Quick Actions – 2 compact cards */}
+      <section aria-labelledby="actions-heading">
+        <h2 id="actions-heading" className="sr-only">Ações rápidas</h2>
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            className="flex items-center gap-2 p-3 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40 active:scale-[0.97] transition-all text-left focus:outline-none focus:ring-2 focus:ring-orange-400 min-h-[60px]"
+            onClick={() => navigate('/lobby')}
+            aria-label="Procurar uma atividade de última hora"
           >
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-2">
-                <Clock className="w-6 h-6 text-orange-600" aria-hidden="true" />
-                <CardTitle className="text-lg">Procuro Substituto</CardTitle>
-              </div>
-              <CardDescription>Encontra um jogador de última hora</CardDescription>
-            </CardHeader>
-          </Card>
-
-          <Card
-            className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98] border-2 border-green-200 bg-green-50 focus-within:ring-2 focus-within:ring-green-500"
+            <Clock className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0" aria-hidden="true" />
+            <span className="text-sm font-semibold text-orange-900 dark:text-orange-100 leading-tight">Última Hora</span>
+          </button>
+          <button
+            className="flex items-center gap-2 p-3 rounded-xl border-2 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/40 active:scale-[0.97] transition-all text-left focus:outline-none focus:ring-2 focus:ring-green-400 min-h-[60px]"
             onClick={() => navigate('/search-location')}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                navigate('/search-location');
-              }
-            }}
             aria-label="Procurar atividades por localização"
           >
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-2">
-                <Search className="w-6 h-6 text-green-600" aria-hidden="true" />
-                <CardTitle className="text-lg">Procurar por Local</CardTitle>
-              </div>
-              <CardDescription>Encontra atividades perto de si</CardDescription>
-            </CardHeader>
-          </Card>
+            <MapPin className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" aria-hidden="true" />
+            <span className="text-sm font-semibold text-green-900 dark:text-green-100 leading-tight">Por Local</span>
+          </button>
         </div>
       </section>
 
-      {/* Search Bar */}
+      {/* Search */}
       <div className="relative">
-        <label htmlFor="sport-search" className="sr-only">
-          Pesquisar desporto
-        </label>
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" aria-hidden="true" />
+        <label htmlFor="sport-search" className="sr-only">Pesquisar desporto</label>
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" aria-hidden="true" />
         <Input
           id="sport-search"
           type="search"
           placeholder="Pesquisar desporto..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 h-12 text-base"
-          aria-describedby="search-hint"
+          className="pl-9 h-10 text-sm"
         />
-        <span id="search-hint" className="sr-only">
-          Digite para filtrar os desportos disponíveis
-        </span>
+        {searchQuery && (
+          <button
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            onClick={() => setSearchQuery('')}
+            aria-label="Limpar pesquisa"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </div>
 
-      {/* User's Interested Sports */}
-      {searchQuery === '' && userInterestedSports.length > 0 && (
-        <section aria-labelledby="favorites-heading">
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-blue-600" aria-hidden="true" />
-            <h3 id="favorites-heading" className="text-lg font-semibold">
-              Os Seus Favoritos
-            </h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {userInterestedSports.map((sport) => (
-              <Card
+      {/* Favourites – horizontal scroll chips */}
+      {!searchQuery && userInterestedSports.length > 0 && (
+        <section aria-labelledby="fav-heading">
+          <h3 id="fav-heading" className="text-sm font-semibold text-muted-foreground mb-2 px-0.5">
+            ⭐ Os teus favoritos
+          </h3>
+          <div
+            className="flex gap-2 overflow-x-auto pb-1 scrollbar-none snap-x snap-mandatory"
+            role="list"
+            aria-label="Desportos favoritos"
+          >
+            {userInterestedSports.map(sport => (
+              <button
                 key={sport.id}
-                className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98] focus-within:ring-2 focus-within:ring-blue-500"
-                onClick={() => navigate(`/sport/${sport.id}`)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    navigate(`/sport/${sport.id}`);
-                  }
-                }}
-                aria-label={`${sport.name}: ${sport.description}`}
+                role="listitem"
+                onClick={() => setSelectedSport(sport)}
+                className="flex items-center gap-2 shrink-0 snap-start px-3 py-2 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px]"
+                aria-label={`${sport.name} – toca para ver detalhes`}
               >
-                <CardHeader>
-                  <div className="flex items-center gap-3">
-                    <div className="text-4xl" role="img" aria-label={sport.name}>
-                      {sport.icon}
-                    </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-lg">{sport.name}</CardTitle>
-                      <CardDescription className="text-sm line-clamp-2">
-                        {sport.description}
-                      </CardDescription>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {sport.minPlayers}-{sport.maxPlayers} jogadores
-                    </Badge>
-                  </div>
-                </CardContent>
-              </Card>
+                <span className="text-xl" role="img" aria-label={sport.name}>{sport.icon}</span>
+                <span className="text-sm font-medium whitespace-nowrap">{sport.name}</span>
+              </button>
             ))}
           </div>
         </section>
       )}
 
-      {/* All Sports */}
-      <section aria-labelledby="all-sports-heading">
-        <h3 id="all-sports-heading" className="text-lg font-semibold mb-4">
-          {searchQuery ? 'Resultados da Pesquisa' : 'Todos os Desportos'}
+      {/* All Sports – compact grid */}
+      <section aria-labelledby="all-heading">
+        <h3 id="all-heading" className="text-sm font-semibold text-muted-foreground mb-2 px-0.5">
+          {searchQuery ? `Resultados para "${searchQuery}"` : '🏅 Todos os desportos'}
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredSports.map((sport) => (
-            <Card
-              key={sport.id}
-              className="cursor-pointer hover:shadow-lg transition-all active:scale-[0.98] focus-within:ring-2 focus-within:ring-blue-500"
-              onClick={() => navigate(`/sport/${sport.id}`)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  navigate(`/sport/${sport.id}`);
-                }
-              }}
-              aria-label={`${sport.name}: ${sport.description}. ${sport.minPlayers} a ${sport.maxPlayers} jogadores`}
-            >
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <div className="text-4xl" role="img" aria-label={sport.name}>
-                    {sport.icon}
-                  </div>
-                  <div className="flex-1">
-                    <CardTitle className="text-lg">{sport.name}</CardTitle>
-                    <CardDescription className="text-sm line-clamp-2">
-                      {sport.description}
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="text-xs">
-                    {sport.minPlayers}-{sport.maxPlayers} jogadores
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-        {filteredSports.length === 0 && (
-          <div
-            className="text-center py-12 text-gray-500"
-            role="status"
-            aria-live="polite"
-          >
-            <p>Nenhum desporto encontrado para "{searchQuery}".</p>
-            <Button
-              variant="outline"
-              className="mt-4"
-              onClick={() => setSearchQuery('')}
-            >
-              Limpar pesquisa
-            </Button>
+
+        {filteredSports.length > 0 ? (
+          <div className="grid grid-cols-3 gap-2" role="list" aria-label="Lista de desportos">
+            {filteredSports.map(sport => (
+              <button
+                key={sport.id}
+                role="listitem"
+                onClick={() => setSelectedSport(sport)}
+                className="flex flex-col items-center gap-1 p-3 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary min-h-[80px]"
+                aria-label={`${sport.name} – toca para ver detalhes`}
+              >
+                <span className="text-3xl" role="img" aria-label={sport.name}>{sport.icon}</span>
+                <span className="text-xs font-medium text-center leading-tight">{sport.name}</span>
+              </button>
+            ))}
           </div>
+        ) : (
+          <Card>
+            <CardContent className="py-8 text-center">
+              <p className="text-muted-foreground text-sm">Nenhum desporto encontrado.</p>
+              <Button variant="outline" className="mt-3 h-9 text-sm" onClick={() => setSearchQuery('')}>
+                Limpar pesquisa
+              </Button>
+            </CardContent>
+          </Card>
         )}
       </section>
+
+      {/* Sport Detail Sheet */}
+      <SportDetailSheet sport={selectedSport} onClose={() => setSelectedSport(null)} />
     </div>
   );
 }

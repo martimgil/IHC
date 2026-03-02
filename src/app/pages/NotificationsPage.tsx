@@ -109,7 +109,7 @@ export default function NotificationsPage() {
         <div>
           <h1 className="text-2xl font-bold">Notificações</h1>
           {unreadCount > 0 && (
-            <p className="text-gray-600 mt-1" aria-live="polite">
+            <p className="text-muted-foreground mt-1" aria-live="polite">
               {unreadCount} não lida{unreadCount > 1 ? 's' : ''}
             </p>
           )}
@@ -140,8 +140,8 @@ export default function NotificationsPage() {
             <Card
               key={notification.id}
               className={`cursor-pointer transition-all active:scale-[0.99] ${!notification.read
-                  ? 'border-blue-200 bg-blue-50 shadow-md'
-                  : 'hover:shadow-md'
+                ? 'border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-950/40 shadow-md'
+                : 'hover:shadow-md'
                 }`}
               onClick={() => !notification.read && handleMarkAsRead(notification.id)}
               role="listitem"
@@ -154,7 +154,7 @@ export default function NotificationsPage() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-1">
-                      <h3 className="font-semibold text-gray-900">
+                      <h3 className="font-semibold text-gray-900 dark:text-foreground">
                         {notification.title}
                       </h3>
                       {!notification.read && (
@@ -163,12 +163,12 @@ export default function NotificationsPage() {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-sm text-gray-700 mb-2">
+                    <p className="text-sm text-gray-700 dark:text-gray-200 mb-2">
                       {notification.message}
                     </p>
                     <div className="flex items-center justify-between gap-2 flex-wrap">
                       <time
-                        className="text-xs text-gray-500"
+                        className="text-xs text-gray-500 dark:text-gray-400"
                         dateTime={notification.timestamp}
                       >
                         {formatTimestamp(notification.timestamp)}
@@ -198,7 +198,7 @@ export default function NotificationsPage() {
                           }}
                           aria-label="Eliminar notificação"
                         >
-                          <Trash2 className="w-4 h-4 text-gray-500" aria-hidden="true" />
+                          <Trash2 className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                         </Button>
                       </div>
                     </div>
@@ -211,9 +211,9 @@ export default function NotificationsPage() {
       ) : (
         <Card>
           <CardContent className="py-12 text-center">
-            <Bell className="w-12 h-12 text-gray-300 mx-auto mb-4" aria-hidden="true" />
-            <p className="text-gray-500 mb-2">Não há notificações</p>
-            <p className="text-sm text-gray-400">
+            <Bell className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" aria-hidden="true" />
+            <p className="text-muted-foreground mb-2">Não há notificações</p>
+            <p className="text-sm text-muted-foreground/70">
               Quando houver novidades, aparecerão aqui
             </p>
           </CardContent>

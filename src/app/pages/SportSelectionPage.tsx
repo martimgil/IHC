@@ -17,11 +17,20 @@ import {
   ChevronRight
 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 
 export default function SportSelectionPage() {
   const { sportId } = useParams<{ sportId: string }>();
   const navigate = useNavigate();
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
+  const [equipmentOpen, setEquipmentOpen] = useState(false);
+
+  const mockEquipment = [
+    { name: 'Raquete', price: 2 },
+    { name: 'Bola', price: 1 },
+    { name: 'Coletes', price: 0.5 },
+    { name: 'Kit completo', price: 4 },
+  ];
 
   const sport = getSportById(sportId || '');
   const sessions = getSessionsBySport(sportId || '');
@@ -76,13 +85,18 @@ export default function SportSelectionPage() {
 
       {/* Required Materials Alert */}
       {sport.requiredMaterials.length > 0 && (
-        <Alert className="border-blue-200 bg-blue-50">
-          <AlertCircle className="h-4 w-4 text-blue-600" />
-          <AlertTitle className="text-blue-950 font-bold">Não t'Esqueças!</AlertTitle>
-          <AlertDescription className="text-blue-900 font-medium">
-            Materiais necessários: {sport.requiredMaterials.join(', ')}
-          </AlertDescription>
-        </Alert>
+        <div className="space-y-2">
+          <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-950/40 dark:border-blue-800">
+            <AlertCircle className="h-4 w-4 text-blue-600" />
+            <AlertTitle className="text-blue-900 dark:text-blue-200">Não te Esqueças!</AlertTitle>
+            <AlertDescription className="text-blue-800 dark:text-blue-300">
+              Materiais necessários: {sport.requiredMaterials.join(', ')}
+            </AlertDescription>
+          </Alert>
+          <Button variant="outline" size="sm" className="w-full" onClick={() => setEquipmentOpen(true)} aria-label="Ver equipamento para aluguer">
+            🎽 Ver equipamento disponível para aluguer
+          </Button>
+        </div>
       )}
 
       {/* Level Filter */}
@@ -253,6 +267,27 @@ export default function SportSelectionPage() {
           </Card>
         )}
       </div>
+
+      {/* Equipment Rental Sheet (R02) */}
+      <Sheet open={equipmentOpen} onOpenChange={o => { if (!o) setEquipmentOpen(false); }}>
+        <SheetContent side="bottom" className="rounded-t-2xl pb-8">
+          <SheetHeader className="mb-4">
+            <SheetTitle>🎽 Equipamento para Aluguer</SheetTitle>
+          </SheetHeader>
+          <p className="text-sm text-muted-foreground mb-4">Equipamento disponível em {sport.name} por sessão:</p>
+          <div className="space-y-2">
+            {mockEquipment.map(e => (
+              <div key={e.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-xl">
+                <span className="font-medium text-sm">{e.name}</span>
+                <span className="text-sm font-bold text-green-600 dark:text-green-400">
+                  {e.price === 0 ? 'Grátis' : `${e.price.toFixed(2)}€/sessão`}
+                </span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-muted-foreground mt-4">* Reserva no local antes da sessão começar.</p>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
