@@ -100,7 +100,7 @@ export default function BookingPage() {
             <Separator />
             <div className="space-y-2">
               <Button
-                className="w-full h-12"
+                className="w-full h-12 bg-green-700 hover:bg-green-800 text-white shadow"
                 onClick={() => navigate('/')}
               >
                 Voltar ao Início

@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { mockNotifications, sports } from '../data';
+import { sports } from '../data';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -16,25 +15,24 @@ import {
 } from 'lucide-react';
 import { Notification } from '../types';
 import { toast } from 'sonner';
+import { useNotifications } from '../context/NotificationContext';
 
 export default function NotificationsPage() {
   const navigate = useNavigate();
-  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+  const { notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification } = useNotifications();
 
   const handleMarkAsRead = (id: string) => {
-    setNotifications(prev =>
-      prev.map(n => n.id === id ? { ...n, read: true } : n)
-    );
+    markAsRead(id);
     toast.success('Marcada como lida');
   };
 
   const handleMarkAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    markAllAsRead();
     toast.success('Todas marcadas como lidas');
   };
 
   const handleDelete = (id: string) => {
-    setNotifications(prev => prev.filter(n => n.id !== id));
+    deleteNotification(id);
     toast.success('Notificação eliminada');
 
     // Announce to screen readers
@@ -46,8 +44,6 @@ export default function NotificationsPage() {
     document.body.appendChild(announcement);
     setTimeout(() => document.body.removeChild(announcement), 1000);
   };
-
-  const unreadCount = notifications.filter(n => !n.read).length;
 
   const getNotificationIcon = (notification: Notification) => {
     const sportIcon = notification.data?.sportId

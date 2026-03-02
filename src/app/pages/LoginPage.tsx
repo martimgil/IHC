@@ -93,7 +93,7 @@ export default function LoginPage() {
                             <CardDescription>Inicia sessão ou usa uma conta de demonstração.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                            <form onSubmit={(e) => { if (validate()) handleLogin(e); }} className="space-y-4" noValidate>
+                            <form onSubmit={(e) => { e.preventDefault(); if (validate()) handleLogin(undefined); }} className="space-y-4" noValidate>
                                 {/* Email */}
                                 <div className="space-y-2">
                                     <Label htmlFor="email" className="font-semibold">Email</Label>
@@ -148,6 +148,18 @@ export default function LoginPage() {
                                             {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                         </button>
                                     </div>
+                                    <AnimatePresence>
+                                        {errors.password && (
+                                            <motion.p
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                exit={{ opacity: 0, height: 0 }}
+                                                className="text-xs font-semibold text-destructive px-1"
+                                            >
+                                                {errors.password}
+                                            </motion.p>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
 
                                 <Button

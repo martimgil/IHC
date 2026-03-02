@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { Outlet, Link, useLocation } from 'react-router';
+import { useState, useEffect } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router';
 import { Home, Map, User, LogOut, Bell, HelpCircle, UserCircle2, Settings, Zap, ArrowRight, X, Calendar, Sun, Moon } from 'lucide-react';
 import { Badge } from './components/ui/badge';
 import { useTheme } from './context/ThemeContext';
 import { useUser } from './context/UserContext';
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNotifications } from './context/NotificationContext';
 import HelpSheet from './components/HelpSheet';
 import OnboardingTutorial from './components/OnboardingTutorial';
 import ScrollBounce from './components/ScrollBounce';
@@ -13,7 +12,7 @@ import ScrollBounce from './components/ScrollBounce';
 export default function Root() {
   const location = useLocation();
   const navigate = useNavigate();
-  const unreadCount = 2;
+  const { unreadCount } = useNotifications();
   const { sessionUser } = useUser();
   const { theme, toggleTheme } = useTheme();
   const [helpOpen, setHelpOpen] = useState(false);
