@@ -41,25 +41,33 @@ interface HelpSheetProps {
 export default function HelpSheet({ open, onClose }: HelpSheetProps) {
     return (
         <Sheet open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
-            <SheetContent side="bottom" className="rounded-t-2xl max-h-[85vh] overflow-y-auto">
-                <SheetHeader className="mb-4">
-                    <SheetTitle className="flex items-center gap-2 text-lg">
-                        <HelpCircle className="w-5 h-5 text-primary" aria-hidden="true" />
-                        Ajuda
-                    </SheetTitle>
-                </SheetHeader>
-                <Accordion type="single" collapsible className="space-y-1">
-                    {faqs.map((faq, i) => (
-                        <AccordionItem key={i} value={`faq-${i}`} className="border rounded-xl px-1">
-                            <AccordionTrigger className="text-sm font-medium text-left py-3 px-2">
-                                {faq.q}
-                            </AccordionTrigger>
-                            <AccordionContent className="text-sm text-muted-foreground px-2 pb-3">
-                                {faq.a}
-                            </AccordionContent>
-                        </AccordionItem>
-                    ))}
-                </Accordion>
+            <SheetContent
+                side="bottom"
+                className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+            >
+                <div className="overflow-y-auto max-h-[75vh] px-5">
+                    <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
+                    <SheetHeader className="mb-6 text-left">
+                        <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
+                            <div className="p-2 bg-primary/10 rounded-xl">
+                                <HelpCircle className="w-6 h-6 text-primary" aria-hidden="true" />
+                            </div>
+                            Ajuda
+                        </SheetTitle>
+                    </SheetHeader>
+                    <Accordion type="single" collapsible className="space-y-2">
+                        {faqs.map((faq, i) => (
+                            <AccordionItem key={i} value={`faq-${i}`} className="border-2 border-border/50 rounded-2xl px-2 bg-card/50 transition-colors data-[state=open]:border-primary/30">
+                                <AccordionTrigger className="text-sm font-bold text-left py-4 px-2 hover:no-underline group">
+                                    <span className="group-hover:text-primary transition-colors">{faq.q}</span>
+                                </AccordionTrigger>
+                                <AccordionContent className="text-sm text-muted-foreground px-2 pb-4 leading-relaxed font-medium">
+                                    {faq.a}
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                </div>
             </SheetContent>
         </Sheet>
     );
