@@ -1,11 +1,15 @@
 import { Sport, Session, Lobby, User, Notification, Player } from './types';
+import { FaSwimmer, FaVolleyballBall, FaBasketballBall, FaTableTennis, FaHiking, FaFutbol } from 'react-icons/fa';
+import React from 'react';
+
+const createIcon = (IconComponent: any) => <IconComponent className="w-[1em] h-[1em]" />;
 
 // Mock sports data
 export const sports: Sport[] = [
   {
     id: 'hidroginastica',
     name: 'Hidroginástica',
-    icon: '🏊',
+    icon: createIcon(FaSwimmer),
     description: 'Exercícios aeróbicos na água, ideal para todas as idades',
     requiredMaterials: ['Fato de banho', 'Touca', 'Toalha'],
     minPlayers: 5,
@@ -15,7 +19,7 @@ export const sports: Sport[] = [
   {
     id: 'voleibol',
     name: 'Voleibol',
-    icon: '🏐',
+    icon: createIcon(FaVolleyballBall),
     description: 'Desporto de equipa dinâmico e competitivo',
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva', 'Joelheiras (opcional)'],
     minPlayers: 6,
@@ -25,7 +29,7 @@ export const sports: Sport[] = [
   {
     id: 'basquetebol',
     name: 'Basquetebol',
-    icon: '🏀',
+    icon: createIcon(FaBasketballBall),
     description: 'Jogo rápido de equipa com muita ação',
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva'],
     minPlayers: 6,
@@ -35,7 +39,7 @@ export const sports: Sport[] = [
   {
     id: 'pickleball',
     name: 'Pickleball',
-    icon: '🏓',
+    icon: createIcon(FaTableTennis),
     description: 'Mistura de ténis, badminton e ténis de mesa',
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva', 'Raquete (fornecida)'],
     minPlayers: 2,
@@ -45,7 +49,7 @@ export const sports: Sport[] = [
   {
     id: 'trilho',
     name: 'Trilho',
-    icon: '⛰️',
+    icon: createIcon(FaHiking),
     description: 'Caminhadas em natureza, adequado para todas as idades',
     requiredMaterials: ['Calçado adequado', 'Água', 'Protetor solar'],
     minPlayers: 1,
@@ -55,7 +59,7 @@ export const sports: Sport[] = [
   {
     id: 'futebol',
     name: 'Futebol',
-    icon: '⚽',
+    icon: createIcon(FaFutbol),
     description: 'O desporto mais popular do mundo',
     requiredMaterials: ['Sapatilhas/Chuteiras', 'Roupa desportiva', 'Caneleiras'],
     minPlayers: 6,
@@ -179,6 +183,7 @@ export const mockNotifications: Notification[] = [
     read: false,
     actionUrl: '/booking?session=session-1',
     actionLabel: 'Ver Sessão',
+    data: { sportId: 'hidroginastica' }
   },
   {
     id: 'notif-2',
@@ -187,6 +192,7 @@ export const mockNotifications: Notification[] = [
     message: 'Lembre-se de levar: Fato de banho e Touca para a hidroginástica',
     timestamp: new Date(Date.now() - 600000).toISOString(),
     read: false,
+    data: { sportId: 'hidroginastica' }
   },
 ];
 

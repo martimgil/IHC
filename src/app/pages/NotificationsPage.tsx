@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { mockNotifications } from '../data';
+import { mockNotifications, sports } from '../data';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
-import { 
+import {
   ArrowLeft,
   Bell,
   CheckCircle,
@@ -36,7 +36,7 @@ export default function NotificationsPage() {
   const handleDelete = (id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
     toast.success('Notificação eliminada');
-    
+
     // Announce to screen readers
     const announcement = document.createElement('div');
     announcement.setAttribute('role', 'status');
@@ -49,8 +49,16 @@ export default function NotificationsPage() {
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
-  const getNotificationIcon = (type: Notification['type']) => {
-    switch (type) {
+  const getNotificationIcon = (notification: Notification) => {
+    const sportIcon = notification.data?.sportId
+      ? sports.find(s => s.id === notification.data.sportId)?.icon
+      : null;
+
+    if (sportIcon) {
+      return <div className="text-2xl w-5 h-5 flex items-center justify-center" role="img">{sportIcon}</div>;
+    }
+
+    switch (notification.type) {
       case 'session-available':
         return <CheckCircle className="w-5 h-5 text-green-600" aria-hidden="true" />;
       case 'booking-failed':
@@ -86,8 +94,8 @@ export default function NotificationsPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Back Button */}
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         onClick={() => navigate(-1)}
         className="mb-2 min-h-[44px]"
         aria-label="Voltar à página anterior"
@@ -107,8 +115,8 @@ export default function NotificationsPage() {
           )}
         </div>
         {unreadCount > 0 && (
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             size="sm"
             onClick={handleMarkAllAsRead}
             className="min-h-[44px]"
@@ -123,19 +131,18 @@ export default function NotificationsPage() {
 
       {/* Notifications List */}
       {notifications.length > 0 ? (
-        <div 
-          className="space-y-3" 
-          role="list" 
+        <div
+          className="space-y-3"
+          role="list"
           aria-label="Lista de notificações"
         >
           {notifications.map((notification) => (
-            <Card 
+            <Card
               key={notification.id}
-              className={`cursor-pointer transition-all active:scale-[0.99] ${
-                !notification.read 
-                  ? 'border-blue-200 bg-blue-50 shadow-md' 
+              className={`cursor-pointer transition-all active:scale-[0.99] ${!notification.read
+                  ? 'border-blue-200 bg-blue-50 shadow-md'
                   : 'hover:shadow-md'
-              }`}
+                }`}
               onClick={() => !notification.read && handleMarkAsRead(notification.id)}
               role="listitem"
               aria-label={`${notification.read ? 'Lida' : 'Não lida'}: ${notification.title}`}
@@ -143,7 +150,7 @@ export default function NotificationsPage() {
               <CardContent className="p-4">
                 <div className="flex items-start gap-3">
                   <div className="mt-1 shrink-0">
-                    {getNotificationIcon(notification.type)}
+                    {getNotificationIcon(notification)}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2 mb-1">
@@ -160,7 +167,7 @@ export default function NotificationsPage() {
                       {notification.message}
                     </p>
                     <div className="flex items-center justify-between gap-2 flex-wrap">
-                      <time 
+                      <time
                         className="text-xs text-gray-500"
                         dateTime={notification.timestamp}
                       >

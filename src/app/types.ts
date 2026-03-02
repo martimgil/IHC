@@ -10,7 +10,7 @@ export type ExperienceLevel =
 export type Sport = {
   id: string;
   name: string;
-  icon: string;
+  icon: any;
   description: string;
   requiredMaterials: string[];
   minPlayers: number;

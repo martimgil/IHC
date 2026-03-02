@@ -26,8 +26,7 @@ export default function ProfilePage() {
   const mockBookings = [
     {
       id: '1',
-      sportName: 'Hidroginástica',
-      icon: '🏊',
+      sportId: 'hidroginastica',
       location: 'Pavilhão Rosa Mota',
       date: '2026-02-26',
       time: '19:00',
@@ -35,11 +34,18 @@ export default function ProfilePage() {
     },
     {
       id: '2',
-      sportName: 'Pickleball',
-      icon: '🎾',
+      sportId: 'pickleball',
       location: 'Centro Desportivo Municipal',
       date: '2026-02-26',
       time: '18:30',
+      status: 'confirmed',
+    },
+    {
+      id: '3',
+      sportId: 'trilho',
+      location: 'Passadiços de Aveiro',
+      date: '2026-03-01',
+      time: '10:00',
       status: 'confirmed',
     },
   ];
@@ -103,22 +109,27 @@ export default function ProfilePage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {mockBookings.map((booking) => (
-            <div
-              key={booking.id}
-              className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-            >
-              <div className="text-3xl">{booking.icon}</div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold">{booking.sportName}</p>
-                <p className="text-sm text-gray-600">{booking.location}</p>
-                <p className="text-sm text-gray-500">
-                  {new Date(booking.date).toLocaleDateString('pt-PT')} às {booking.time}
-                </p>
+          {mockBookings.map((booking) => {
+            const sport = sports.find(s => s.id === booking.sportId);
+            return (
+              <div
+                key={booking.id}
+                className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+              >
+                <div className="text-3xl" role="img" aria-label={sport?.name}>
+                  {sport?.icon}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold">{sport?.name}</p>
+                  <p className="text-sm text-gray-600">{booking.location}</p>
+                  <p className="text-sm text-gray-500">
+                    {new Date(booking.date).toLocaleDateString('pt-PT')} às {booking.time}
+                  </p>
+                </div>
+                <CheckCircle className="w-5 h-5 text-green-600" />
               </div>
-              <CheckCircle className="w-5 h-5 text-green-600" />
-            </div>
-          ))}
+            );
+          })}
         </CardContent>
       </Card>
 

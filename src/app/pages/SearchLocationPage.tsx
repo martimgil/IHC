@@ -28,21 +28,21 @@ export default function SearchLocationPage() {
       name: 'Pavilhão Rosa Mota',
       address: 'Rua Rosa Mota, Aveiro',
       distance: 0.5,
-      availableSports: ['hidroginastica', 'voleibol', 'basquetebol'],
+      availableSports: ['hidroginastica', 'voleibol', 'basquetebol', 'pickleball'],
     },
     {
       id: 'loc-2',
       name: 'Centro Desportivo Municipal',
       address: 'Av. do Desporto, Aveiro',
       distance: 1.2,
-      availableSports: ['pickleball', 'basquetebol', 'voleibol'],
+      availableSports: ['pickleball', 'basquetebol', 'voleibol', 'trilho'],
     },
     {
       id: 'loc-3',
       name: 'Pavilhão Universitário',
       address: 'Universidade de Aveiro',
       distance: 2.0,
-      availableSports: ['voleibol', 'futebol', 'basquetebol'],
+      availableSports: ['voleibol', 'futebol', 'basquetebol', 'pickleball', 'trilho'],
     },
     {
       id: 'loc-4',
@@ -129,6 +129,16 @@ export default function SearchLocationPage() {
                           <MapPin className="w-3 h-3" />
                           {location.address}
                         </CardDescription>
+                        <div className="flex flex-wrap gap-1 mt-2">
+                          {location.availableSports.map(sportId => {
+                            const sport = sports.find(s => s.id === sportId);
+                            return sport ? (
+                              <span key={sportId} className="text-sm" role="img" aria-label={sport.name}>
+                                {sport.icon}
+                              </span>
+                            ) : null;
+                          })}
+                        </div>
                       </div>
                       <div className="flex flex-col items-end gap-1">
                         <Badge variant="secondary">{location.distance} km</Badge>
