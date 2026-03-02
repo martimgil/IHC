@@ -1,0 +1,217 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
+import { mockNotifications } from '../data';
+import { Card, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
+import { Separator } from '../components/ui/separator';
+import { 
+  ArrowLeft,
+  Bell,
+  CheckCircle,
+  AlertCircle,
+  Clock,
+  Calendar,
+  Trash2
+} from 'lucide-react';
+import { Notification } from '../types';
+import { toast } from 'sonner';
+
+export default function NotificationsPage() {
+  const navigate = useNavigate();
+  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
+
+  const handleMarkAsRead = (id: string) => {
+    setNotifications(prev =>
+      prev.map(n => n.id === id ? { ...n, read: true } : n)
+    );
+    toast.success('Marcada como lida');
+  };
+
+  const handleMarkAllAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    toast.success('Todas marcadas como lidas');
+  };
+
+  const handleDelete = (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+    toast.success('Notificação eliminada');
+    
+    // Announce to screen readers
+    const announcement = document.createElement('div');
+    announcement.setAttribute('role', 'status');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.textContent = 'Notificação eliminada';
+    announcement.className = 'sr-only';
+    document.body.appendChild(announcement);
+    setTimeout(() => document.body.removeChild(announcement), 1000);
+  };
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const getNotificationIcon = (type: Notification['type']) => {
+    switch (type) {
+      case 'session-available':
+        return <CheckCircle className="w-5 h-5 text-green-600" aria-hidden="true" />;
+      case 'booking-failed':
+        return <AlertCircle className="w-5 h-5 text-red-600" aria-hidden="true" />;
+      case 'alternative-suggestion':
+        return <Bell className="w-5 h-5 text-blue-600" aria-hidden="true" />;
+      case 'urgent-match':
+        return <Clock className="w-5 h-5 text-orange-600" aria-hidden="true" />;
+      case 'lobby-full':
+        return <CheckCircle className="w-5 h-5 text-green-600" aria-hidden="true" />;
+      case 'reminder':
+        return <Calendar className="w-5 h-5 text-purple-600" aria-hidden="true" />;
+      default:
+        return <Bell className="w-5 h-5 text-gray-600" aria-hidden="true" />;
+    }
+  };
+
+  const formatTimestamp = (timestamp: string) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Agora';
+    if (diffMins < 60) return `Há ${diffMins} minuto${diffMins > 1 ? 's' : ''}`;
+    if (diffHours < 24) return `Há ${diffHours} hora${diffHours > 1 ? 's' : ''}`;
+    if (diffDays < 7) return `Há ${diffDays} dia${diffDays > 1 ? 's' : ''}`;
+    return date.toLocaleDateString('pt-PT');
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-6">
+      {/* Back Button */}
+      <Button 
+        variant="ghost" 
+        onClick={() => navigate(-1)}
+        className="mb-2 min-h-[44px]"
+        aria-label="Voltar à página anterior"
+      >
+        <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+        Voltar
+      </Button>
+
+      {/* Header */}
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold">Notificações</h1>
+          {unreadCount > 0 && (
+            <p className="text-gray-600 mt-1" aria-live="polite">
+              {unreadCount} não lida{unreadCount > 1 ? 's' : ''}
+            </p>
+          )}
+        </div>
+        {unreadCount > 0 && (
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={handleMarkAllAsRead}
+            className="min-h-[44px]"
+            aria-label={`Marcar ${unreadCount} notificações como lidas`}
+          >
+            Marcar todas como lidas
+          </Button>
+        )}
+      </div>
+
+      <Separator />
+
+      {/* Notifications List */}
+      {notifications.length > 0 ? (
+        <div 
+          className="space-y-3" 
+          role="list" 
+          aria-label="Lista de notificações"
+        >
+          {notifications.map((notification) => (
+            <Card 
+              key={notification.id}
+              className={`cursor-pointer transition-all active:scale-[0.99] ${
+                !notification.read 
+                  ? 'border-blue-200 bg-blue-50 shadow-md' 
+                  : 'hover:shadow-md'
+              }`}
+              onClick={() => !notification.read && handleMarkAsRead(notification.id)}
+              role="listitem"
+              aria-label={`${notification.read ? 'Lida' : 'Não lida'}: ${notification.title}`}
+            >
+              <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                  <div className="mt-1 shrink-0">
+                    {getNotificationIcon(notification.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-2 mb-1">
+                      <h3 className="font-semibold text-gray-900">
+                        {notification.title}
+                      </h3>
+                      {!notification.read && (
+                        <Badge className="bg-blue-600 shrink-0" aria-label="Nova notificação">
+                          Nova
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-gray-700 mb-2">
+                      {notification.message}
+                    </p>
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
+                      <time 
+                        className="text-xs text-gray-500"
+                        dateTime={notification.timestamp}
+                      >
+                        {formatTimestamp(notification.timestamp)}
+                      </time>
+                      <div className="flex items-center gap-2">
+                        {notification.actionUrl && notification.actionLabel && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="min-h-[36px]"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(notification.actionUrl!);
+                            }}
+                            aria-label={notification.actionLabel}
+                          >
+                            {notification.actionLabel}
+                          </Button>
+                        )}
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="min-h-[36px] min-w-[36px]"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(notification.id);
+                          }}
+                          aria-label="Eliminar notificação"
+                        >
+                          <Trash2 className="w-4 h-4 text-gray-500" aria-hidden="true" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="py-12 text-center">
+            <Bell className="w-12 h-12 text-gray-300 mx-auto mb-4" aria-hidden="true" />
+            <p className="text-gray-500 mb-2">Não há notificações</p>
+            <p className="text-sm text-gray-400">
+              Quando houver novidades, aparecerão aqui
+            </p>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
