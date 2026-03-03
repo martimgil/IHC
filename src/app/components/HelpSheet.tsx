@@ -1,6 +1,8 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
-import { HelpCircle } from 'lucide-react';
+import {
+    FaHeadset
+} from 'react-icons/fa6';
 
 const faqs = [
     {
@@ -50,7 +52,7 @@ export default function HelpSheet({ open, onClose }: HelpSheetProps) {
                     <SheetHeader className="mb-6 text-left">
                         <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
                             <div className="p-2 bg-primary/10 rounded-xl">
-                                <HelpCircle className="w-6 h-6 text-primary" aria-hidden="true" />
+                                <FaHeadset className="w-6 h-6 text-primary" aria-hidden="true" />
                             </div>
                             Ajuda
                         </SheetTitle>

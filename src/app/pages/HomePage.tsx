@@ -9,9 +9,7 @@ import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { Separator } from '../components/ui/separator';
-import {
-  Search, MapPin, Clock, ChevronRight, Users, Dumbbell, X, Zap
-} from 'lucide-react';
+import { FaMagnifyingGlass, FaMapPin, FaUsers, FaEuroSign, FaChevronRight, FaBell, FaBolt, FaDumbbell, FaXmark } from 'react-icons/fa6';
 
 function SportDetailSheet({
   sport,
@@ -56,14 +54,14 @@ function SportDetailSheet({
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-muted/50 rounded-xl p-3">
                 <div className="flex items-center gap-1.5 mb-1">
-                  <Users className="w-4 h-4 text-primary" aria-hidden="true" />
+                  <FaUsers className="w-4 h-4 text-primary" aria-hidden="true" />
                   <span className="text-xs font-semibold">Jogadores</span>
                 </div>
                 <p className="text-sm font-bold">{sport.minPlayers}–{sport.maxPlayers}</p>
               </div>
               <div className="bg-muted/50 rounded-xl p-3">
                 <div className="flex items-center gap-1.5 mb-1">
-                  <Dumbbell className="w-4 h-4 text-primary" aria-hidden="true" />
+                  <FaDumbbell className="w-4 h-4 text-primary" aria-hidden="true" />
                   <span className="text-xs font-semibold">Material</span>
                 </div>
                 <p className="text-xs text-muted-foreground leading-snug">
@@ -126,12 +124,12 @@ export default function HomePage() {
           <div>
             <h2 id="welcome-heading" className="font-extrabold text-2xl leading-tight flex items-center gap-2">
               Olá, {firstName}!
-              <Zap className="w-6 h-6 text-primary-foreground fill-current animate-pulse opacity-90" />
+              <FaBolt className="w-6 h-6 text-primary-foreground fill-current animate-pulse opacity-90" />
             </h2>
             <p className="text-sm font-medium opacity-90 mt-1">Pronto para o teu próximo jogo?</p>
           </div>
           <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
-            <Dumbbell className="w-6 h-6" />
+            <FaDumbbell className="w-6 h-6" />
           </div>
         </div>
         {/* Abstract shapes for premium feel */}
@@ -147,7 +145,7 @@ export default function HomePage() {
             onClick={() => navigate('/lobby')}
             aria-label="Procurar uma atividade de última hora"
           >
-            <Clock className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0" aria-hidden="true" />
+            <FaBell className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0" aria-hidden="true" />
             <span className="text-sm font-semibold text-orange-900 dark:text-orange-100 leading-tight">Última Hora</span>
           </button>
           <button
@@ -155,7 +153,7 @@ export default function HomePage() {
             onClick={() => navigate('/search-location')}
             aria-label="Procurar atividades por localização"
           >
-            <MapPin className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" aria-hidden="true" />
+            <FaMapPin className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" aria-hidden="true" />
             <span className="text-sm font-semibold text-green-900 dark:text-green-100 leading-tight">Por Local</span>
           </button>
         </div>
@@ -164,7 +162,7 @@ export default function HomePage() {
       {/* Search */}
       <div className="relative">
         <label htmlFor="sport-search" className="sr-only">Pesquisar outros desportos</label>
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" aria-hidden="true" />
+        <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" aria-hidden="true" />
         <Input
           id="sport-search"
           type="search"
@@ -179,7 +177,7 @@ export default function HomePage() {
             onClick={() => setSearchQuery('')}
             aria-label="Limpar pesquisa"
           >
-            <X className="w-4 h-4" />
+            <FaXmark className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -202,7 +200,7 @@ export default function HomePage() {
                   >
                     <span className="text-2xl" role="img">{sport.icon}</span>
                     <span className="text-sm font-medium flex-1">{sport.name}</span>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                    <FaChevronRight className="w-4 h-4 text-muted-foreground" />
                   </button>
                 </div>
               ))}

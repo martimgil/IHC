@@ -12,10 +12,10 @@ import { Input } from '../components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import {
-  ArrowLeft, Calendar, MapPin, Users, Euro, CheckCircle,
-  Clock, Shield, AlertCircle, Send, UserPlus, UserMinus,
-  ThumbsUp, Star, Heart, LogOut, MessageCircle
-} from 'lucide-react';
+  FaArrowLeft, FaCalendarDay, FaMapPin, FaUsers, FaEuroSign, FaCircleCheck,
+  FaClock, FaShieldHalved, FaCircleExclamation, FaPaperPlane, FaUserPlus, FaUserMinus,
+  FaThumbsUp, FaStar, FaHeart, FaRightFromBracket, FaMessage
+} from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { Lobby } from '../types';
 
@@ -69,7 +69,7 @@ function LobbyChat() {
           aria-label="Mensagem"
         />
         <Button size="sm" onClick={send} disabled={!text.trim()} className="h-10 px-3" aria-label="Enviar">
-          <Send className="w-4 h-4" />
+          <FaPaperPlane className="w-4 h-4" />
         </Button>
       </div>
     </div>
@@ -78,9 +78,9 @@ function LobbyChat() {
 
 // ── Rating Sheet ──────────────────────────────────────────────────────
 const RATING_CATS = [
-  { key: 'friendly', label: 'Amigável', icon: <Heart className="w-4 h-4" /> },
-  { key: 'teammate', label: 'Bom Colega', icon: <ThumbsUp className="w-4 h-4" /> },
-  { key: 'skilled', label: 'Habilidoso', icon: <Star className="w-4 h-4" /> },
+  { key: 'friendly', label: 'Amigável', icon: <FaHeart className="w-4 h-4" /> },
+  { key: 'teammate', label: 'Bom Colega', icon: <FaThumbsUp className="w-4 h-4" /> },
+  { key: 'skilled', label: 'Habilidoso', icon: <FaStar className="w-4 h-4" /> },
 ];
 
 function RatingSheet({ players, open, onClose }: { players: Lobby['currentPlayers'], open: boolean, onClose: () => void }) {
@@ -90,36 +90,54 @@ function RatingSheet({ players, open, onClose }: { players: Lobby['currentPlayer
 
   return (
     <Sheet open={open} onOpenChange={o => { if (!o) onClose(); }}>
-      <SheetContent side="bottom" className="rounded-t-2xl max-h-[80vh] overflow-y-auto pb-8">
-        <SheetHeader className="mb-4">
-          <SheetTitle className="flex items-center gap-2"><Star className="w-5 h-5 text-primary" />Avaliar Jogadores</SheetTitle>
-        </SheetHeader>
-        <div className="space-y-4">
-          {players.map(p => (
-            <div key={p.id} className="p-3 bg-muted/50 rounded-xl space-y-2">
-              <div className="flex items-center gap-2">
-                <Avatar className="w-8 h-8"><AvatarFallback className="text-xs">{p.name.split(' ').map(n => n[0]).join('').slice(0, 2)}</AvatarFallback></Avatar>
-                <p className="font-semibold text-sm">{p.name}</p>
+      <SheetContent
+        side="bottom"
+        className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+      >
+        <div className="overflow-y-auto max-h-[75vh] px-5">
+          <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
+          <SheetHeader className="mb-6 text-left">
+            <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
+              <div className="p-2 bg-primary/10 rounded-xl">
+                <FaStar className="w-6 h-6 text-primary" aria-hidden="true" />
               </div>
-              <div className="flex gap-2">
-                {RATING_CATS.map(({ key, label, icon }) => (
-                  <button
-                    key={key}
-                    onClick={() => toggle(p.id, key)}
-                    className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-xs font-medium border transition-all ${ratings[p.id]?.[key] ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border'}`}
-                    aria-pressed={!!ratings[p.id]?.[key]}
-                    aria-label={`${label} para ${p.name}`}
-                  >
-                    {icon}{label}
-                  </button>
-                ))}
+              Avaliar Jogadores
+            </SheetTitle>
+          </SheetHeader>
+          <div className="space-y-4">
+            {players.map(p => (
+              <div key={p.id} className="p-4 bg-muted/40 border-2 border-border/50 rounded-2xl space-y-3 transition-colors hover:border-primary/20">
+                <div className="flex items-center gap-3">
+                  <Avatar className="w-10 h-10 border-2 border-background shadow-sm">
+                    <AvatarFallback className="text-xs font-bold bg-primary/10 text-primary">
+                      {p.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <p className="font-bold text-base tracking-tight">{p.name}</p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {RATING_CATS.map(({ key, label, icon }) => (
+                    <button
+                      key={key}
+                      onClick={() => toggle(p.id, key)}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border-2 transition-all active:scale-[0.95] ${ratings[p.id]?.[key] ? 'bg-primary text-primary-foreground border-primary shadow-md shadow-primary/20' : 'bg-card border-border/60 hover:border-primary/40'}`}
+                      aria-pressed={!!ratings[p.id]?.[key]}
+                      aria-label={`${label} para ${p.name}`}
+                    >
+                      {icon}{label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <Button
+            className="w-full mt-8 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform"
+            onClick={() => { toast.success('Avaliações guardadas!', { description: 'Obrigado!.' }); onClose(); }}
+          >
+            Guardar Avaliações
+          </Button>
         </div>
-        <Button className="w-full mt-4" onClick={() => { toast.success('Avaliações guardadas!'); onClose(); }}>
-          Guardar Avaliações
-        </Button>
       </SheetContent>
     </Sheet>
   );
@@ -162,10 +180,10 @@ export default function LobbyPage() {
     return (
       <div className="max-w-3xl mx-auto space-y-4">
         <Button variant="ghost" onClick={() => navigate(-1)} className="-ml-2 min-h-[44px]">
-          <ArrowLeft className="w-4 h-4 mr-2" />Voltar
+          <FaArrowLeft className="w-4 h-4 mr-2" />Voltar
         </Button>
         <h1 className="text-xl font-bold flex items-center gap-2">
-          <Users className="w-5 h-5 text-primary" />Atividades de Última Hora
+          <FaUsers className="w-5 h-5 text-primary" />Atividades de Última Hora
         </h1>
         <div className="space-y-3">
           {lobbies.map(l => {
@@ -255,7 +273,7 @@ export default function LobbyPage() {
   return (
     <div className="max-w-3xl mx-auto space-y-4">
       <Button variant="ghost" onClick={() => navigate(-1)} className="-ml-2 min-h-[44px]">
-        <ArrowLeft className="w-4 h-4 mr-2" />Voltar
+        <FaArrowLeft className="w-4 h-4 mr-2" />Voltar
       </Button>
 
       {/* Header */}
@@ -267,7 +285,7 @@ export default function LobbyPage() {
               <div>
                 <CardTitle className="text-xl">{sport.name}</CardTitle>
                 <CardDescription className="flex items-center gap-1 mt-0.5">
-                  <MapPin className="w-3 h-3" />{lobby.locationName}
+                  <FaMapPin className="w-3 h-3" />{lobby.locationName}
                 </CardDescription>
               </div>
             </div>
@@ -280,14 +298,14 @@ export default function LobbyPage() {
         <CardContent className="space-y-3">
           {lobby.scheduledDate && (
             <div className="flex items-center gap-2 text-sm">
-              <Calendar className="w-4 h-4 text-muted-foreground" />
+              <FaCalendarDay className="w-4 h-4 text-muted-foreground" />
               <span>{new Date(lobby.scheduledDate).toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' })} às {lobby.scheduledTime}</span>
             </div>
           )}
           <div className="space-y-1">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-muted-foreground" />
+                <FaUsers className="w-4 h-4 text-muted-foreground" />
                 <span className="font-semibold">{lobby.currentPlayers.length}/{lobby.maxPlayers} jogadores</span>
               </div>
               <Badge variant="outline">{lobby.level}</Badge>
@@ -302,7 +320,7 @@ export default function LobbyPage() {
             </p>
           </div>
           <div className="flex items-center gap-2 bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-lg p-2.5">
-            <Euro className="w-4 h-4 text-green-600" />
+            <FaEuroSign className="w-4 h-4 text-green-600" />
             <p className="text-sm font-bold text-green-700 dark:text-green-300">{lobby.pricePerPerson.toFixed(2)}€ por pessoa</p>
           </div>
         </CardContent>
@@ -314,7 +332,7 @@ export default function LobbyPage() {
           <Button className="w-full h-12 text-sm md:text-base font-semibold" onClick={handleJoin} disabled={isProcessing}>
             {isProcessing
               ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />A enviar pedido...</>
-              : <><UserPlus className="w-5 h-5 mr-2" />Juntar-me ao Grupo</>}
+              : <><FaUserPlus className="w-5 h-5 mr-2" />Juntar-me ao Grupo</>}
           </Button>
         )}
 
@@ -325,23 +343,23 @@ export default function LobbyPage() {
                 toast.success('Pagamento confirmado!', { description: 'Vaga garantida!' });
                 navigate('/');
               }}>
-                <Euro className="w-5 h-5 mr-2" />Confirmar Pagamento ({lobby.pricePerPerson.toFixed(2)}€)
+                <FaEuroSign className="w-5 h-5 mr-2" />Confirmar Pagamento ({lobby.pricePerPerson.toFixed(2)}€)
               </Button>
             )}
             <div className="flex gap-2">
               <Button variant="outline" className="flex-1 h-10 text-amber-600 dark:text-amber-400 border-amber-300 dark:border-amber-700 text-xs md:text-sm font-semibold" onClick={() => setShowRating(true)}>
-                <Star className="w-4 h-4 mr-1.5" />Avaliar Formação
+                <FaStar className="w-4 h-4 mr-1.5" />Avaliar Formação
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="outline" className="flex-1 h-10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/40 text-xs md:text-sm font-semibold">
-                    <LogOut className="w-4 h-4 mr-1.5" />Sair do Grupo
+                    <FaRightFromBracket className="w-4 h-4 mr-1.5" />Sair do Grupo
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Sair do grupo?</AlertDialogTitle>
-                    <AlertDialogDescription>A tua vaga ficará disponível para outros jogadores.</AlertDialogDescription>
+                    <AlertDialogDescription>A tua vaga ficará disponível para os outros jogadores.</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
@@ -357,13 +375,13 @@ export default function LobbyPage() {
       {/* Alerts */}
       {lobby.isUrgent && (
         <Alert className="border-orange-200 bg-orange-50 dark:bg-orange-950/40 dark:border-orange-800">
-          <Clock className="h-4 w-4 text-orange-600" />
+          <FaClock className="h-4 w-4 text-orange-600" />
           <AlertTitle className="text-orange-900 dark:text-orange-200">Jogo Urgente</AlertTitle>
           <AlertDescription className="text-orange-800 dark:text-orange-300">Precisam de um substituto. Junta-te rapidamente!</AlertDescription>
         </Alert>
       )}
       <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-950/40 dark:border-blue-800">
-        <AlertCircle className="h-4 w-4 text-blue-600" />
+        <FaCircleExclamation className="h-4 w-4 text-blue-600" />
         <AlertTitle className="text-blue-900 dark:text-blue-200">Material necessário</AlertTitle>
         <AlertDescription className="text-blue-800 dark:text-blue-300">{sport.requiredMaterials.join(', ')}</AlertDescription>
       </Alert>
@@ -373,7 +391,7 @@ export default function LobbyPage() {
         <Card className="border-amber-200 dark:border-amber-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <Shield className="w-4 h-4 text-amber-600" />Pedidos de Entrada
+              <FaShieldHalved className="w-4 h-4 text-amber-600" />Pedidos de Entrada
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -386,7 +404,7 @@ export default function LobbyPage() {
                 </div>
                 <div className="flex gap-1.5">
                   <Button size="sm" className="h-8 px-2 text-xs" onClick={() => handleApprove(req.id, req.name)}>
-                    <CheckCircle className="w-3 h-3 mr-1" />Aprovar
+                    <FaCircleCheck className="w-3 h-3 mr-1" />Aprovar
                   </Button>
                   <Button size="sm" variant="outline" className="h-8 px-2 text-xs" onClick={() => handleReject(req.id, req.name)}>
                     Rejeitar
@@ -419,7 +437,7 @@ export default function LobbyPage() {
                 </div>
                 {player.id === lobby.createdBy && (
                   <Badge variant="outline" className="text-xs shrink-0 border-amber-300 text-amber-700">
-                    <Shield className="w-3 h-3 mr-1" />Criador
+                    <FaShieldHalved className="w-3 h-3 mr-1" />Criador
                   </Badge>
                 )}
                 {player.id !== lobby.createdBy && player.id !== 'me' && (
@@ -436,7 +454,7 @@ export default function LobbyPage() {
                     aria-label={followed.has(player.id) ? `Deixar de seguir ${player.name}` : `Seguir ${player.name}`}
                     aria-pressed={followed.has(player.id)}
                   >
-                    <UserPlus className="w-3 h-3" />
+                    <FaUserPlus className="w-3 h-3" />
                     {followed.has(player.id) ? 'A seguir' : 'Seguir'}
                   </button>
                 )}
@@ -481,7 +499,7 @@ export default function LobbyPage() {
             aria-expanded={showChat}
             aria-controls="lobby-chat"
           >
-            <MessageCircle className="w-5 h-5 text-primary" />
+            <FaMessage className="w-5 h-5 text-primary" />
             <CardTitle className="text-base">Chat do Grupo</CardTitle>
             <Badge variant="secondary" className="ml-auto text-xs">{initialMessages.length} msgs</Badge>
           </button>

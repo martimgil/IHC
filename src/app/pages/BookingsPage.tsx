@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { ArrowLeft, Calendar, CheckCircle, X } from 'lucide-react';
+import { FaArrowLeft, FaCalendarDays, FaCircleCheck, FaXmark } from 'react-icons/fa6';
 import { sports } from '../data';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -34,7 +34,7 @@ export default function BookingsPage() {
         <div className="max-w-4xl mx-auto space-y-5">
             <div className="flex items-center gap-2 mb-2">
                 <Button variant="ghost" onClick={() => navigate(-1)} className="min-h-[44px] -ml-2 px-3">
-                    <ArrowLeft className="w-5 h-5" />
+                    <FaArrowLeft className="w-5 h-5" />
                 </Button>
                 <h1 className="text-xl font-bold">As Minhas Reservas</h1>
             </div>
@@ -44,7 +44,7 @@ export default function BookingsPage() {
                     <div className="flex items-center justify-between">
                         <div>
                             <CardTitle className="text-base flex items-center gap-2">
-                                <Calendar className="w-5 h-5 text-primary" />Próximas Reservas
+                                <FaCalendarDays className="w-5 h-5 text-primary" />Próximas Reservas
                             </CardTitle>
                             <CardDescription>Gerir atividades em agenda</CardDescription>
                         </div>
@@ -56,7 +56,7 @@ export default function BookingsPage() {
                 <CardContent className="pt-0 space-y-2">
                     {bookings.length === 0 && (
                         <div className="text-center py-10">
-                            <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-20" />
+                            <FaCalendarDays className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-20" />
                             <p className="text-sm font-medium">Sem reservas ativas.</p>
                             <p className="text-xs text-muted-foreground mt-1">Regressa ao mapa para encontrar atividades!</p>
                             <Button onClick={() => navigate('/')} className="mt-4" variant="outline">Procurar Atividades</Button>
@@ -85,7 +85,7 @@ export default function BookingsPage() {
                                         </div>
                                     </div>
                                     <div className="flex flex-col items-end gap-2 shrink-0">
-                                        <CheckCircle className="w-5 h-5 text-green-500" />
+                                        <FaCircleCheck className="w-5 h-5 text-green-500" />
                                         <AlertDialog>
                                             <AlertDialogTrigger asChild>
                                                 <Button

@@ -5,14 +5,14 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import {
-  ArrowLeft,
-  Bell,
-  CheckCircle,
-  AlertCircle,
-  Clock,
-  Calendar,
-  Trash2
-} from 'lucide-react';
+  FaArrowLeft,
+  FaBell,
+  FaCircleCheck,
+  FaCircleExclamation,
+  FaClock,
+  FaCalendarDays,
+  FaTrashCan
+} from 'react-icons/fa6';
 import { Notification } from '../types';
 import { toast } from 'sonner';
 import { useNotifications } from '../context/NotificationContext';
@@ -56,19 +56,19 @@ export default function NotificationsPage() {
 
     switch (notification.type) {
       case 'session-available':
-        return <CheckCircle className="w-5 h-5 text-green-600" aria-hidden="true" />;
+        return <FaCircleCheck className="w-5 h-5 text-green-600" aria-hidden="true" />;
       case 'booking-failed':
-        return <AlertCircle className="w-5 h-5 text-red-600" aria-hidden="true" />;
+        return <FaCircleExclamation className="w-5 h-5 text-red-600" aria-hidden="true" />;
       case 'alternative-suggestion':
-        return <Bell className="w-5 h-5 text-blue-600" aria-hidden="true" />;
+        return <FaBell className="w-5 h-5 text-blue-600" aria-hidden="true" />;
       case 'urgent-match':
-        return <Clock className="w-5 h-5 text-orange-600" aria-hidden="true" />;
+        return <FaClock className="w-5 h-5 text-orange-600" aria-hidden="true" />;
       case 'lobby-full':
-        return <CheckCircle className="w-5 h-5 text-green-600" aria-hidden="true" />;
+        return <FaCircleCheck className="w-5 h-5 text-green-600" aria-hidden="true" />;
       case 'reminder':
-        return <Calendar className="w-5 h-5 text-purple-600" aria-hidden="true" />;
+        return <FaCalendarDays className="w-5 h-5 text-purple-600" aria-hidden="true" />;
       default:
-        return <Bell className="w-5 h-5 text-gray-600" aria-hidden="true" />;
+        return <FaBell className="w-5 h-5 text-gray-600" aria-hidden="true" />;
     }
   };
 
@@ -96,7 +96,7 @@ export default function NotificationsPage() {
         className="mb-2 min-h-[44px]"
         aria-label="Voltar à página anterior"
       >
-        <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+        <FaArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
         Voltar
       </Button>
 
@@ -194,7 +194,7 @@ export default function NotificationsPage() {
                           }}
                           aria-label="Eliminar notificação"
                         >
-                          <Trash2 className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
+                          <FaTrashCan className="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" />
                         </Button>
                       </div>
                     </div>
@@ -207,7 +207,7 @@ export default function NotificationsPage() {
       ) : (
         <Card>
           <CardContent className="py-12 text-center">
-            <Bell className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" aria-hidden="true" />
+            <FaBell className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" aria-hidden="true" />
             <p className="text-muted-foreground mb-2">Não há notificações</p>
             <p className="text-sm text-muted-foreground/70">
               Quando houver novidades, aparecerão aqui

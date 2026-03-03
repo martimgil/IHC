@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
-import { ArrowLeft, Trophy, Lock, Star, Flame, Zap, Heart, MapPin, Users, Calendar } from 'lucide-react';
+import { FaArrowLeft, FaTrophy, FaLock, FaStar, FaFire, FaBolt, FaHeart, FaMapPin, FaUsers, FaCalendarDays } from 'react-icons/fa6';
 
 interface Achievement {
     id: string;
@@ -22,7 +22,7 @@ const achievements: Achievement[] = [
         id: 'first-session',
         title: 'Primeira Sessão',
         description: 'Participaste na tua primeira atividade desportiva',
-        icon: <Star className="w-6 h-6" />,
+        icon: <FaStar className="w-6 h-6" />,
         unlocked: true,
         unlockedAt: '2026-01-10',
         category: 'Atividade',
@@ -32,7 +32,7 @@ const achievements: Achievement[] = [
         id: 'five-sessions',
         title: 'Veterano',
         description: 'Completa 5 sessões desportivas',
-        icon: <Flame className="w-6 h-6" />,
+        icon: <FaFire className="w-6 h-6" />,
         unlocked: true,
         unlockedAt: '2026-02-05',
         category: 'Atividade',
@@ -43,7 +43,7 @@ const achievements: Achievement[] = [
         id: 'ten-sessions',
         title: 'Entusiasta',
         description: 'Completa 10 sessões desportivas',
-        icon: <Zap className="w-6 h-6" />,
+        icon: <FaBolt className="w-6 h-6" />,
         unlocked: true,
         unlockedAt: '2026-02-20',
         category: 'Atividade',
@@ -54,7 +54,7 @@ const achievements: Achievement[] = [
         id: 'twenty-sessions',
         title: 'Maratonista',
         description: 'Completa 20 sessões desportivas',
-        icon: <Trophy className="w-6 h-6" />,
+        icon: <FaTrophy className="w-6 h-6" />,
         unlocked: false,
         category: 'Atividade',
         rarity: 'épico',
@@ -65,7 +65,7 @@ const achievements: Achievement[] = [
         id: 'first-lobby',
         title: 'Espírito de Equipa',
         description: 'Juntaste-te ao teu primeiro lobby',
-        icon: <Users className="w-6 h-6" />,
+        icon: <FaUsers className="w-6 h-6" />,
         unlocked: true,
         unlockedAt: '2026-01-15',
         category: 'Social',
@@ -75,7 +75,7 @@ const achievements: Achievement[] = [
         id: 'five-lobbies',
         title: 'Jogador de Equipa',
         description: 'Participa em 5 lobbies diferentes',
-        icon: <Users className="w-6 h-6" />,
+        icon: <FaUsers className="w-6 h-6" />,
         unlocked: false,
         category: 'Social',
         rarity: 'raro',
@@ -85,7 +85,7 @@ const achievements: Achievement[] = [
         id: 'create-lobby',
         title: 'Organizador',
         description: 'Cria o teu próprio lobby',
-        icon: <Calendar className="w-6 h-6" />,
+        icon: <FaCalendarDays className="w-6 h-6" />,
         unlocked: false,
         category: 'Social',
         rarity: 'raro',
@@ -95,7 +95,7 @@ const achievements: Achievement[] = [
         id: 'first-sport',
         title: 'Explorador',
         description: 'Experimenta um novo desporto',
-        icon: <MapPin className="w-6 h-6" />,
+        icon: <FaMapPin className="w-6 h-6" />,
         unlocked: true,
         unlockedAt: '2026-01-10',
         category: 'Exploração',
@@ -105,7 +105,7 @@ const achievements: Achievement[] = [
         id: 'three-sports',
         title: 'Polivalente',
         description: 'Pratica 3 desportos diferentes',
-        icon: <Heart className="w-6 h-6" />,
+        icon: <FaHeart className="w-6 h-6" />,
         unlocked: true,
         unlockedAt: '2026-02-01',
         category: 'Exploração',
@@ -115,7 +115,7 @@ const achievements: Achievement[] = [
         id: 'all-sports',
         title: 'Atleta Completo',
         description: 'Experimenta todos os desportos disponíveis',
-        icon: <Trophy className="w-6 h-6" />,
+        icon: <FaTrophy className="w-6 h-6" />,
         unlocked: false,
         category: 'Exploração',
         rarity: 'lendário',
@@ -151,7 +151,7 @@ export default function AchievementsPage() {
                 className="mb-2 min-h-[44px]"
                 aria-label="Voltar ao perfil"
             >
-                <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+                <FaArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
                 Voltar ao Perfil
             </Button>
 
@@ -159,7 +159,7 @@ export default function AchievementsPage() {
             <div className="flex items-center justify-between gap-4 flex-wrap">
                 <div>
                     <h1 className="text-2xl font-bold flex items-center gap-2">
-                        <Trophy className="w-7 h-7 text-amber-500" aria-hidden="true" />
+                        <FaTrophy className="w-7 h-7 text-amber-500" aria-hidden="true" />
                         Conquistas
                     </h1>
                     <p className="text-muted-foreground mt-1">
@@ -213,8 +213,8 @@ export default function AchievementsPage() {
                                                 {/* Icon */}
                                                 <div
                                                     className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center ${achievement.unlocked
-                                                            ? 'bg-white/70 dark:bg-black/20'
-                                                            : 'bg-muted'
+                                                        ? 'bg-white/70 dark:bg-black/20'
+                                                        : 'bg-muted'
                                                         }`}
                                                     aria-hidden="true"
                                                 >
@@ -226,7 +226,7 @@ export default function AchievementsPage() {
                                                             {achievement.icon}
                                                         </span>
                                                     ) : (
-                                                        <Lock className="w-5 h-5 text-muted-foreground" />
+                                                        <FaLock className="w-5 h-5 text-muted-foreground" />
                                                     )}
                                                 </div>
 

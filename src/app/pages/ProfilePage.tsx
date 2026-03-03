@@ -12,10 +12,10 @@ import { Label } from '../components/ui/label';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import {
-  ArrowLeft, Mail, MapPin, Calendar, Trophy,
-  Settings, Heart, CheckCircle, Award, Bell,
-  ChevronRight, Plus, LogOut, Star, Edit2, X, Zap, Search, Trash2
-} from 'lucide-react';
+  FaArrowLeft, FaEnvelope, FaMapPin, FaCalendarDays, FaTrophy,
+  FaGear, FaHeart, FaCircleCheck, FaAward, FaBell,
+  FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaXmark, FaBolt, FaMagnifyingGlass, FaTrashCan
+} from 'react-icons/fa6';
 import { toast } from 'sonner';
 
 // Suggested activities from user's interested sports (R17)
@@ -29,7 +29,7 @@ function SuggestionsSection() {
     <Card className="border-primary/20 bg-primary/5">
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-2">
-          <Zap className="w-5 h-5 text-primary" />Sugestões Para Ti
+          <FaBolt className="w-5 h-5 text-primary" />Sugestões Para Ti
         </CardTitle>
         <CardDescription>Baseadas nos teus desportos</CardDescription>
       </CardHeader>
@@ -48,7 +48,7 @@ function SuggestionsSection() {
                 <p className="text-sm font-semibold truncate">{s?.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{l.locationName} · {l.scheduledDate}</p>
               </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+              <FaChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
             </button>
           );
         })}
@@ -80,91 +80,102 @@ function EditProfileSheet({ open, onClose }: { open: boolean; onClose: () => voi
 
   return (
     <Sheet open={open} onOpenChange={o => { if (!o) onClose(); }}>
-      <SheetContent side="bottom" className="rounded-t-2xl max-h-[90vh] overflow-y-auto pb-8">
-        <SheetHeader className="mb-4">
-          <SheetTitle className="flex items-center gap-2"><Edit2 className="w-5 h-5 text-primary" />Editar Perfil</SheetTitle>
-        </SheetHeader>
-        <div className="space-y-5">
-          <div className="space-y-1.5">
-            <Label htmlFor="edit-name">Nome</Label>
-            <Input id="edit-name" value={name} onChange={e => setName(e.target.value)} />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="edit-location">Localização</Label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input id="edit-location" value={location} onChange={e => setLocation(e.target.value)} className="pl-9" />
-            </div>
-          </div>
-          <Separator />
-          <div>
-            <p className="text-sm font-semibold mb-2">Desportos de Interesse</p>
-            <div className="relative mb-3">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Pesquisar desportos..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-            {searchQuery && searchResults.length > 0 && (
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                {searchResults.map(s => (
-                  <button
-                    key={s.id}
-                    onClick={() => { toggleSport(s.id); setSearchQuery(''); }}
-                    className="flex items-center gap-2 p-2 rounded-xl border border-border bg-card text-left transition-all text-sm hover:border-primary active:scale-[0.97]"
-                  >
-                    <span>{s.icon}</span><span className="truncate">{s.name}</span>
-                    <Plus className="w-3.5 h-3.5 text-muted-foreground ml-auto shrink-0" />
-                  </button>
-                ))}
+      <SheetContent
+        side="bottom"
+        className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+      >
+        <div className="overflow-y-auto max-h-[75vh] px-5">
+          <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
+          <SheetHeader className="mb-6 text-left">
+            <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
+              <div className="p-2 bg-primary/10 rounded-xl">
+                <FaPenToSquare className="w-6 h-6 text-primary" aria-hidden="true" />
               </div>
-            )}
-            {searchQuery && searchResults.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-2">Nenhum desporto encontrado.</p>
-            )}
-          </div>
-
-          {interests.length > 0 && (
+              Editar Perfil
+            </SheetTitle>
+          </SheetHeader>
+          <div className="space-y-5 pb-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-name">Nome</Label>
+              <Input id="edit-name" value={name} onChange={e => setName(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-location">Localização</Label>
+              <div className="relative">
+                <FaMapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input id="edit-location" value={location} onChange={e => setLocation(e.target.value)} className="pl-9" />
+              </div>
+            </div>
+            <Separator />
             <div>
-              <p className="text-sm font-semibold mb-2">Nível por Desporto</p>
-              <div className="space-y-2">
-                {interests.map(id => {
-                  const s = sports.find(sp => sp.id === id);
-                  return (
-                    <div key={id} className="flex items-center gap-3 bg-muted/30 p-2 rounded-xl border border-transparent hover:border-border transition-colors">
-                      <span className="text-lg w-8 shrink-0 flex items-center justify-center">{s?.icon}</span>
-                      <span className="text-sm font-medium flex-1 truncate">{s?.name}</span>
-                      <div className="flex gap-1">
-                        {levelOptions.map(lv => (
-                          <button
-                            key={lv}
-                            onClick={() => setLevels(prev => ({ ...prev, [id]: lv }))}
-                            className={`px-2 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${(levels[id] || 'iniciante') === lv ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-background text-muted-foreground hover:bg-muted'}`}
-                            aria-pressed={(levels[id] || 'iniciante') === lv}
-                          >
-                            {lv === 'iniciante' ? 'Ini' : lv === 'intermediario' ? 'Int' : 'Av'}
-                          </button>
-                        ))}
-                      </div>
-                      <button
-                        onClick={() => removeSport(id)}
-                        className="p-1.5 text-muted-foreground hover:text-destructive transition-colors ml-1"
-                        aria-label="Remover desporto"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  );
-                })}
+              <p className="text-sm font-semibold mb-2">Desportos de Interesse</p>
+              <div className="relative mb-3">
+                <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  placeholder="Pesquisar desportos..."
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
               </div>
+              {searchQuery && searchResults.length > 0 && (
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  {searchResults.map(s => (
+                    <button
+                      key={s.id}
+                      onClick={() => { toggleSport(s.id); setSearchQuery(''); }}
+                      className="flex items-center gap-2 p-2 rounded-xl border-2 border-border bg-card text-left transition-all text-sm hover:border-primary active:scale-[0.97]"
+                    >
+                      <span>{s.icon}</span><span className="truncate">{s.name}</span>
+                      <FaPlus className="w-3.5 h-3.5 text-muted-foreground ml-auto shrink-0" />
+                    </button>
+                  ))}
+                </div>
+              )}
+              {searchQuery && searchResults.length === 0 && (
+                <p className="text-sm text-muted-foreground text-center py-2">Nenhum desporto encontrado.</p>
+              )}
             </div>
-          )}
-          <Button className="w-full" onClick={() => { toast.success('Perfil atualizado!'); onClose(); }}>
-            Guardar Alterações
-          </Button>
+
+            {interests.length > 0 && (
+              <div>
+                <p className="text-sm font-semibold mb-2">Nível por Desporto</p>
+                <div className="space-y-2">
+                  {interests.map(id => {
+                    const s = sports.find(sp => sp.id === id);
+                    return (
+                      <div key={id} className="flex items-center gap-3 bg-muted/30 p-2 rounded-xl border-2 border-transparent hover:border-border transition-colors">
+                        <span className="text-lg w-8 shrink-0 flex items-center justify-center">{s?.icon}</span>
+                        <span className="text-sm font-medium flex-1 truncate">{s?.name}</span>
+                        <div className="flex gap-1">
+                          {levelOptions.map(lv => (
+                            <button
+                              key={lv}
+                              onClick={() => setLevels(prev => ({ ...prev, [id]: lv }))}
+                              className={`px-2 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${(levels[id] || 'iniciante') === lv ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-background text-muted-foreground hover:bg-muted'}`}
+                              aria-pressed={(levels[id] || 'iniciante') === lv}
+                            >
+                              {lv === 'iniciante' ? 'Ini' : lv === 'intermediario' ? 'Int' : 'Av'}
+                            </button>
+                          ))}
+                        </div>
+                        <button
+                          onClick={() => removeSport(id)}
+                          className="p-1.5 text-muted-foreground hover:text-destructive transition-colors ml-1"
+                          aria-label="Remover desporto"
+                        >
+                          <FaTrashCan className="w-4 h-4" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+            <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => { toast.success('Perfil atualizado!'); onClose(); }}>
+              Guardar Alterações
+            </Button>
+          </div>
         </div>
       </SheetContent>
     </Sheet>
@@ -190,10 +201,10 @@ export default function ProfilePage() {
   const initials = displayName.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
 
   const stats = [
-    { label: 'Atividades', value: '12', icon: <Trophy className="w-4 h-4 text-amber-500" />, color: 'text-amber-600 dark:text-amber-400' },
-    { label: 'Reservas', value: String(bookings.length), icon: <Calendar className="w-4 h-4 text-blue-500" />, color: 'text-blue-600 dark:text-blue-400' },
-    { label: 'Desportos', value: String(userSports.length), icon: <Heart className="w-4 h-4 text-red-500" />, color: 'text-red-600 dark:text-red-400' },
-    { label: 'Conquistas', value: '6', icon: <Star className="w-4 h-4 text-purple-500" />, color: 'text-purple-600 dark:text-purple-400' },
+    { label: 'Atividades', value: '12', icon: <FaTrophy className="w-4 h-4 text-amber-500" />, color: 'text-amber-600 dark:text-amber-400' },
+    { label: 'Reservas', value: String(bookings.length), icon: <FaCalendarDays className="w-4 h-4 text-blue-500" />, color: 'text-blue-600 dark:text-blue-400' },
+    { label: 'Desportos', value: String(userSports.length), icon: <FaHeart className="w-4 h-4 text-red-500" />, color: 'text-red-600 dark:text-red-400' },
+    { label: 'Conquistas', value: '6', icon: <FaStar className="w-4 h-4 text-purple-500" />, color: 'text-purple-600 dark:text-purple-400' },
   ];
 
   const cancelBooking = (id: string) => {
@@ -204,7 +215,7 @@ export default function ProfilePage() {
   return (
     <div className="max-w-4xl mx-auto space-y-5">
       <Button variant="ghost" onClick={() => navigate('/')} className="min-h-[44px] -ml-2">
-        <ArrowLeft className="w-4 h-4 mr-2" />Voltar
+        <FaArrowLeft className="w-4 h-4 mr-2" />Voltar
       </Button>
 
       {/* Hero Card */}
@@ -216,14 +227,14 @@ export default function ProfilePage() {
               <AvatarFallback className="bg-primary text-primary-foreground text-xl font-bold">{initials}</AvatarFallback>
             </Avatar>
             <Button variant="outline" size="sm" className="mb-1 min-h-[40px]" onClick={() => setEditOpen(true)} aria-label="Editar perfil">
-              <Edit2 className="w-4 h-4 mr-2" />Editar Perfil
+              <FaPenToSquare className="w-4 h-4 mr-2" />Editar Perfil
             </Button>
           </div>
           <div className="mb-4">
             <h1 className="text-xl font-bold">{displayName}</h1>
             <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" />{displayEmail}</span>
-              <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{displayLocation}</span>
+              <span className="flex items-center gap-1.5"><FaEnvelope className="w-3.5 h-3.5" />{displayEmail}</span>
+              <span className="flex items-center gap-1.5"><FaMapPin className="w-3.5 h-3.5" />{displayLocation}</span>
             </div>
           </div>
           <div className="grid grid-cols-4 gap-2">
@@ -247,14 +258,14 @@ export default function ProfilePage() {
       >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center dark:bg-amber-900/40">
-            <Award className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            <FaAward className="w-5 h-5 text-amber-600 dark:text-amber-400" />
           </div>
           <div>
             <h3 className="font-bold text-sm">As Minhas Conquistas</h3>
             <p className="text-xs text-muted-foreground mt-0.5">Desbloqueaste 6/10 emblemas</p>
           </div>
         </div>
-        <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+        <FaChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
       </button>
 
       {/* Sports (R04 - linking to edit) */}
@@ -262,10 +273,10 @@ export default function ProfilePage() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
-              <Heart className="w-5 h-5 text-red-500" />Os Meus Desportos
+              <FaHeart className="w-5 h-5 text-red-500" />Os Meus Desportos
             </CardTitle>
             <Button variant="ghost" size="sm" onClick={() => setEditOpen(true)} className="min-h-[40px] text-primary">
-              <Plus className="w-4 h-4 mr-1" />Editar
+              <FaPlus className="w-4 h-4 mr-1" />Editar
             </Button>
           </div>
         </CardHeader>
@@ -295,8 +306,8 @@ export default function ProfilePage() {
         <CardHeader className="pb-2"><CardTitle className="text-base">Mais opções</CardTitle></CardHeader>
         <CardContent className="pt-0 space-y-1">
           {[
-            { label: 'Preferências de Notificação', icon: <Settings className="w-5 h-5 text-muted-foreground" />, action: () => toast.info('Em breve') },
-            { label: 'Alterar Localização', icon: <MapPin className="w-5 h-5 text-muted-foreground" />, action: () => setEditOpen(true) },
+            { label: 'Preferências de Notificação', icon: <FaGear className="w-5 h-5 text-muted-foreground" />, action: () => toast.info('Em breve') },
+            { label: 'Alterar Localização', icon: <FaMapPin className="w-5 h-5 text-muted-foreground" />, action: () => setEditOpen(true) },
           ].map(item => (
             <button
               key={item.label}
@@ -305,7 +316,7 @@ export default function ProfilePage() {
             >
               {item.icon}
               <span className="flex-1 font-medium text-sm">{item.label}</span>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+              <FaChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
             </button>
           ))}
           <Separator className="my-2" />
@@ -313,7 +324,7 @@ export default function ProfilePage() {
             className="w-full flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors text-left min-h-[48px]"
             onClick={() => { logout(); navigate('/login'); }}
           >
-            <LogOut className="w-5 h-5 text-red-500 shrink-0" />
+            <FaRightFromBracket className="w-5 h-5 text-red-500 shrink-0" />
             <span className="font-medium text-sm text-red-600 dark:text-red-400">Terminar Sessão</span>
           </button>
         </CardContent>

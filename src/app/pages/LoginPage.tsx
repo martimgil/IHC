@@ -6,7 +6,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Separator } from '../components/ui/separator';
-import { Mail, Lock, Eye, EyeOff, Zap, ShieldCheck, UserCheck } from 'lucide-react';
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved, FaUserCheck } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -79,7 +79,7 @@ export default function LoginPage() {
                             className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-2xl mb-4 rotate-3"
                             whileHover={{ scale: 1.05, rotate: 0 }}
                         >
-                            <Zap className="w-9 h-9 text-primary-foreground fill-current" />
+                            <FaBolt className="w-9 h-9 text-primary-foreground" />
                         </motion.div>
                         <h1 className="text-4xl font-extrabold tracking-tight">
                             match<span className="text-primary italic">In</span>
@@ -98,7 +98,7 @@ export default function LoginPage() {
                                 <div className="space-y-2">
                                     <Label htmlFor="email" className="font-semibold">Email</Label>
                                     <div className="relative group">
-                                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                                        <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
                                         <Input
                                             id="email"
                                             type="email"
@@ -131,7 +131,7 @@ export default function LoginPage() {
                                         </button>
                                     </div>
                                     <div className="relative group">
-                                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
+                                        <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
                                         <Input
                                             id="password"
                                             type={showPassword ? 'text' : 'password'}
@@ -145,7 +145,7 @@ export default function LoginPage() {
                                             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                                             onClick={() => setShowPassword(!showPassword)}
                                         >
-                                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                            {showPassword ? <FaEyeSlash className="w-4 h-4" /> : <FaEye className="w-4 h-4" />}
                                         </button>
                                     </div>
                                     <AnimatePresence>
@@ -192,7 +192,7 @@ export default function LoginPage() {
                                         className="flex flex-col items-start p-3 text-left border border-border/50 rounded-xl bg-accent/30 hover:bg-accent/50 hover:border-primary/50 transition-all active:scale-[0.97] group"
                                     >
                                         <div className="flex items-center gap-1.5 mb-1">
-                                            <UserCheck className="w-3.5 h-3.5 text-primary" />
+                                            <FaUserCheck className="w-3.5 h-3.5 text-primary" />
                                             <span className="text-xs font-bold truncate">{acc.name.split(' ')[0]}</span>
                                         </div>
                                         <span className="text-[10px] text-muted-foreground leading-none">{acc.role}</span>
@@ -213,8 +213,8 @@ export default function LoginPage() {
                                     </button>
                                 </p>
                                 <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground/60">
-                                    <span className="flex items-center gap-1"><ShieldCheck className="w-3 h-3" /> Secure Login</span>
-                                    <span className="flex items-center gap-1"><Zap className="w-3 h-3" /> Fast Access</span>
+                                    <span className="flex items-center gap-1"><FaShieldHalved className="w-3 h-3" /> Secure Login</span>
+                                    <span className="flex items-center gap-1"><FaBolt className="w-3 h-3" /> Fast Access</span>
                                 </div>
                             </div>
                         </CardContent>
