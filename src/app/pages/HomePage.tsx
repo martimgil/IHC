@@ -246,17 +246,17 @@ export default function HomePage() {
         </h3>
 
         {filteredSports.length > 0 ? (
-          <div className="grid grid-cols-2 gap-4" role="list" aria-label="Lista de desportos">
+          <div className="grid grid-cols-3 gap-2" role="list" aria-label="Lista de desportos">
             {filteredSports.map(sport => (
               <button
                 key={sport.id}
                 role="listitem"
                 onClick={() => setSelectedSport(sport)}
-                className="flex flex-col items-center justify-center p-6 bg-card border-2 border-border/50 rounded-[2rem] hover:border-primary hover:bg-primary/5 transition-all shadow-sm active:scale-[0.96] focus:outline-none focus:ring-2 focus:ring-primary aspect-square group"
+                className="flex flex-col items-center justify-center p-3 bg-card border-2 border-border/50 rounded-2xl hover:border-primary hover:bg-primary/5 transition-all shadow-sm active:scale-[0.96] focus:outline-none focus:ring-2 focus:ring-primary group"
                 aria-label={`${sport.name} – toca para ver detalhes`}
               >
-                <span className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300" role="img" aria-label={sport.name}>{sport.icon}</span>
-                <span className="text-sm font-extrabold text-foreground tracking-tight text-center leading-tight">{sport.name}</span>
+                <span className="text-3xl mb-2 transform group-hover:scale-110 transition-transform duration-300" role="img" aria-label={sport.name}>{sport.icon}</span>
+                <span className="text-xs font-extrabold text-foreground tracking-tight text-center leading-tight">{sport.name}</span>
               </button>
             ))}
           </div>

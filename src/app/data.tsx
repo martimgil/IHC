@@ -1,5 +1,6 @@
 import { Sport, Session, Lobby, User, Notification, Player } from './types';
-import { FaPersonSwimming, FaVolleyball, FaBasketball, FaTableTennisPaddleBall, FaPersonHiking, FaFutbol } from 'react-icons/fa6';
+import { FaPersonSwimming, FaVolleyball, FaBasketball, FaTableTennisPaddleBall, FaPersonHiking, FaFutbol, FaBaseballBatBall, FaPersonRunning, FaFootball } from 'react-icons/fa6';
+import { GiTennisRacket } from 'react-icons/gi';
 import React from 'react';
 
 const createIcon = (IconComponent: any) => <IconComponent className="w-[1em] h-[1em]" />;
@@ -14,6 +15,7 @@ export const sports: Sport[] = [
     requiredMaterials: ['Fato de banho', 'Touca', 'Toalha'],
     minPlayers: 5,
     maxPlayers: 20,
+    recommendedPlayers: 12,
     difficulty: ['principiante', 'intermedio'],
   },
   {
@@ -24,6 +26,7 @@ export const sports: Sport[] = [
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva', 'Joelheiras (opcional)'],
     minPlayers: 6,
     maxPlayers: 12,
+    recommendedPlayers: 12,
     difficulty: ['principiante', 'intermedio', 'avancado', 'senior-federado'],
   },
   {
@@ -34,6 +37,7 @@ export const sports: Sport[] = [
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva'],
     minPlayers: 6,
     maxPlayers: 10,
+    recommendedPlayers: 10,
     difficulty: ['principiante', 'intermedio', 'avancado'],
   },
   {
@@ -44,6 +48,7 @@ export const sports: Sport[] = [
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva', 'Raquete (fornecida)'],
     minPlayers: 2,
     maxPlayers: 4,
+    recommendedPlayers: 4,
     difficulty: ['principiante', 'intermedio'],
   },
   {
@@ -54,6 +59,7 @@ export const sports: Sport[] = [
     requiredMaterials: ['Calçado adequado', 'Água', 'Protetor solar'],
     minPlayers: 1,
     maxPlayers: 30,
+    recommendedPlayers: 10,
     difficulty: ['qualquer'],
   },
   {
@@ -64,6 +70,51 @@ export const sports: Sport[] = [
     requiredMaterials: ['Sapatilhas/Chuteiras', 'Roupa desportiva', 'Caneleiras'],
     minPlayers: 6,
     maxPlayers: 14,
+    recommendedPlayers: 14,
+    difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
+    id: 'tenis',
+    name: 'Ténis',
+    icon: createIcon(GiTennisRacket),
+    description: 'Desporto individual ou de pares com raquete e bola',
+    requiredMaterials: ['Raquete', 'Sapatilhas', 'Roupa desportiva'],
+    minPlayers: 2,
+    maxPlayers: 4,
+    recommendedPlayers: 2,
+    difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
+    id: 'padel',
+    name: 'Padel',
+    icon: createIcon(FaBaseballBatBall),
+    description: 'Desporto de raquete em campo fechado, jogado em pares',
+    requiredMaterials: ['Raquete de padel', 'Sapatilhas', 'Roupa desportiva'],
+    minPlayers: 4,
+    maxPlayers: 4,
+    recommendedPlayers: 4,
+    difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
+    id: 'rugby',
+    name: 'Rugby',
+    icon: createIcon(FaFootball),
+    description: 'Desporto de contacto com grande espírito de equipa',
+    requiredMaterials: ['Botas de rugby', 'Protetor bucal', 'Roupa desportiva'],
+    minPlayers: 10,
+    maxPlayers: 15,
+    recommendedPlayers: 15,
+    difficulty: ['principiante', 'intermedio', 'avancado', 'senior-federado'],
+  },
+  {
+    id: 'natacao',
+    name: 'Natação',
+    icon: createIcon(FaPersonRunning),
+    description: 'Treino de natação em piscina, para todos os níveis',
+    requiredMaterials: ['Fato de banho', 'Touca', 'Óculos de natação', 'Toalha'],
+    minPlayers: 1,
+    maxPlayers: 8,
+    recommendedPlayers: 6,
     difficulty: ['principiante', 'intermedio', 'avancado'],
   },
 ];

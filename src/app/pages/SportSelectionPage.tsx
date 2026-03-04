@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
+import StickyBackButton from '../components/StickyBackButton';
 import {
   FaArrowLeft,
   FaCalendarDays,
@@ -58,15 +59,7 @@ export default function SportSelectionPage() {
 
   return (
     <div className="space-y-6">
-      {/* Back Button */}
-      <Button
-        variant="ghost"
-        onClick={() => navigate('/')}
-        className="mb-2"
-      >
-        <FaArrowLeft className="w-4 h-4 mr-2" />
-        Voltar
-      </Button>
+      <StickyBackButton to="/" />
 
       {/* Sport Header */}
       <div className="bg-primary rounded-xl p-6 text-primary-foreground">
@@ -77,7 +70,7 @@ export default function SportSelectionPage() {
             <p className="opacity-90 mb-4">{sport.description}</p>
             <div className="flex flex-wrap gap-2">
               <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
-                {sport.minPlayers}-{sport.maxPlayers} jogadores
+                {sport.recommendedPlayers ? `${sport.recommendedPlayers} jogadores (recomendado)` : `${sport.minPlayers}-${sport.maxPlayers} jogadores`}
               </Badge>
             </div>
           </div>

@@ -16,6 +16,7 @@ import {
   FaGear, FaHeart, FaCircleCheck, FaAward, FaBell,
   FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaXmark, FaBolt, FaMagnifyingGlass, FaTrashCan
 } from 'react-icons/fa6';
+import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
 
 // Suggested activities from user's interested sports (R17)
@@ -57,10 +58,51 @@ function SuggestionsSection() {
   );
 }
 
-// Edit Profile Sheet (R04)
-function EditProfileSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [name, setName] = useState(currentUser.name);
-  const [location, setLocation] = useState(currentUser.location);
+// Edit Profile Sheet — only name & location
+function EditProfileSheet({ open, onClose, userName, userLocation }: { open: boolean; onClose: () => void; userName: string; userLocation: string }) {
+  const [name, setName] = useState(userName);
+  const [location, setLocation] = useState(userLocation);
+
+  return (
+    <Sheet open={open} onOpenChange={o => { if (!o) onClose(); }}>
+      <SheetContent
+        side="bottom"
+        className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+      >
+        <div className="overflow-y-auto max-h-[75vh] px-5">
+          <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
+          <SheetHeader className="mb-6 text-left">
+            <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
+              <div className="p-2 bg-primary/10 rounded-xl">
+                <FaPenToSquare className="w-6 h-6 text-primary" aria-hidden="true" />
+              </div>
+              Editar Perfil
+            </SheetTitle>
+          </SheetHeader>
+          <div className="space-y-5 pb-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-name">Nome</Label>
+              <Input id="edit-name" value={name} onChange={e => setName(e.target.value)} />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="edit-location">Local de Residência</Label>
+              <div className="relative">
+                <FaMapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input id="edit-location" value={location} onChange={e => setLocation(e.target.value)} className="pl-9" />
+              </div>
+            </div>
+            <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => { toast.success('Perfil atualizado!'); onClose(); }}>
+              Guardar Alterações
+            </Button>
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+// Edit Sports Sheet — only sports & levels
+function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [interests, setInterests] = useState<string[]>([...currentUser.interestedSports]);
   const [levels, setLevels] = useState<Record<string, string>>({ ...currentUser.experienceLevels });
   const levelOptions = ['iniciante', 'intermediario', 'avancado'];
@@ -89,26 +131,14 @@ function EditProfileSheet({ open, onClose }: { open: boolean; onClose: () => voi
           <SheetHeader className="mb-6 text-left">
             <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
               <div className="p-2 bg-primary/10 rounded-xl">
-                <FaPenToSquare className="w-6 h-6 text-primary" aria-hidden="true" />
+                <FaHeart className="w-6 h-6 text-primary" aria-hidden="true" />
               </div>
-              Editar Perfil
+              Editar Desportos
             </SheetTitle>
           </SheetHeader>
           <div className="space-y-5 pb-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="edit-name">Nome</Label>
-              <Input id="edit-name" value={name} onChange={e => setName(e.target.value)} />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="edit-location">Localização</Label>
-              <div className="relative">
-                <FaMapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input id="edit-location" value={location} onChange={e => setLocation(e.target.value)} className="pl-9" />
-              </div>
-            </div>
-            <Separator />
             <div>
-              <p className="text-sm font-semibold mb-2">Desportos de Interesse</p>
+              <p className="text-sm font-semibold mb-2">Adicionar Desportos</p>
               <div className="relative mb-3">
                 <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
@@ -172,7 +202,7 @@ function EditProfileSheet({ open, onClose }: { open: boolean; onClose: () => voi
                 </div>
               </div>
             )}
-            <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => { toast.success('Perfil atualizado!'); onClose(); }}>
+            <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => { toast.success('Desportos atualizados!'); onClose(); }}>
               Guardar Alterações
             </Button>
           </div>
@@ -187,6 +217,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const { sessionUser, logout } = useUser();
   const [editOpen, setEditOpen] = useState(false);
+  const [sportsEditOpen, setSportsEditOpen] = useState(false);
 
   const displayName = sessionUser?.name ?? currentUser.name;
   const displayEmail = sessionUser?.email ?? currentUser.email;
@@ -214,9 +245,7 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-5">
-      <Button variant="ghost" onClick={() => navigate('/')} className="min-h-[44px] -ml-2">
-        <FaArrowLeft className="w-4 h-4 mr-2" />Voltar
-      </Button>
+      <StickyBackButton to="/" />
 
       {/* Hero Card */}
       <Card className="overflow-hidden border-0 shadow-md">
@@ -268,14 +297,14 @@ export default function ProfilePage() {
         <FaChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
       </button>
 
-      {/* Sports (R04 - linking to edit) */}
+      {/* Sports (R04 - linking to sports edit) */}
       <Card>
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
               <FaHeart className="w-5 h-5 text-red-500" />Os Meus Desportos
             </CardTitle>
-            <Button variant="ghost" size="sm" onClick={() => setEditOpen(true)} className="min-h-[40px] text-primary">
+            <Button variant="ghost" size="sm" onClick={() => setSportsEditOpen(true)} className="min-h-[40px] text-primary">
               <FaPlus className="w-4 h-4 mr-1" />Editar
             </Button>
           </div>
@@ -307,7 +336,6 @@ export default function ProfilePage() {
         <CardContent className="pt-0 space-y-1">
           {[
             { label: 'Preferências de Notificação', icon: <FaGear className="w-5 h-5 text-muted-foreground" />, action: () => toast.info('Em breve') },
-            { label: 'Alterar Localização', icon: <FaMapPin className="w-5 h-5 text-muted-foreground" />, action: () => setEditOpen(true) },
           ].map(item => (
             <button
               key={item.label}
@@ -330,8 +358,12 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Edit Profile Sheet (R04) */}
-      <EditProfileSheet open={editOpen} onClose={() => setEditOpen(false)} />
+      {/* Edit Profile Sheet — name & location only */}
+      <EditProfileSheet open={editOpen} onClose={() => setEditOpen(false)} userName={displayName} userLocation={displayLocation} />
+
+      {/* Edit Sports Sheet — sports & levels only */}
+      <EditSportsSheet open={sportsEditOpen} onClose={() => setSportsEditOpen(false)} />
     </div>
   );
 }
+

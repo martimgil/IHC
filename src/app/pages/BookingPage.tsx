@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
-import { getSessionById, getSportById, currentUser } from '../data';
+import { getSessionById, getSportById, currentUser, getLevelLabel } from '../data';
+import { useUser } from '../context/UserContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -17,6 +18,7 @@ import {
   FaCreditCard,
   FaCircleExclamation
 } from 'react-icons/fa6';
+import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
 
 export default function BookingPage() {
@@ -24,6 +26,7 @@ export default function BookingPage() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const { sessionUser } = useUser();
 
   const sessionId = searchParams.get('session');
   const session = sessionId ? getSessionById(sessionId) : null;
@@ -66,15 +69,15 @@ export default function BookingPage() {
   if (bookingConfirmed) {
     return (
       <div className="max-w-2xl mx-auto space-y-6">
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/40">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <div className="bg-green-100 rounded-full p-4" role="img" aria-label="Sucesso">
                 <FaCircleCheck className="w-12 h-12 text-green-600" aria-hidden="true" />
               </div>
             </div>
-            <CardTitle className="text-2xl text-green-900">Reserva Confirmada!</CardTitle>
-            <CardDescription className="text-green-800">
+            <CardTitle className="text-2xl text-green-900 dark:text-green-100">Reserva Confirmada!</CardTitle>
+            <CardDescription className="text-green-800 dark:text-green-300">
               A tua vaga foi confirmada.
             </CardDescription>
           </CardHeader>
@@ -82,18 +85,18 @@ export default function BookingPage() {
             <Separator />
             <div className="space-y-3" role="region" aria-label="Detalhes da reserva">
               <div className="flex items-center gap-2">
-                <FaMapPin className="w-5 h-5 text-gray-600" aria-hidden="true" />
+                <FaMapPin className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
                 <div>
                   <p className="font-semibold">{session.locationName}</p>
-                  <p className="text-sm text-gray-600">{session.locationAddress}</p>
+                  <p className="text-sm text-muted-foreground">{session.locationAddress}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <FaCalendarDays className="w-5 h-5 text-gray-600" aria-hidden="true" />
+                <FaCalendarDays className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
                 <span>{new Date(session.date).toLocaleDateString('pt-PT')} às {session.time}</span>
               </div>
               <div className="flex items-center gap-2">
-                <FaClock className="w-5 h-5 text-gray-600" aria-hidden="true" />
+                <FaClock className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
                 <span>{session.duration} minutos</span>
               </div>
             </div>
@@ -121,16 +124,7 @@ export default function BookingPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Back Button */}
-      <Button
-        variant="ghost"
-        onClick={() => navigate(-1)}
-        className="mb-2 min-h-[44px]"
-        aria-label="Voltar à página anterior"
-      >
-        <FaArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
-        Voltar
-      </Button>
+      <StickyBackButton />
 
       {/* Booking Summary */}
       <Card>
@@ -207,16 +201,16 @@ export default function BookingPage() {
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-gray-600">Nome:</span>
-            <span className="font-semibold">{currentUser.name}</span>
+            <span className="text-muted-foreground">Nome:</span>
+            <span className="font-semibold">{sessionUser?.name ?? currentUser.name}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-600">Email:</span>
-            <span className="font-semibold">{currentUser.email}</span>
+            <span className="text-muted-foreground">Email:</span>
+            <span className="font-semibold">{sessionUser?.email ?? currentUser.email}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-gray-600">Nível:</span>
-            <Badge>{currentUser.experienceLevels[session.sportId] || 'Não definido'}</Badge>
+            <span className="text-muted-foreground">Nível:</span>
+            <Badge>{getLevelLabel(currentUser.experienceLevels[session.sportId] || 'principiante')}</Badge>
           </div>
         </CardContent>
       </Card>

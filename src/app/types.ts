@@ -15,6 +15,7 @@ export type Sport = {
   requiredMaterials: string[];
   minPlayers: number;
   maxPlayers: number;
+  recommendedPlayers?: number;
   difficulty: ExperienceLevel[];
 };
 

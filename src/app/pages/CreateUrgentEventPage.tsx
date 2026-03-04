@@ -23,6 +23,7 @@ import {
   FaCircleExclamation,
   FaCircleCheck
 } from 'react-icons/fa6';
+import StickyBackButton from '../components/StickyBackButton';
 import { ExperienceLevel } from '../types';
 import { toast } from 'sonner';
 
@@ -40,6 +41,7 @@ export default function CreateUrgentEventPage() {
     level: 'intermediario' as ExperienceLevel,
     spotsNeeded: '1',
     notes: '',
+    isUltimaHora: false,
   });
 
   const validateForm = () => {
@@ -167,16 +169,7 @@ export default function CreateUrgentEventPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Back Button */}
-      <Button
-        variant="ghost"
-        onClick={() => navigate('/')}
-        className="mb-2 min-h-[44px]"
-        aria-label="Voltar à página inicial"
-      >
-        <FaArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
-        Voltar
-      </Button>
+      <StickyBackButton />
 
       {/* Header */}
       <Card className="border-orange-200 bg-orange-50">
@@ -378,6 +371,30 @@ export default function CreateUrgentEventPage() {
               <p id="notes-hint" className="text-xs text-gray-500">
                 Adicione detalhes que possam ajudar a encontrar o jogador ideal
               </p>
+            </div>
+
+            {/* Última Hora Toggle */}
+            <div className="flex items-center justify-between p-4 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40">
+              <div className="flex items-center gap-3">
+                <FaClock className="w-5 h-5 text-orange-600 dark:text-orange-400" aria-hidden="true" />
+                <div>
+                  <p className="font-semibold text-sm text-orange-900 dark:text-orange-100">Opção de Última Hora</p>
+                  <p className="text-xs text-orange-700 dark:text-orange-300">Notifica jogadores próximos imediatamente</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={formData.isUltimaHora}
+                onClick={() => setFormData(prev => ({ ...prev, isUltimaHora: !prev.isUltimaHora }))}
+                className={`relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 ${formData.isUltimaHora ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-600'
+                  }`}
+              >
+                <span
+                  className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-200 ${formData.isUltimaHora ? 'translate-x-5' : 'translate-x-0'
+                    }`}
+                />
+              </button>
             </div>
 
             {/* Submit Button */}

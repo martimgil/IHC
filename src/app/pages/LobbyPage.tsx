@@ -16,6 +16,7 @@ import {
   FaClock, FaShieldHalved, FaCircleExclamation, FaPaperPlane, FaUserPlus, FaUserMinus,
   FaThumbsUp, FaStar, FaHeart, FaRightFromBracket, FaMessage
 } from 'react-icons/fa6';
+import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
 import { Lobby } from '../types';
 
@@ -179,9 +180,7 @@ export default function LobbyPage() {
   if (!lobbyId) {
     return (
       <div className="max-w-3xl mx-auto space-y-4">
-        <Button variant="ghost" onClick={() => navigate(-1)} className="-ml-2 min-h-[44px]">
-          <FaArrowLeft className="w-4 h-4 mr-2" />Voltar
-        </Button>
+        <StickyBackButton />
         <h1 className="text-xl font-bold flex items-center gap-2">
           <FaUsers className="w-5 h-5 text-primary" />Atividades de Última Hora
         </h1>
@@ -272,9 +271,7 @@ export default function LobbyPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-4">
-      <Button variant="ghost" onClick={() => navigate(-1)} className="-ml-2 min-h-[44px]">
-        <FaArrowLeft className="w-4 h-4 mr-2" />Voltar
-      </Button>
+      <StickyBackButton />
 
       {/* Header */}
       <Card>

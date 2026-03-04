@@ -5,16 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import {
-  FaArrowLeft,
-  FaMapPin,
-  FaMagnifyingGlass,
-  FaCompass,
-  FaCalendarDays,
-  FaUsers,
-  FaEuroSign,
-  FaChevronRight
-} from 'react-icons/fa6';
+import { FaArrowLeft, FaMapPin, FaMagnifyingGlass, FaCompass, FaCalendarDays, FaUsers, FaEuroSign, FaChevronRight } from 'react-icons/fa6';
+import StickyBackButton from '../components/StickyBackButton';
+import { toast } from 'sonner';
 
 export default function SearchLocationPage() {
   const navigate = useNavigate();
@@ -67,21 +60,13 @@ export default function SearchLocationPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Back Button */}
-      <Button
-        variant="ghost"
-        onClick={() => navigate('/')}
-        className="mb-2"
-      >
-        <FaArrowLeft className="w-4 h-4 mr-2" />
-        Voltar
-      </Button>
+    <div className="max-w-3xl mx-auto space-y-4">
+      <StickyBackButton />
 
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold mb-2">Procurar por Local</h1>
-        <p className="text-gray-600">Encontre atividades desportivas perto de si</p>
+        <p className="text-muted-foreground">Encontre atividades desportivas perto de si</p>
       </div>
 
       {/* Search Bar */}
@@ -96,7 +81,10 @@ export default function SearchLocationPage() {
             className="pl-10 h-12"
           />
         </div>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" onClick={() => {
+          setSearchQuery('Universidade de Aveiro');
+          toast.success('Localização detetada!', { description: 'Universidade de Aveiro' });
+        }}>
           <FaCompass className="w-4 h-4 mr-2" />
           Usar Localização Atual
         </Button>
@@ -155,7 +143,7 @@ export default function SearchLocationPage() {
                     <CardContent className="pt-0 space-y-4">
                       {/* Available Sports */}
                       <div>
-                        <h4 className="font-semibold mb-2 text-sm text-gray-600">Desportos Disponíveis</h4>
+                        <h4 className="font-semibold mb-2 text-sm text-muted-foreground">Desportos Disponíveis</h4>
                         <div className="flex flex-wrap gap-2">
                           {location.availableSports.map(sportId => {
                             const sport = sports.find(s => s.id === sportId);
@@ -176,7 +164,7 @@ export default function SearchLocationPage() {
                             {activities.sessions.map(session => (
                               <div
                                 key={session.id}
-                                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                                className="flex items-center justify-between p-3 bg-muted/40 rounded-lg hover:bg-muted/60 transition-colors cursor-pointer"
                                 onClick={() => navigate(`/booking?session=${session.id}`)}
                               >
                                 <div className="flex-1">
@@ -184,7 +172,7 @@ export default function SearchLocationPage() {
                                     <span>{sports.find(s => s.id === session.sportId)?.icon}</span>
                                     <span>{sports.find(s => s.id === session.sportId)?.name}</span>
                                   </p>
-                                  <div className="flex items-center gap-3 text-xs text-gray-600 mt-1">
+                                  <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
                                     <span className="flex items-center gap-1">
                                       <FaCalendarDays className="w-3 h-3" />
                                       {new Date(session.date).toLocaleDateString('pt-PT')}
@@ -199,7 +187,7 @@ export default function SearchLocationPage() {
                                     </span>
                                   </div>
                                 </div>
-                                <FaChevronRight className="w-4 h-4 text-gray-400" />
+                                <FaChevronRight className="w-4 h-4 text-muted-foreground" />
                               </div>
                             ))}
                           </div>
@@ -222,7 +210,7 @@ export default function SearchLocationPage() {
                                     <span>{sports.find(s => s.id === lobby.sportId)?.icon}</span>
                                     <span>{sports.find(s => s.id === lobby.sportId)?.name}</span>
                                   </p>
-                                  <div className="flex items-center gap-3 text-xs text-gray-600 mt-1">
+                                  <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
                                     <span className="flex items-center gap-1">
                                       <FaUsers className="w-3 h-3" />
                                       {lobby.currentPlayers.length}/{lobby.maxPlayers}
@@ -236,7 +224,7 @@ export default function SearchLocationPage() {
                                   </div>
                                 </div>
                                 {lobby.isUrgent && <Badge variant="destructive">Urgente</Badge>}
-                                <FaChevronRight className="w-4 h-4 text-gray-400 ml-2" />
+                                <FaChevronRight className="w-4 h-4 text-muted-foreground ml-2" />
                               </div>
                             ))}
                           </div>
@@ -244,7 +232,7 @@ export default function SearchLocationPage() {
                       )}
 
                       {totalActivities === 0 && (
-                        <p className="text-sm text-gray-500 text-center py-4">
+                        <p className="text-sm text-muted-foreground text-center py-4">
                           Nenhuma atividade disponível no momento
                         </p>
                       )}
@@ -256,8 +244,8 @@ export default function SearchLocationPage() {
           </div>
         ) : (
           <Card>
-            <CardContent className="py-12 text-center text-gray-500">
-              <FaMapPin className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+            <CardContent className="py-12 text-center text-muted-foreground">
+              <FaMapPin className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
               <p>Nenhum local encontrado.</p>
             </CardContent>
           </Card>

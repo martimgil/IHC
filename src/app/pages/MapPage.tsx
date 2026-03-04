@@ -5,6 +5,7 @@ import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { Card, CardContent } from '../components/ui/card';
 import { FaArrowLeft, FaMapPin, FaMagnifyingGlass, FaCompass, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa6';
+import StickyBackButton from '../components/StickyBackButton';
 import { sports, sessions, getSportById } from '../data';
 
 // Mock locations with coordinates (relative positions in % for fake map)
@@ -31,10 +32,8 @@ export default function MapPage() {
         sportIds.map(id => sports.find(s => s.id === id)).filter(Boolean);
 
     return (
-        <div className="max-w-4xl mx-auto space-y-4">
-            <Button variant="ghost" onClick={() => navigate(-1)} className="min-h-[44px] -ml-2">
-                <FaArrowLeft className="w-4 h-4 mr-2" />Voltar
-            </Button>
+        <div className="max-w-3xl mx-auto space-y-4">
+            <StickyBackButton />
 
             <div>
                 <h1 className="text-xl font-bold flex items-center gap-2">
@@ -55,25 +54,81 @@ export default function MapPage() {
                 />
             </div>
 
-            {/* Fake Map */}
+            {/* Realistic Map */}
             <div
                 className="relative w-full rounded-2xl overflow-hidden border border-border shadow-md"
-                style={{ height: '320px' }}
+                style={{ height: '370px' }}
                 role="img"
                 aria-label="Mapa de locais desportivos em Aveiro"
             >
                 {/* Map background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-blue-100 dark:from-green-950/30 dark:to-blue-950/30">
-                    {/* Fake roads */}
-                    <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 100 100" preserveAspectRatio="none">
-                        <line x1="0" y1="45" x2="100" y2="45" stroke="currentColor" strokeWidth="0.5" className="text-gray-500" />
-                        <line x1="0" y1="60" x2="100" y2="60" stroke="currentColor" strokeWidth="0.3" className="text-gray-400" />
-                        <line x1="50" y1="0" x2="50" y2="100" stroke="currentColor" strokeWidth="0.5" className="text-gray-500" />
-                        <line x1="30" y1="0" x2="30" y2="100" stroke="currentColor" strokeWidth="0.3" className="text-gray-400" />
-                        {/* Fake river/lagoon */}
-                        <ellipse cx="20" cy="55" rx="12" ry="20" fill="#93c5fd" opacity="0.5" />
-                        <text x="10" y="56" fontSize="3" fill="#1e40af" opacity="0.7">Ria de</text>
-                        <text x="10" y="60" fontSize="3" fill="#1e40af" opacity="0.7">Aveiro</text>
+                <div className="absolute inset-0 bg-[#e8f0e0] dark:bg-[#1a2a1a]">
+                    <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice">
+                        {/* Water - Ria de Aveiro */}
+                        <path d="M0,80 Q10,75 15,85 Q20,100 18,120 Q16,140 20,160 Q25,175 15,190 L0,200 L0,80Z" fill="#7cc8e8" opacity="0.55" />
+                        <path d="M15,85 Q25,90 30,100 Q35,115 32,130 Q28,145 35,160 Q42,175 35,190 L20,190 Q25,175 20,160 Q16,140 18,120 Q20,100 15,85Z" fill="#9bd4ef" opacity="0.4" />
+                        <path d="M0,60 Q8,55 12,65 Q15,78 15,85 Q10,75 0,80Z" fill="#7cc8e8" opacity="0.45" />
+                        {/* Small canal */}
+                        <path d="M30,100 Q45,95 60,100 Q65,102 60,105 Q45,100 30,105Z" fill="#7cc8e8" opacity="0.35" />
+
+                        {/* Green areas / Parks */}
+                        <ellipse cx="140" cy="45" rx="18" ry="12" fill="#6db86b" opacity="0.3" />
+                        <ellipse cx="165" cy="70" rx="10" ry="8" fill="#6db86b" opacity="0.25" />
+                        <ellipse cx="45" cy="150" rx="8" ry="6" fill="#6db86b" opacity="0.3" />
+                        <rect x="155" y="35" width="20" height="15" rx="4" fill="#6db86b" opacity="0.2" />
+
+                        {/* Main roads */}
+                        <line x1="40" y1="0" x2="40" y2="200" stroke="#c4c4c4" strokeWidth="1.8" opacity="0.7" className="dark:stroke-gray-600" />
+                        <line x1="80" y1="0" x2="80" y2="200" stroke="#c4c4c4" strokeWidth="1.2" opacity="0.5" className="dark:stroke-gray-600" />
+                        <line x1="120" y1="0" x2="120" y2="200" stroke="#c4c4c4" strokeWidth="1.5" opacity="0.6" className="dark:stroke-gray-600" />
+                        <line x1="160" y1="0" x2="160" y2="200" stroke="#c4c4c4" strokeWidth="1" opacity="0.4" className="dark:stroke-gray-600" />
+                        <line x1="0" y1="50" x2="200" y2="50" stroke="#c4c4c4" strokeWidth="1.5" opacity="0.6" className="dark:stroke-gray-600" />
+                        <line x1="0" y1="100" x2="200" y2="100" stroke="#c4c4c4" strokeWidth="1.8" opacity="0.7" className="dark:stroke-gray-600" />
+                        <line x1="0" y1="140" x2="200" y2="140" stroke="#c4c4c4" strokeWidth="1.2" opacity="0.5" className="dark:stroke-gray-600" />
+                        <line x1="30" y1="170" x2="200" y2="170" stroke="#c4c4c4" strokeWidth="1" opacity="0.4" className="dark:stroke-gray-600" />
+
+                        {/* Secondary roads */}
+                        <line x1="60" y1="20" x2="60" y2="180" stroke="#d4d4d4" strokeWidth="0.6" opacity="0.4" className="dark:stroke-gray-700" />
+                        <line x1="100" y1="30" x2="100" y2="190" stroke="#d4d4d4" strokeWidth="0.6" opacity="0.4" className="dark:stroke-gray-700" />
+                        <line x1="140" y1="10" x2="140" y2="200" stroke="#d4d4d4" strokeWidth="0.6" opacity="0.4" className="dark:stroke-gray-700" />
+                        <line x1="180" y1="30" x2="180" y2="190" stroke="#d4d4d4" strokeWidth="0.6" opacity="0.4" className="dark:stroke-gray-700" />
+                        <line x1="35" y1="75" x2="200" y2="75" stroke="#d4d4d4" strokeWidth="0.6" opacity="0.4" className="dark:stroke-gray-700" />
+                        <line x1="40" y1="120" x2="200" y2="120" stroke="#d4d4d4" strokeWidth="0.6" opacity="0.4" className="dark:stroke-gray-700" />
+
+                        {/* City blocks (buildings) */}
+                        <rect x="43" y="53" width="14" height="18" rx="1.5" fill="#d6c9b8" opacity="0.5" className="dark:fill-gray-700" />
+                        <rect x="63" y="53" width="14" height="18" rx="1.5" fill="#d1c4b3" opacity="0.45" className="dark:fill-gray-700" />
+                        <rect x="43" y="78" width="14" height="18" rx="1.5" fill="#cfc2b0" opacity="0.4" className="dark:fill-gray-700" />
+                        <rect x="63" y="78" width="14" height="18" rx="1.5" fill="#d6c9b8" opacity="0.5" className="dark:fill-gray-700" />
+                        <rect x="83" y="53" width="14" height="18" rx="1.5" fill="#cdbfae" opacity="0.45" className="dark:fill-gray-700" />
+                        <rect x="83" y="78" width="14" height="18" rx="1.5" fill="#d1c4b3" opacity="0.4" className="dark:fill-gray-700" />
+                        <rect x="103" y="53" width="14" height="18" rx="1.5" fill="#d6c9b8" opacity="0.5" className="dark:fill-gray-700" />
+                        <rect x="103" y="78" width="14" height="18" rx="1.5" fill="#cfc2b0" opacity="0.45" className="dark:fill-gray-700" />
+                        <rect x="123" y="103" width="14" height="14" rx="1.5" fill="#d6c9b8" opacity="0.4" className="dark:fill-gray-700" />
+                        <rect x="143" y="103" width="14" height="14" rx="1.5" fill="#cdbfae" opacity="0.45" className="dark:fill-gray-700" />
+                        <rect x="43" y="103" width="14" height="14" rx="1.5" fill="#d1c4b3" opacity="0.4" className="dark:fill-gray-700" />
+                        <rect x="63" y="103" width="14" height="14" rx="1.5" fill="#d6c9b8" opacity="0.45" className="dark:fill-gray-700" />
+                        <rect x="83" y="103" width="14" height="14" rx="1.5" fill="#cfc2b0" opacity="0.4" className="dark:fill-gray-700" />
+                        <rect x="103" y="143" width="14" height="22" rx="1.5" fill="#d6c9b8" opacity="0.5" className="dark:fill-gray-700" />
+                        <rect x="123" y="143" width="14" height="22" rx="1.5" fill="#cdbfae" opacity="0.4" className="dark:fill-gray-700" />
+                        <rect x="143" y="143" width="14" height="22" rx="1.5" fill="#d1c4b3" opacity="0.45" className="dark:fill-gray-700" />
+
+                        {/* University campus area */}
+                        <rect x="135" y="25" width="30" height="20" rx="3" fill="#b8d4a8" opacity="0.4" stroke="#7cb86b" strokeWidth="0.5" />
+                        <text x="150" y="37" fontSize="3.5" fill="#2d6b2a" opacity="0.8" textAnchor="middle" fontWeight="bold" className="dark:fill-green-400">Univ. Aveiro</text>
+
+                        {/* Street labels */}
+                        <text x="40" y="48" fontSize="2.5" fill="#666" opacity="0.7" textAnchor="middle" className="dark:fill-gray-400">Av. da Universidade</text>
+                        <text x="90" y="98" fontSize="2.5" fill="#666" opacity="0.7" textAnchor="middle" className="dark:fill-gray-400">Av. Dr. Lourenço Peixinho</text>
+                        <text x="55" y="138" fontSize="2.5" fill="#666" opacity="0.7" textAnchor="middle" className="dark:fill-gray-400">Rua de Aveiro</text>
+
+                        {/* Water labels */}
+                        <text x="12" y="105" fontSize="4" fill="#1e5a8a" opacity="0.6" textAnchor="middle" fontStyle="italic" className="dark:fill-blue-400">Ria</text>
+                        <text x="12" y="112" fontSize="4" fill="#1e5a8a" opacity="0.6" textAnchor="middle" fontStyle="italic" className="dark:fill-blue-400">de</text>
+                        <text x="12" y="119" fontSize="4" fill="#1e5a8a" opacity="0.6" textAnchor="middle" fontStyle="italic" className="dark:fill-blue-400">Aveiro</text>
+
+                        {/* Compass icon */}
+                        <text x="190" y="15" fontSize="6" fill="#888" opacity="0.5" textAnchor="middle" className="dark:fill-gray-500">N↑</text>
                     </svg>
                     <p className="absolute bottom-2 right-3 text-xs text-muted-foreground/50">Mapa ilustrativo · Aveiro</p>
                 </div>
@@ -98,9 +153,10 @@ export default function MapPage() {
                     </button>
                 ))}
 
-                {/* User location dot */}
-                <div className="absolute" style={{ left: '50%', top: '50%' }}>
+                {/* User location dot - at University of Aveiro */}
+                <div className="absolute" style={{ left: '75%', top: '28%' }}>
                     <div className="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg animate-pulse" aria-label="A tua localização" />
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap bg-white/80 dark:bg-card/80 px-1 rounded">Tu</div>
                 </div>
             </div>
 

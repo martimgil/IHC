@@ -6,9 +6,10 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Separator } from '../components/ui/separator';
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved, FaUserCheck } from 'react-icons/fa6';
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved, FaUserCheck, FaHeart } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'motion/react';
+import { sports, currentUser } from '../data';
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -198,6 +199,23 @@ export default function LoginPage() {
                                         <span className="text-[10px] text-muted-foreground leading-none">{acc.role}</span>
                                     </button>
                                 ))}
+                            </div>
+
+                            {/* Favorite Sports */}
+                            <div className="space-y-2">
+                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
+                                    <FaHeart className="w-3 h-3 text-red-500" />Os teus desportos favoritos
+                                </p>
+                                <div className="flex flex-wrap gap-1.5">
+                                    {currentUser.interestedSports.map(id => {
+                                        const sport = sports.find(s => s.id === id);
+                                        return sport ? (
+                                            <span key={id} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-primary/10 text-primary text-xs font-semibold border border-primary/20">
+                                                <span>{sport.icon}</span>{sport.name}
+                                            </span>
+                                        ) : null;
+                                    })}
+                                </div>
                             </div>
 
                             <Separator className="opacity-50" />
