@@ -7,16 +7,16 @@ import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import {
-  ArrowLeft,
-  Calendar,
-  MapPin,
-  Users,
-  Clock,
-  Euro,
-  CheckCircle,
-  CreditCard,
-  AlertCircle
-} from 'lucide-react';
+  FaArrowLeft,
+  FaCalendarDays,
+  FaMapPin,
+  FaUsers,
+  FaClock,
+  FaEuroSign,
+  FaCircleCheck,
+  FaCreditCard,
+  FaCircleExclamation
+} from 'react-icons/fa6';
 import { toast } from 'sonner';
 
 export default function BookingPage() {
@@ -70,7 +70,7 @@ export default function BookingPage() {
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <div className="bg-green-100 rounded-full p-4" role="img" aria-label="Sucesso">
-                <CheckCircle className="w-12 h-12 text-green-600" aria-hidden="true" />
+                <FaCircleCheck className="w-12 h-12 text-green-600" aria-hidden="true" />
               </div>
             </div>
             <CardTitle className="text-2xl text-green-900">Reserva Confirmada!</CardTitle>
@@ -82,18 +82,18 @@ export default function BookingPage() {
             <Separator />
             <div className="space-y-3" role="region" aria-label="Detalhes da reserva">
               <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-gray-600" aria-hidden="true" />
+                <FaMapPin className="w-5 h-5 text-gray-600" aria-hidden="true" />
                 <div>
                   <p className="font-semibold">{session.locationName}</p>
                   <p className="text-sm text-gray-600">{session.locationAddress}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-gray-600" aria-hidden="true" />
+                <FaCalendarDays className="w-5 h-5 text-gray-600" aria-hidden="true" />
                 <span>{new Date(session.date).toLocaleDateString('pt-PT')} às {session.time}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-gray-600" aria-hidden="true" />
+                <FaClock className="w-5 h-5 text-gray-600" aria-hidden="true" />
                 <span>{session.duration} minutos</span>
               </div>
             </div>
@@ -128,7 +128,7 @@ export default function BookingPage() {
         className="mb-2 min-h-[44px]"
         aria-label="Voltar à página anterior"
       >
-        <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+        <FaArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
         Voltar
       </Button>
 
@@ -148,7 +148,7 @@ export default function BookingPage() {
         <CardContent className="space-y-4">
           <div className="space-y-3" role="region" aria-label="Detalhes da sessão">
             <div className="flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-gray-600 mt-0.5 shrink-0" aria-hidden="true" />
+              <FaMapPin className="w-5 h-5 text-gray-600 mt-0.5 shrink-0" aria-hidden="true" />
               <div>
                 <p className="font-semibold">{session.locationName}</p>
                 <p className="text-sm text-gray-600">{session.locationAddress}</p>
@@ -156,7 +156,7 @@ export default function BookingPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <Calendar className="w-5 h-5 text-gray-600 shrink-0" aria-hidden="true" />
+              <FaCalendarDays className="w-5 h-5 text-gray-600 shrink-0" aria-hidden="true" />
               <span>{new Date(session.date).toLocaleDateString('pt-PT', {
                 weekday: 'long',
                 year: 'numeric',
@@ -166,12 +166,12 @@ export default function BookingPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <Clock className="w-5 h-5 text-gray-600 shrink-0" aria-hidden="true" />
+              <FaClock className="w-5 h-5 text-gray-600 shrink-0" aria-hidden="true" />
               <span>Duração: {session.duration} minutos</span>
             </div>
 
             <div className="flex items-center gap-3">
-              <Users className="w-5 h-5 text-gray-600 shrink-0" aria-hidden="true" />
+              <FaUsers className="w-5 h-5 text-gray-600 shrink-0" aria-hidden="true" />
               <div className="flex-1">
                 <span>{session.availableSpots} vaga(s) disponível(eis) de {session.totalSpots}</span>
                 <div className="flex items-center gap-2 mt-1">
@@ -193,7 +193,7 @@ export default function BookingPage() {
           <div className="flex items-center justify-between py-2">
             <span className="text-lg font-semibold">Total a Pagar</span>
             <div className="flex items-center gap-1 text-2xl font-bold text-green-600">
-              <Euro className="w-6 h-6" aria-hidden="true" />
+              <FaEuroSign className="w-6 h-6" aria-hidden="true" />
               <span aria-label={`${session.price.toFixed(2)} euros`}>{session.price.toFixed(2)}</span>
             </div>
           </div>
@@ -223,7 +223,7 @@ export default function BookingPage() {
 
       {/* Payment Warning */}
       <Alert className="border-orange-200 bg-orange-50">
-        <AlertCircle className="h-4 w-4 text-orange-600" aria-hidden="true" />
+        <FaCircleExclamation className="h-4 w-4 text-orange-600" aria-hidden="true" />
         <AlertTitle className="text-orange-950 font-bold">Importante</AlertTitle>
         <AlertDescription className="text-orange-900 font-medium">
           O pagamento garante a tua vaga. Em caso de cancelamento com mais de 24h de antecedência,
@@ -250,7 +250,7 @@ export default function BookingPage() {
             </>
           ) : (
             <>
-              <CreditCard className="w-5 h-5 mr-2" aria-hidden="true" />
+              <FaCreditCard className="w-5 h-5 mr-2" aria-hidden="true" />
               Confirmar e Pagar {session.price.toFixed(2)}€
             </>
           )}

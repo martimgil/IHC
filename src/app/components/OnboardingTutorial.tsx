@@ -1,31 +1,31 @@
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent } from './ui/dialog';
 import { Button } from './ui/button';
-import { Home, MapPin, Users, Bell, Zap } from 'lucide-react';
+import { FaHouse, FaMapPin, FaUsers, FaBell, FaBolt } from 'react-icons/fa6';
 
 const steps = [
     {
-        icon: <Zap className="w-12 h-12 text-primary" />,
+        icon: <FaBolt className="w-12 h-12 text-primary" />,
         title: 'Bem-vindo ao matchIn! ⚡',
         description: 'A tua app para encontrar atividades desportivas, juntar lobbies e fazer novas conexões.',
     },
     {
-        icon: <Home className="w-12 h-12 text-primary" />,
+        icon: <FaHouse className="w-12 h-12 text-primary" />,
         title: 'Escolhe o teu desporto',
         description: 'Na página inicial encontras todos os desportos disponíveis. Toca num para ver sessões e lobbies.',
     },
     {
-        icon: <MapPin className="w-12 h-12 text-primary" />,
+        icon: <FaMapPin className="w-12 h-12 text-primary" />,
         title: 'Encontra por local',
         description: 'Usa "Procurar por Local" para encontrar atividades perto de ti.',
     },
     {
-        icon: <Users className="w-12 h-12 text-primary" />,
+        icon: <FaUsers className="w-12 h-12 text-primary" />,
         title: 'Atividades de última hora',
         description: 'Precisas de um companheiro agora? Usa "Atividade de Última Hora" para encontrar lobbies abertos.',
     },
     {
-        icon: <Bell className="w-12 h-12 text-primary" />,
+        icon: <FaBell className="w-12 h-12 text-primary" />,
         title: 'Fica a par',
         description: 'Activa as notificações para saberes quando há uma vaga disponível no teu desporto favorito.',
     },

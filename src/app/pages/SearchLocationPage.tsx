@@ -6,15 +6,15 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import {
-  ArrowLeft,
-  MapPin,
-  Search,
-  Navigation,
-  Calendar,
-  Users,
-  Euro,
-  ChevronRight
-} from 'lucide-react';
+  FaArrowLeft,
+  FaMapPin,
+  FaMagnifyingGlass,
+  FaCompass,
+  FaCalendarDays,
+  FaUsers,
+  FaEuroSign,
+  FaChevronRight
+} from 'react-icons/fa6';
 
 export default function SearchLocationPage() {
   const navigate = useNavigate();
@@ -74,7 +74,7 @@ export default function SearchLocationPage() {
         onClick={() => navigate('/')}
         className="mb-2"
       >
-        <ArrowLeft className="w-4 h-4 mr-2" />
+        <FaArrowLeft className="w-4 h-4 mr-2" />
         Voltar
       </Button>
 
@@ -87,7 +87,7 @@ export default function SearchLocationPage() {
       {/* Search Bar */}
       <div className="space-y-3">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <FaMagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <Input
             type="text"
             placeholder="Pesquisar local..."
@@ -97,7 +97,7 @@ export default function SearchLocationPage() {
           />
         </div>
         <Button variant="outline" className="w-full">
-          <Navigation className="w-4 h-4 mr-2" />
+          <FaCompass className="w-4 h-4 mr-2" />
           Usar Localização Atual
         </Button>
       </div>
@@ -126,7 +126,7 @@ export default function SearchLocationPage() {
                       <div className="flex-1">
                         <CardTitle className="text-lg">{location.name}</CardTitle>
                         <CardDescription className="flex items-center gap-1 mt-1">
-                          <MapPin className="w-3 h-3" />
+                          <FaMapPin className="w-3 h-3" />
                           {location.address}
                         </CardDescription>
                         <div className="flex flex-wrap gap-1 mt-2">
@@ -186,20 +186,20 @@ export default function SearchLocationPage() {
                                   </p>
                                   <div className="flex items-center gap-3 text-xs text-gray-600 mt-1">
                                     <span className="flex items-center gap-1">
-                                      <Calendar className="w-3 h-3" />
+                                      <FaCalendarDays className="w-3 h-3" />
                                       {new Date(session.date).toLocaleDateString('pt-PT')}
                                     </span>
                                     <span className="flex items-center gap-1">
-                                      <Users className="w-3 h-3" />
+                                      <FaUsers className="w-3 h-3" />
                                       {session.availableSpots} vagas
                                     </span>
                                     <span className="flex items-center gap-1">
-                                      <Euro className="w-3 h-3" />
+                                      <FaEuroSign className="w-3 h-3" />
                                       {session.price.toFixed(2)}
                                     </span>
                                   </div>
                                 </div>
-                                <ChevronRight className="w-4 h-4 text-gray-400" />
+                                <FaChevronRight className="w-4 h-4 text-gray-400" />
                               </div>
                             ))}
                           </div>
@@ -224,19 +224,19 @@ export default function SearchLocationPage() {
                                   </p>
                                   <div className="flex items-center gap-3 text-xs text-gray-600 mt-1">
                                     <span className="flex items-center gap-1">
-                                      <Users className="w-3 h-3" />
+                                      <FaUsers className="w-3 h-3" />
                                       {lobby.currentPlayers.length}/{lobby.maxPlayers}
                                     </span>
                                     {lobby.scheduledDate && (
                                       <span className="flex items-center gap-1">
-                                        <Calendar className="w-3 h-3" />
+                                        <FaCalendarDays className="w-3 h-3" />
                                         {new Date(lobby.scheduledDate).toLocaleDateString('pt-PT')}
                                       </span>
                                     )}
                                   </div>
                                 </div>
                                 {lobby.isUrgent && <Badge variant="destructive">Urgente</Badge>}
-                                <ChevronRight className="w-4 h-4 text-gray-400 ml-2" />
+                                <FaChevronRight className="w-4 h-4 text-gray-400 ml-2" />
                               </div>
                             ))}
                           </div>
@@ -257,7 +257,7 @@ export default function SearchLocationPage() {
         ) : (
           <Card>
             <CardContent className="py-12 text-center text-gray-500">
-              <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+              <FaMapPin className="w-12 h-12 text-gray-300 mx-auto mb-4" />
               <p>Nenhum local encontrado.</p>
             </CardContent>
           </Card>

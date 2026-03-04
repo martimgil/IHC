@@ -6,16 +6,17 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import {
-  ArrowLeft,
-  Calendar,
-  MapPin,
-  Users,
-  Clock,
-  Euro,
-  AlertCircle,
-  CheckCircle,
-  ChevronRight
-} from 'lucide-react';
+  FaArrowLeft,
+  FaCalendarDays,
+  FaLocationDot,
+  FaUsers,
+  FaClock,
+  FaEuroSign,
+  FaCircleExclamation,
+  FaCircleCheck,
+  FaChevronRight,
+  FaDumbbell
+} from 'react-icons/fa6';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 
@@ -63,7 +64,7 @@ export default function SportSelectionPage() {
         onClick={() => navigate('/')}
         className="mb-2"
       >
-        <ArrowLeft className="w-4 h-4 mr-2" />
+        <FaArrowLeft className="w-4 h-4 mr-2" />
         Voltar
       </Button>
 
@@ -87,7 +88,7 @@ export default function SportSelectionPage() {
       {sport.requiredMaterials.length > 0 && (
         <div className="space-y-2">
           <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-950/40 dark:border-blue-800">
-            <AlertCircle className="h-4 w-4 text-blue-600" />
+            <FaCircleExclamation className="h-4 w-4 text-blue-600" />
             <AlertTitle className="text-blue-900 dark:text-blue-200">Não te Esqueças!</AlertTitle>
             <AlertDescription className="text-blue-800 dark:text-blue-300">
               Materiais necessários: {sport.requiredMaterials.join(', ')}
@@ -141,7 +142,7 @@ export default function SportSelectionPage() {
                     <div className="flex-1">
                       <CardTitle className="text-lg">{session.locationName}</CardTitle>
                       <CardDescription className="flex items-center gap-1 mt-1">
-                        <MapPin className="w-3 h-3" />
+                        <FaLocationDot className="w-3 h-3" />
                         {session.locationAddress}
                       </CardDescription>
                     </div>
@@ -152,27 +153,27 @@ export default function SportSelectionPage() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Calendar className="w-4 h-4" />
+                    <FaCalendarDays className="w-4 h-4" />
                     <span>{new Date(session.date).toLocaleDateString('pt-PT')} às {session.time}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Clock className="w-4 h-4" />
+                    <FaClock className="w-4 h-4" />
                     <span>{session.duration} minutos</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Users className="w-4 h-4" />
+                    <FaUsers className="w-4 h-4" />
                     <span>{session.availableSpots} vagas de {session.totalSpots}</span>
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center gap-1 font-semibold text-success">
-                      <Euro className="w-4 h-4" />
+                      <FaEuroSign className="w-4 h-4" />
                       <span>{session.price.toFixed(2)}</span>
                     </div>
                     <Badge variant="outline">{getLevelLabel(session.level)}</Badge>
                   </div>
                   <Button className="w-full mt-2">
                     Reservar Agora
-                    <ChevronRight className="w-4 h-4 ml-2" />
+                    <FaChevronRight className="w-4 h-4 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
@@ -203,7 +204,7 @@ export default function SportSelectionPage() {
                     <div className="flex-1">
                       <CardTitle className="text-lg">{lobby.locationName}</CardTitle>
                       <CardDescription className="flex items-center gap-1 mt-1">
-                        <MapPin className="w-3 h-3" />
+                        <FaLocationDot className="w-3 h-3" />
                         {lobby.locationAddress}
                       </CardDescription>
                     </div>
@@ -218,18 +219,18 @@ export default function SportSelectionPage() {
                 <CardContent className="space-y-2">
                   {lobby.scheduledDate && (
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Calendar className="w-4 h-4" />
+                      <FaCalendarDays className="w-4 h-4" />
                       <span>{new Date(lobby.scheduledDate).toLocaleDateString('pt-PT')} às {lobby.scheduledTime}</span>
                     </div>
                   )}
                   {lobby.isRecurring && (
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
+                      <FaCircleCheck className="w-4 h-4 text-green-600" />
                       <span>Treino semanal às {lobby.recurringDay}s</span>
                     </div>
                   )}
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Users className="w-4 h-4" />
+                    <FaUsers className="w-4 h-4" />
                     <span>{lobby.currentPlayers.length}/{lobby.maxPlayers} jogadores</span>
                     <div className="flex-1 bg-gray-200 rounded-full h-2">
                       <div
@@ -240,7 +241,7 @@ export default function SportSelectionPage() {
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center gap-1 font-semibold text-success">
-                      <Euro className="w-4 h-4" />
+                      <FaEuroSign className="w-4 h-4" />
                       <span>{lobby.pricePerPerson.toFixed(2)} por pessoa</span>
                     </div>
                     <Badge variant="outline">{getLevelLabel(lobby.level)}</Badge>
@@ -250,7 +251,7 @@ export default function SportSelectionPage() {
                     disabled={lobby.status === 'full'}
                   >
                     {lobby.status === 'full' ? 'Grupo Completo' : 'Juntar-me ao Grupo'}
-                    <ChevronRight className="w-4 h-4 ml-2" />
+                    <FaChevronRight className="w-4 h-4 ml-2" />
                   </Button>
                 </CardContent>
               </Card>
@@ -270,22 +271,40 @@ export default function SportSelectionPage() {
 
       {/* Equipment Rental Sheet (R02) */}
       <Sheet open={equipmentOpen} onOpenChange={o => { if (!o) setEquipmentOpen(false); }}>
-        <SheetContent side="bottom" className="rounded-t-2xl pb-8">
-          <SheetHeader className="mb-4">
-            <SheetTitle>🎽 Equipamento para Aluguer</SheetTitle>
-          </SheetHeader>
-          <p className="text-sm text-muted-foreground mb-4">Equipamento disponível em {sport.name} por sessão:</p>
-          <div className="space-y-2">
-            {mockEquipment.map(e => (
-              <div key={e.name} className="flex items-center justify-between p-3 bg-muted/50 rounded-xl">
-                <span className="font-medium text-sm">{e.name}</span>
-                <span className="text-sm font-bold text-green-600 dark:text-green-400">
-                  {e.price === 0 ? 'Grátis' : `${e.price.toFixed(2)}€/sessão`}
-                </span>
+        <SheetContent
+          side="bottom"
+          className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+        >
+          <div className="overflow-y-auto max-h-[75vh] px-5">
+            <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
+            <SheetHeader className="mb-6 text-left">
+              <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
+                <div className="p-2 bg-primary/10 rounded-xl">
+                  <FaDumbbell className="w-6 h-6 text-primary" aria-hidden="true" />
+                </div>
+                Equipamento para Aluguer
+              </SheetTitle>
+            </SheetHeader>
+            <div className="space-y-4">
+              <p className="text-sm text-muted-foreground mb-4">Equipamento disponível em {sport.name} por sessão:</p>
+              <div className="space-y-2">
+                {mockEquipment.map(e => (
+                  <div key={e.name} className="flex items-center justify-between p-4 bg-muted/40 border-2 border-border/50 rounded-2xl transition-colors hover:border-primary/20">
+                    <span className="font-bold text-sm">{e.name}</span>
+                    <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 border-green-200 dark:border-green-800">
+                      {e.price === 0 ? 'Grátis' : `${e.price.toFixed(2)}€/sessão`}
+                    </Badge>
+                  </div>
+                ))}
               </div>
-            ))}
+              <p className="text-xs text-muted-foreground mt-4 italic font-medium">
+                * Reserva o equipamento no local antes da sessão começar.
+              </p>
+              <Button className="w-full mt-4 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => setEquipmentOpen(false)}>
+                Entendido
+              </Button>
+            </div>
           </div>
-          <p className="text-xs text-muted-foreground mt-4">* Reserva no local antes da sessão começar.</p>
         </SheetContent>
       </Sheet>
     </div>

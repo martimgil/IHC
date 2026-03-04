@@ -7,7 +7,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Separator } from '../components/ui/separator';
 import { Badge } from '../components/ui/badge';
-import { Mail, Lock, Eye, EyeOff, User, Zap, CheckCircle, MapPin } from 'lucide-react';
+import { FaEnvelope, FaLock, FaUser, FaBolt, FaCircleCheck, FaMapPin, FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { sports } from '../data';
 
@@ -63,7 +63,7 @@ export default function RegisterPage() {
             {/* Logo */}
             <div className="flex items-center gap-2 mb-8">
                 <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
-                    <Zap className="w-7 h-7 text-primary-foreground" />
+                    <FaBolt className="w-7 h-7 text-primary-foreground" />
                 </div>
                 <span className="text-3xl font-bold">match<span className="text-primary">In</span></span>
             </div>
@@ -92,7 +92,7 @@ export default function RegisterPage() {
                             <div className="space-y-1.5">
                                 <Label htmlFor="reg-name">Nome completo</Label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                    <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                     <Input
                                         id="reg-name"
                                         placeholder="O teu nome"
@@ -110,7 +110,7 @@ export default function RegisterPage() {
                             <div className="space-y-1.5">
                                 <Label htmlFor="reg-location">Localização <span className="text-muted-foreground font-normal">(opcional)</span></Label>
                                 <div className="relative">
-                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                    <FaMapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                     <Input
                                         id="reg-location"
                                         placeholder="Ex: Aveiro"
@@ -125,7 +125,7 @@ export default function RegisterPage() {
                             <div className="space-y-1.5">
                                 <Label htmlFor="reg-email">Email</Label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                    <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                     <Input
                                         id="reg-email"
                                         type="email"
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                             <div className="space-y-1.5">
                                 <Label htmlFor="reg-password">Password</Label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                    <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                     <Input
                                         id="reg-password"
                                         type={showPassword ? 'text' : 'password'}
@@ -161,7 +161,7 @@ export default function RegisterPage() {
                                         onClick={() => setShowPassword(v => !v)}
                                         aria-label={showPassword ? 'Esconder password' : 'Mostrar password'}
                                     >
-                                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                                        {showPassword ? <FaEyeSlash className="w-4 h-4" /> : <FaEye className="w-4 h-4" />}
                                     </button>
                                 </div>
                                 {errors.password && <p id="pw-err" className="text-xs text-destructive">{errors.password}</p>}
@@ -171,7 +171,7 @@ export default function RegisterPage() {
                             <div className="space-y-1.5">
                                 <Label htmlFor="reg-confirm">Confirmar Password</Label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                                    <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                     <Input
                                         id="reg-confirm"
                                         type="password"
@@ -206,7 +206,7 @@ export default function RegisterPage() {
                                         >
                                             <span className="text-xl shrink-0">{s.icon}</span>
                                             <span className="truncate flex-1">{s.name}</span>
-                                            {selected && <CheckCircle className="w-3.5 h-3.5 text-primary shrink-0" />}
+                                            {selected && <FaCircleCheck className="w-3.5 h-3.5 text-primary shrink-0" />}
                                         </button>
                                     );
                                 })}

@@ -4,7 +4,7 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { Card, CardContent } from '../components/ui/card';
-import { ArrowLeft, MapPin, Search, Navigation, Clock, Euro, Users } from 'lucide-react';
+import { FaArrowLeft, FaMapPin, FaMagnifyingGlass, FaCompass, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa6';
 import { sports, sessions, getSportById } from '../data';
 
 // Mock locations with coordinates (relative positions in % for fake map)
@@ -33,19 +33,19 @@ export default function MapPage() {
     return (
         <div className="max-w-4xl mx-auto space-y-4">
             <Button variant="ghost" onClick={() => navigate(-1)} className="min-h-[44px] -ml-2">
-                <ArrowLeft className="w-4 h-4 mr-2" />Voltar
+                <FaArrowLeft className="w-4 h-4 mr-2" />Voltar
             </Button>
 
             <div>
                 <h1 className="text-xl font-bold flex items-center gap-2">
-                    <MapPin className="w-5 h-5 text-primary" />Mapa de Locais
+                    <FaMapPin className="w-5 h-5 text-primary" />Mapa de Locais
                 </h1>
                 <p className="text-sm text-muted-foreground mt-0.5">Encontra onde praticar desporto em Aveiro</p>
             </div>
 
             {/* Search */}
             <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
                     placeholder="Pesquisar local..."
                     value={search}
@@ -89,7 +89,7 @@ export default function MapPage() {
                     >
                         <div className={`flex flex-col items-center transition-transform group-hover:scale-110 ${selected?.id === loc.id ? 'scale-125' : ''}`}>
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center shadow-lg border-2 border-white ${selected?.id === loc.id ? 'bg-primary' : 'bg-white dark:bg-card'}`}>
-                                <MapPin className={`w-4 h-4 ${selected?.id === loc.id ? 'text-primary-foreground' : 'text-primary'}`} />
+                                <FaMapPin className={`w-4 h-4 ${selected?.id === loc.id ? 'text-primary-foreground' : 'text-primary'}`} />
                             </div>
                             <div className={`text-xs font-semibold whitespace-nowrap bg-white/90 dark:bg-card/90 px-1.5 py-0.5 rounded shadow mt-0.5 max-w-[100px] truncate ${selected?.id === loc.id ? 'text-primary' : ''}`}>
                                 {loc.name.split(' ').slice(0, 2).join(' ')}
@@ -112,12 +112,12 @@ export default function MapPage() {
                             <div>
                                 <h3 className="font-bold text-sm">{selected.name}</h3>
                                 <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
-                                    <Navigation className="w-3 h-3" />{selected.address}
+                                    <FaCompass className="w-3 h-3" />{selected.address}
                                 </p>
                             </div>
                             {selected.price > 0 && (
                                 <Badge variant="secondary" className="shrink-0 flex items-center gap-0.5">
-                                    <Euro className="w-3 h-3" />{selected.price}
+                                    <FaEuroSign className="w-3 h-3" />{selected.price}
                                 </Badge>
                             )}
                         </div>
@@ -153,7 +153,7 @@ export default function MapPage() {
                             aria-label={loc.name}
                         >
                             <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center shrink-0">
-                                <MapPin className="w-5 h-5 text-primary" />
+                                <FaMapPin className="w-5 h-5 text-primary" />
                             </div>
                             <div className="flex-1 min-w-0">
                                 <p className="font-semibold text-sm truncate">{loc.name}</p>

@@ -15,14 +15,14 @@ import {
 } from '../components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import {
-  ArrowLeft,
-  Clock,
-  Calendar,
-  Users,
-  MapPin,
-  AlertCircle,
-  CheckCircle
-} from 'lucide-react';
+  FaArrowLeft,
+  FaClock,
+  FaCalendarDays,
+  FaUsers,
+  FaMapPin,
+  FaCircleExclamation,
+  FaCircleCheck
+} from 'react-icons/fa6';
 import { ExperienceLevel } from '../types';
 import { toast } from 'sonner';
 
@@ -118,7 +118,7 @@ export default function CreateUrgentEventPage() {
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
               <div className="bg-green-100 rounded-full p-4" role="img" aria-label="Sucesso">
-                <CheckCircle className="w-12 h-12 text-green-600" aria-hidden="true" />
+                <FaCircleCheck className="w-12 h-12 text-green-600" aria-hidden="true" />
               </div>
             </div>
             <CardTitle className="text-2xl text-green-900">Evento Criado!</CardTitle>
@@ -144,7 +144,7 @@ export default function CreateUrgentEventPage() {
             </div>
 
             <Alert className="border-blue-200 bg-blue-50">
-              <AlertCircle className="h-4 w-4 text-blue-600" aria-hidden="true" />
+              <FaCircleExclamation className="h-4 w-4 text-blue-600" aria-hidden="true" />
               <AlertTitle className="text-blue-900">Notificaremos Você</AlertTitle>
               <AlertDescription className="text-blue-800">
                 Receberá uma notificação assim que jogadores aceitarem o convite.
@@ -174,7 +174,7 @@ export default function CreateUrgentEventPage() {
         className="mb-2 min-h-[44px]"
         aria-label="Voltar à página inicial"
       >
-        <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+        <FaArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
         Voltar
       </Button>
 
@@ -182,7 +182,7 @@ export default function CreateUrgentEventPage() {
       <Card className="border-orange-200 bg-orange-50">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <Clock className="w-8 h-8 text-orange-600" aria-hidden="true" />
+            <FaClock className="w-8 h-8 text-orange-600" aria-hidden="true" />
             <div>
               <CardTitle className="text-2xl text-orange-900">Procurar Substituto</CardTitle>
               <CardDescription className="text-orange-800">
@@ -195,7 +195,7 @@ export default function CreateUrgentEventPage() {
 
       {/* Info Alert */}
       <Alert>
-        <AlertCircle className="h-4 w-4" aria-hidden="true" />
+        <FaCircleExclamation className="h-4 w-4" aria-hidden="true" />
         <AlertTitle>Como Funciona</AlertTitle>
         <AlertDescription>
           Preencha os detalhes do evento e a aplicação procurará automaticamente jogadores disponíveis
@@ -249,7 +249,7 @@ export default function CreateUrgentEventPage() {
                   Data <span className="text-red-600" aria-label="obrigatório">*</span>
                 </Label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
+                  <FaCalendarDays className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
                   <Input
                     id="date"
                     type="date"
@@ -272,7 +272,7 @@ export default function CreateUrgentEventPage() {
                   Hora <span className="text-red-600" aria-label="obrigatório">*</span>
                 </Label>
                 <div className="relative">
-                  <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
+                  <FaClock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
                   <Input
                     id="time"
                     type="time"
@@ -298,7 +298,7 @@ export default function CreateUrgentEventPage() {
                 Local <span className="text-red-600" aria-label="obrigatório">*</span>
               </Label>
               <div className="relative">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
+                <FaMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
                 <Input
                   id="location"
                   type="text"
@@ -346,7 +346,7 @@ export default function CreateUrgentEventPage() {
                 Número de Jogadores Necessários <span className="text-red-600" aria-label="obrigatório">*</span>
               </Label>
               <div className="relative">
-                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
+                <FaUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
                 <Input
                   id="spotsNeeded"
                   type="number"
@@ -398,7 +398,7 @@ export default function CreateUrgentEventPage() {
                 </>
               ) : (
                 <>
-                  <Clock className="w-5 h-5 mr-2" aria-hidden="true" />
+                  <FaClock className="w-5 h-5 mr-2" aria-hidden="true" />
                   Criar Evento Urgente
                 </>
               )}

@@ -1,5 +1,5 @@
 import { Sport, Session, Lobby, User, Notification, Player } from './types';
-import { FaSwimmer, FaVolleyballBall, FaBasketballBall, FaTableTennis, FaHiking, FaFutbol } from 'react-icons/fa';
+import { FaPersonSwimming, FaVolleyball, FaBasketball, FaTableTennisPaddleBall, FaPersonHiking, FaFutbol } from 'react-icons/fa6';
 import React from 'react';
 
 const createIcon = (IconComponent: any) => <IconComponent className="w-[1em] h-[1em]" />;
@@ -9,7 +9,7 @@ export const sports: Sport[] = [
   {
     id: 'hidroginastica',
     name: 'Hidroginástica',
-    icon: createIcon(FaSwimmer),
+    icon: createIcon(FaPersonSwimming),
     description: 'Exercícios aeróbicos na água, ideal para todas as idades',
     requiredMaterials: ['Fato de banho', 'Touca', 'Toalha'],
     minPlayers: 5,
@@ -19,7 +19,7 @@ export const sports: Sport[] = [
   {
     id: 'voleibol',
     name: 'Voleibol',
-    icon: createIcon(FaVolleyballBall),
+    icon: createIcon(FaVolleyball),
     description: 'Desporto de equipa dinâmico e competitivo',
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva', 'Joelheiras (opcional)'],
     minPlayers: 6,
@@ -29,7 +29,7 @@ export const sports: Sport[] = [
   {
     id: 'basquetebol',
     name: 'Basquetebol',
-    icon: createIcon(FaBasketballBall),
+    icon: createIcon(FaBasketball),
     description: 'Jogo rápido de equipa com muita ação',
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva'],
     minPlayers: 6,
@@ -39,7 +39,7 @@ export const sports: Sport[] = [
   {
     id: 'pickleball',
     name: 'Pickleball',
-    icon: createIcon(FaTableTennis),
+    icon: createIcon(FaTableTennisPaddleBall),
     description: 'Mistura de ténis, badminton e ténis de mesa',
     requiredMaterials: ['Sapatilhas', 'Roupa desportiva', 'Raquete (fornecida)'],
     minPlayers: 2,
@@ -49,7 +49,7 @@ export const sports: Sport[] = [
   {
     id: 'trilho',
     name: 'Trilho',
-    icon: createIcon(FaHiking),
+    icon: createIcon(FaPersonHiking),
     description: 'Caminhadas em natureza, adequado para todas as idades',
     requiredMaterials: ['Calçado adequado', 'Água', 'Protetor solar'],
     minPlayers: 1,
