@@ -77,10 +77,10 @@ export default function LoginPage() {
                     {/* Header/Logo */}
                     <div className="flex flex-col items-center mb-8 text-center">
                         <motion.div
-                            className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-2xl mb-4 rotate-3"
+                            className="w-16 h-16 rounded-2xl shadow-2xl mb-4 rotate-3 overflow-hidden"
                             whileHover={{ scale: 1.05, rotate: 0 }}
                         >
-                            <FaBolt className="w-9 h-9 text-primary-foreground" />
+                            <img src="/icon.jpg" alt="matchIn logo" className="w-full h-full object-cover" />
                         </motion.div>
                         <h1 className="text-4xl font-extrabold tracking-tight">
                             match<span className="text-primary italic">In</span>

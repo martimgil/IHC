@@ -124,12 +124,12 @@ export default function HomePage() {
           <div>
             <h2 id="welcome-heading" className="font-extrabold text-2xl leading-tight flex items-center gap-2">
               Olá, {firstName}!
-              <FaBolt className="w-6 h-6 text-primary-foreground fill-current animate-pulse opacity-90" />
+              <img src="/icon.jpg" alt="matchIn" className="w-7 h-7 rounded-md object-cover" />
             </h2>
             <p className="text-sm font-medium opacity-90 mt-1">Pronto para o teu próximo jogo?</p>
           </div>
-          <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md">
-            <FaDumbbell className="w-6 h-6" />
+          <div className="w-12 h-12 rounded-2xl overflow-hidden backdrop-blur-md shadow-md">
+            <img src="/icon.jpg" alt="matchIn logo" className="w-full h-full object-cover" />
           </div>
         </div>
         {/* Abstract shapes for premium feel */}

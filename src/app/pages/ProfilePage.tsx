@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { currentUser, sports, getLevelLabel, lobbies, sessions } from '../data';
+import { currentUser, sports, getLevelLabel, lobbies, sessions, mockFollowing, mockFollowers, FollowUser } from '../data';
 import { useNavigate } from 'react-router';
 import { useUser } from '../context/UserContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
@@ -14,7 +14,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import {
   FaArrowLeft, FaEnvelope, FaMapPin, FaCalendarDays, FaTrophy,
   FaGear, FaHeart, FaCircleCheck, FaAward, FaBell,
-  FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaXmark, FaBolt, FaMagnifyingGlass, FaTrashCan
+  FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaXmark, FaBolt, FaMagnifyingGlass, FaTrashCan, FaUserGroup, FaUserPlus
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
@@ -30,7 +30,7 @@ function SuggestionsSection() {
     <Card className="border-primary/20 bg-primary/5">
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-2">
-          <FaBolt className="w-5 h-5 text-primary" />Sugestões Para Ti
+          <FaBolt className="w-5 h-5 text-primary" aria-hidden="true" />Sugestões Para Ti
         </CardTitle>
         <CardDescription>Baseadas nos teus desportos</CardDescription>
       </CardHeader>
@@ -44,12 +44,12 @@ function SuggestionsSection() {
               className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors text-left"
               aria-label={`${s?.name} em ${l.locationName}`}
             >
-              <span className="text-2xl">{s?.icon}</span>
+              <span className="text-2xl" aria-hidden="true">{s?.icon}</span>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold truncate">{s?.name}</p>
                 <p className="text-xs text-muted-foreground truncate">{l.locationName} · {l.scheduledDate}</p>
               </div>
-              <FaChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+              <FaChevronRight className="w-4 h-4 text-muted-foreground shrink-0" aria-hidden="true" />
             </button>
           );
         })}
@@ -218,6 +218,28 @@ export default function ProfilePage() {
   const { sessionUser, logout } = useUser();
   const [editOpen, setEditOpen] = useState(false);
   const [sportsEditOpen, setSportsEditOpen] = useState(false);
+  const [followingList, setFollowingList] = useState<FollowUser[]>([...mockFollowing]);
+  const [followersList] = useState<FollowUser[]>([...mockFollowers]);
+  const [communityOpen, setCommunityOpen] = useState(false);
+  const [communityTab, setCommunityTab] = useState<'following' | 'followers'>('following');
+
+  const handleFollow = (user: FollowUser) => {
+    if (!followingList.find(u => u.id === user.id)) {
+      setFollowingList(prev => [...prev, user]);
+      toast.success(`A seguir ${user.name}`);
+    }
+  };
+
+  const handleUnfollow = (userId: string) => {
+    const user = followingList.find(u => u.id === userId);
+    setFollowingList(prev => prev.filter(u => u.id !== userId));
+    if (user) toast.info(`Deixaste de seguir ${user.name}`);
+  };
+
+  const openCommunity = (tab: 'following' | 'followers') => {
+    setCommunityTab(tab);
+    setCommunityOpen(true);
+  };
 
   const displayName = sessionUser?.name ?? currentUser.name;
   const displayEmail = sessionUser?.email ?? currentUser.email;
@@ -243,6 +265,9 @@ export default function ProfilePage() {
     toast.success('Reserva cancelada.', { description: 'Receberá o reembolso em 3-5 dias úteis.' });
   };
 
+  const followingIds = new Set(followingList.map(u => u.id));
+  const communityList = communityTab === 'following' ? followingList : followersList;
+
   return (
     <div className="max-w-4xl mx-auto space-y-5">
       <StickyBackButton to="/" />
@@ -262,11 +287,13 @@ export default function ProfilePage() {
           <div className="mb-4">
             <h1 className="text-xl font-bold">{displayName}</h1>
             <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1.5"><FaEnvelope className="w-3.5 h-3.5" />{displayEmail}</span>
-              <span className="flex items-center gap-1.5"><FaMapPin className="w-3.5 h-3.5" />{displayLocation}</span>
+              <span className="flex items-center gap-1.5"><FaEnvelope className="w-3.5 h-3.5" aria-hidden="true" />{displayEmail}</span>
+              <span className="flex items-center gap-1.5"><FaMapPin className="w-3.5 h-3.5" aria-hidden="true" />{displayLocation}</span>
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-2">
+
+          {/* Stats row — includes Following / Followers counts */}
+          <div className="grid grid-cols-4 gap-2 mb-3">
             {stats.map(s => (
               <div key={s.label} className="flex flex-col items-center gap-1 p-2 bg-muted/50 rounded-xl">
                 {s.icon}
@@ -275,8 +302,135 @@ export default function ProfilePage() {
               </div>
             ))}
           </div>
+
+          {/* Following / Followers — clickable counters */}
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => openCommunity('following')}
+              className="flex flex-col items-center gap-0.5 p-3 bg-muted/50 rounded-xl hover:bg-primary/5 hover:border-primary/30 border-2 border-transparent transition-all active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary"
+              aria-label={`${followingList.length} pessoas que segues. Toca para ver`}
+            >
+              <FaUserGroup className="w-4 h-4 text-blue-500 mb-0.5" aria-hidden="true" />
+              <span className="text-lg font-bold leading-none text-blue-600 dark:text-blue-400">{followingList.length}</span>
+              <span className="text-xs text-muted-foreground">A Seguir</span>
+            </button>
+            <button
+              onClick={() => openCommunity('followers')}
+              className="flex flex-col items-center gap-0.5 p-3 bg-muted/50 rounded-xl hover:bg-primary/5 hover:border-primary/30 border-2 border-transparent transition-all active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary"
+              aria-label={`${followersList.length} seguidores. Toca para ver`}
+            >
+              <FaUserGroup className="w-4 h-4 text-purple-500 mb-0.5" aria-hidden="true" />
+              <span className="text-lg font-bold leading-none text-purple-600 dark:text-purple-400">{followersList.length}</span>
+              <span className="text-xs text-muted-foreground">Seguidores</span>
+            </button>
+          </div>
         </CardContent>
       </Card>
+
+      {/* Community Sheet — opens on count click */}
+      <Sheet open={communityOpen} onOpenChange={o => { if (!o) setCommunityOpen(false); }}>
+        <SheetContent
+          side="bottom"
+          className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+          aria-label="Comunidade"
+        >
+          <div className="overflow-y-auto max-h-[75vh] px-5">
+            <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
+            <SheetHeader className="mb-4 text-left">
+              <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
+                <div className="p-2 bg-primary/10 rounded-xl">
+                  <FaUserGroup className="w-6 h-6 text-primary" aria-hidden="true" />
+                </div>
+                Comunidade
+              </SheetTitle>
+            </SheetHeader>
+
+            {/* Tabs */}
+            <div className="flex gap-2 mb-4">
+              <button
+                onClick={() => setCommunityTab('following')}
+                className={`flex-1 py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'following'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                  }`}
+                aria-pressed={communityTab === 'following'}
+              >
+                A Seguir ({followingList.length})
+              </button>
+              <button
+                onClick={() => setCommunityTab('followers')}
+                className={`flex-1 py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'followers'
+                    ? 'bg-primary text-primary-foreground shadow-sm'
+                    : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                  }`}
+                aria-pressed={communityTab === 'followers'}
+              >
+                Seguidores ({followersList.length})
+              </button>
+            </div>
+
+            {/* User list */}
+            <div className="space-y-2" role="list" aria-label={communityTab === 'following' ? 'Pessoas que segues' : 'Pessoas que te seguem'}>
+              {communityList.length === 0 && (
+                <p className="text-sm text-muted-foreground text-center py-4">
+                  {communityTab === 'following' ? 'Ainda não segues ninguém.' : 'Ainda não tens seguidores.'}
+                </p>
+              )}
+              {communityList.map(user => {
+                const uSports = user.sports.map(sid => sports.find(s => s.id === sid)).filter(Boolean);
+                const uInitials = user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+                const isMutual = followingIds.has(user.id);
+                return (
+                  <div key={user.id} role="listitem" className="flex items-center gap-3 p-3 bg-muted/40 border-2 border-border/50 rounded-2xl transition-colors hover:border-primary/20">
+                    <Avatar className="w-10 h-10 border-2 border-background shadow-sm">
+                      <AvatarFallback className="text-xs font-bold bg-primary/10 text-primary">
+                        {uInitials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-bold text-sm truncate">{user.name}</p>
+                      <div className="flex items-center gap-1.5 mt-0.5">
+                        {uSports.slice(0, 3).map(s => (
+                          <span key={s!.id} className="text-sm" aria-hidden="true">{s!.icon}</span>
+                        ))}
+                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 ml-1">
+                          {getLevelLabel(user.level)}
+                        </Badge>
+                      </div>
+                    </div>
+                    {communityTab === 'following' ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs shrink-0"
+                        aria-label={`Deixar de seguir ${user.name}`}
+                        onClick={() => handleUnfollow(user.id)}
+                      >
+                        A seguir
+                      </Button>
+                    ) : (
+                      isMutual ? (
+                        <Badge variant="secondary" className="text-xs shrink-0 py-1 px-2">Mútuo</Badge>
+                      ) : (
+                        <Button
+                          variant="default"
+                          size="sm"
+                          className="h-8 text-xs shrink-0"
+                          aria-label={`Seguir ${user.name} de volta`}
+                          onClick={() => handleFollow(user)}
+                        >
+                          <FaUserPlus className="w-3 h-3 mr-1" aria-hidden="true" />
+                          Seguir
+                        </Button>
+                      )
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Suggestions (R17) */}
       <SuggestionsSection />
@@ -287,14 +441,14 @@ export default function ProfilePage() {
       >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center dark:bg-amber-900/40">
-            <FaAward className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            <FaAward className="w-5 h-5 text-amber-600 dark:text-amber-400" aria-hidden="true" />
           </div>
           <div>
             <h3 className="font-bold text-sm">As Minhas Conquistas</h3>
             <p className="text-xs text-muted-foreground mt-0.5">Desbloqueaste 6/10 emblemas</p>
           </div>
         </div>
-        <FaChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" />
+        <FaChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" aria-hidden="true" />
       </button>
 
       {/* Sports (R04 - linking to sports edit) */}
@@ -302,10 +456,10 @@ export default function ProfilePage() {
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
-              <FaHeart className="w-5 h-5 text-red-500" />Os Meus Desportos
+              <FaHeart className="w-5 h-5 text-red-500" aria-hidden="true" />Os Meus Desportos
             </CardTitle>
-            <Button variant="ghost" size="sm" onClick={() => setSportsEditOpen(true)} className="min-h-[40px] text-primary">
-              <FaPlus className="w-4 h-4 mr-1" />Editar
+            <Button variant="ghost" size="sm" onClick={() => setSportsEditOpen(true)} className="min-h-[40px] text-primary" aria-label="Editar desportos favoritos">
+              <FaPlus className="w-4 h-4 mr-1" aria-hidden="true" />Editar
             </Button>
           </div>
         </CardHeader>
@@ -316,8 +470,9 @@ export default function ProfilePage() {
                 key={sport.id}
                 className="flex items-center gap-3 p-3 border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left active:scale-[0.98]"
                 onClick={() => navigate(`/sport/${sport.id}`)}
+                aria-label={`Ver ${sport.name}, nível ${getLevelLabel(currentUser.experienceLevels[sport.id] || 'iniciante')}`}
               >
-                <div className="text-2xl shrink-0">{sport.icon}</div>
+                <div className="text-2xl shrink-0" aria-hidden="true">{sport.icon}</div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm truncate">{sport.name}</p>
                   <Badge variant="outline" className="mt-0.5 text-xs px-1.5 py-0">
@@ -344,7 +499,7 @@ export default function ProfilePage() {
             >
               {item.icon}
               <span className="flex-1 font-medium text-sm">{item.label}</span>
-              <FaChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+              <FaChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" aria-hidden="true" />
             </button>
           ))}
           <Separator className="my-2" />
@@ -352,7 +507,7 @@ export default function ProfilePage() {
             className="w-full flex items-center gap-3 px-3 py-3 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors text-left min-h-[48px]"
             onClick={() => { logout(); navigate('/login'); }}
           >
-            <FaRightFromBracket className="w-5 h-5 text-red-500 shrink-0" />
+            <FaRightFromBracket className="w-5 h-5 text-red-500 shrink-0" aria-hidden="true" />
             <span className="font-medium text-sm text-red-600 dark:text-red-400">Terminar Sessão</span>
           </button>
         </CardContent>

@@ -1,6 +1,7 @@
 import { Sport, Session, Lobby, User, Notification, Player } from './types';
-import { FaPersonSwimming, FaVolleyball, FaBasketball, FaTableTennisPaddleBall, FaPersonHiking, FaFutbol, FaBaseballBatBall, FaPersonRunning, FaFootball } from 'react-icons/fa6';
-import { GiTennisRacket } from 'react-icons/gi';
+import { FaPersonSwimming, FaVolleyball, FaBasketball, FaTableTennisPaddleBall, FaPersonHiking, FaFutbol, FaBaseballBatBall, FaPersonRunning, FaFootball, FaPersonBiking, FaPersonWalking } from 'react-icons/fa6';
+import { GiTennisRacket, GiSurfBoard, GiRollerSkate, GiSoccerField } from 'react-icons/gi';
+import { MdSurfing, MdSportsHandball, MdSportsTennis } from 'react-icons/md';
 import React from 'react';
 
 const createIcon = (IconComponent: any) => <IconComponent className="w-[1em] h-[1em]" />;
@@ -87,7 +88,7 @@ export const sports: Sport[] = [
   {
     id: 'padel',
     name: 'Padel',
-    icon: createIcon(FaBaseballBatBall),
+    icon: createIcon(MdSportsTennis),
     description: 'Desporto de raquete em campo fechado, jogado em pares',
     requiredMaterials: ['Raquete de padel', 'Sapatilhas', 'Roupa desportiva'],
     minPlayers: 4,
@@ -109,13 +110,101 @@ export const sports: Sport[] = [
   {
     id: 'natacao',
     name: 'Natação',
-    icon: createIcon(FaPersonRunning),
+    icon: createIcon(FaPersonSwimming),
     description: 'Treino de natação em piscina, para todos os níveis',
     requiredMaterials: ['Fato de banho', 'Touca', 'Óculos de natação', 'Toalha'],
     minPlayers: 1,
     maxPlayers: 8,
     recommendedPlayers: 6,
     difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
+    id: 'ciclismo',
+    name: 'Ciclismo',
+    icon: createIcon(FaPersonBiking),
+    description: 'Passeios e treinos de bicicleta em grupo',
+    requiredMaterials: ['Bicicleta', 'Capacete', 'Roupa desportiva', 'Água'],
+    minPlayers: 1,
+    maxPlayers: 20,
+    recommendedPlayers: 8,
+    difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
+    id: 'surf',
+    name: 'Surf',
+    icon: createIcon(MdSurfing),
+    description: 'Aulas e sessões de surf nas melhores ondas',
+    requiredMaterials: ['Prancha de surf', 'Fato de neoprene', 'Protetor solar'],
+    minPlayers: 1,
+    maxPlayers: 10,
+    recommendedPlayers: 6,
+    difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
+    id: 'hoquei-patins',
+    name: 'Hóquei em Patins',
+    icon: createIcon(GiRollerSkate),
+    description: 'Desporto de equipa sobre patins com stick e bola',
+    requiredMaterials: ['Patins', 'Stick', 'Caneleiras', 'Capacete'],
+    minPlayers: 6,
+    maxPlayers: 10,
+    recommendedPlayers: 10,
+    difficulty: ['principiante', 'intermedio', 'avancado', 'senior-federado'],
+  },
+  {
+    id: 'andebol',
+    name: 'Andebol',
+    icon: createIcon(MdSportsHandball),
+    description: 'Desporto de equipa dinâmico jogado com as mãos',
+    requiredMaterials: ['Sapatilhas', 'Roupa desportiva'],
+    minPlayers: 8,
+    maxPlayers: 14,
+    recommendedPlayers: 14,
+    difficulty: ['principiante', 'intermedio', 'avancado', 'senior-federado'],
+  },
+  {
+    id: 'futsal',
+    name: 'Futsal',
+    icon: createIcon(GiSoccerField),
+    description: 'Futebol de pavilhão com equipas de 5 jogadores',
+    requiredMaterials: ['Sapatilhas de futsal', 'Roupa desportiva', 'Caneleiras'],
+    minPlayers: 6,
+    maxPlayers: 10,
+    recommendedPlayers: 10,
+    difficulty: ['principiante', 'intermedio', 'avancado', 'senior-federado'],
+  },
+  {
+    id: 'futebol-praia',
+    name: 'Futebol de Praia',
+    icon: createIcon(FaFutbol),
+    description: 'Futebol na areia, jogado descalço junto ao mar',
+    requiredMaterials: ['Roupa desportiva', 'Protetor solar', 'Água'],
+    minPlayers: 6,
+    maxPlayers: 10,
+    recommendedPlayers: 10,
+    difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
+    id: 'corrida',
+    name: 'Corrida',
+    icon: createIcon(FaPersonRunning),
+    description: 'Corrida ao ar livre em grupo, para todos os ritmos',
+    requiredMaterials: ['Sapatilhas de corrida', 'Roupa desportiva', 'Água'],
+    minPlayers: 1,
+    maxPlayers: 30,
+    recommendedPlayers: 10,
+    difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
+    id: 'caminhada',
+    name: 'Caminhada',
+    icon: createIcon(FaPersonWalking),
+    description: 'Caminhadas tranquilas em grupo, ideais para socializar',
+    requiredMaterials: ['Calçado confortável', 'Água', 'Protetor solar'],
+    minPlayers: 1,
+    maxPlayers: 30,
+    recommendedPlayers: 12,
+    difficulty: ['qualquer'],
   },
 ];
 
@@ -222,6 +311,28 @@ export const currentUser: User = {
   },
   location: 'Aveiro',
 };
+
+// Mock followers/following data
+export type FollowUser = {
+  id: string;
+  name: string;
+  sports: string[];
+  level: string;
+};
+
+export const mockFollowing: FollowUser[] = [
+  { id: 'p1', name: 'João Silva', sports: ['voleibol', 'futebol'], level: 'intermedio' },
+  { id: 'p5', name: 'Ana Oliveira', sports: ['voleibol', 'basquetebol'], level: 'avancado' },
+  { id: 'p4', name: 'Eduardo OrangeTree', sports: ['voleibol', 'padel'], level: 'senior-federado' },
+];
+
+export const mockFollowers: FollowUser[] = [
+  { id: 'p1', name: 'João Silva', sports: ['voleibol', 'futebol'], level: 'intermedio' },
+  { id: 'p3', name: 'Pedro Costa', sports: ['voleibol', 'basquetebol'], level: 'intermedio' },
+  { id: 'p6', name: 'Carlos Pereira', sports: ['futebol', 'futsal'], level: 'intermedio' },
+  { id: 'p7', name: 'Sofia Lima', sports: ['pickleball', 'tenis'], level: 'intermedio' },
+  { id: 'req-1', name: 'Marta Rodrigues', sports: ['voleibol', 'andebol'], level: 'intermedio' },
+];
 
 // Mock notifications
 export const mockNotifications: Notification[] = [

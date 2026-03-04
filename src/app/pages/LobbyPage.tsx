@@ -48,7 +48,7 @@ function LobbyChat() {
 
   return (
     <div className="flex flex-col" style={{ height: '320px' }}>
-      <div className="flex-1 overflow-y-auto space-y-3 p-3 bg-muted/30 rounded-xl">
+      <div className="flex-1 overflow-y-auto space-y-3 p-3 bg-muted/30 rounded-xl" role="log" aria-label="Mensagens do chat do grupo" aria-live="polite">
         {msgs.map(m => (
           <div key={m.id} className={`flex ${m.isMe ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm ${m.isMe ? 'bg-primary text-primary-foreground rounded-br-sm' : 'bg-card border rounded-bl-sm'}`}>
@@ -182,7 +182,7 @@ export default function LobbyPage() {
       <div className="max-w-3xl mx-auto space-y-4">
         <StickyBackButton />
         <h1 className="text-xl font-bold flex items-center gap-2">
-          <FaUsers className="w-5 h-5 text-primary" />Atividades de Última Hora
+          <FaUsers className="w-5 h-5 text-primary" aria-hidden="true" />Atividades de Última Hora
         </h1>
         <div className="space-y-3">
           {lobbies.map(l => {
@@ -192,8 +192,9 @@ export default function LobbyPage() {
                 key={l.id}
                 onClick={() => navigate(`/lobby/${l.id}`)}
                 className="w-full flex items-center gap-3 p-4 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left focus:outline-none focus:ring-2 focus:ring-primary"
+                aria-label={`${s?.name} em ${l.locationName}, ${l.currentPlayers.length} de ${l.maxPlayers} jogadores${l.isUrgent ? ', urgente' : ''}`}
               >
-                <div className="text-3xl shrink-0">{s?.icon}</div>
+                <div className="text-3xl shrink-0" aria-hidden="true">{s?.icon}</div>
                 <div className="flex-1 min-w-0">
                   <p className="font-bold">{s?.name}</p>
                   <p className="text-sm text-muted-foreground truncate">{l.locationName}</p>
@@ -278,11 +279,11 @@ export default function LobbyPage() {
         <CardHeader>
           <div className="flex items-start justify-between gap-2">
             <div className="flex items-center gap-3">
-              <span className="text-4xl">{sport.icon}</span>
+              <span className="text-4xl" role="img" aria-label={sport.name}>{sport.icon}</span>
               <div>
                 <CardTitle className="text-xl">{sport.name}</CardTitle>
                 <CardDescription className="flex items-center gap-1 mt-0.5">
-                  <FaMapPin className="w-3 h-3" />{lobby.locationName}
+                  <FaMapPin className="w-3 h-3" aria-hidden="true" />{lobby.locationName}
                 </CardDescription>
               </div>
             </div>
@@ -295,19 +296,19 @@ export default function LobbyPage() {
         <CardContent className="space-y-3">
           {lobby.scheduledDate && (
             <div className="flex items-center gap-2 text-sm">
-              <FaCalendarDay className="w-4 h-4 text-muted-foreground" />
+              <FaCalendarDay className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
               <span>{new Date(lobby.scheduledDate).toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' })} às {lobby.scheduledTime}</span>
             </div>
           )}
           <div className="space-y-1">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
-                <FaUsers className="w-4 h-4 text-muted-foreground" />
+                <FaUsers className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
                 <span className="font-semibold">{lobby.currentPlayers.length}/{lobby.maxPlayers} jogadores</span>
               </div>
               <Badge variant="outline">{lobby.level}</Badge>
             </div>
-            <div className="bg-muted rounded-full h-2">
+            <div className="bg-muted rounded-full h-2" role="progressbar" aria-valuenow={displayPlayers.length} aria-valuemin={0} aria-valuemax={lobby.maxPlayers} aria-label={`${displayPlayers.length} de ${lobby.maxPlayers} jogadores inscritos`}>
               <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${progressPercentage}%` }} />
             </div>
             <p className="text-xs text-muted-foreground">
@@ -317,7 +318,7 @@ export default function LobbyPage() {
             </p>
           </div>
           <div className="flex items-center gap-2 bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-lg p-2.5">
-            <FaEuroSign className="w-4 h-4 text-green-600" />
+            <FaEuroSign className="w-4 h-4 text-green-600" aria-hidden="true" />
             <p className="text-sm font-bold text-green-700 dark:text-green-300">{lobby.pricePerPerson.toFixed(2)}€ por pessoa</p>
           </div>
         </CardContent>
@@ -388,7 +389,7 @@ export default function LobbyPage() {
         <Card className="border-amber-200 dark:border-amber-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
-              <FaShieldHalved className="w-4 h-4 text-amber-600" />Pedidos de Entrada
+              <FaShieldHalved className="w-4 h-4 text-amber-600" aria-hidden="true" />Pedidos de Entrada
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
@@ -496,7 +497,7 @@ export default function LobbyPage() {
             aria-expanded={showChat}
             aria-controls="lobby-chat"
           >
-            <FaMessage className="w-5 h-5 text-primary" />
+            <FaMessage className="w-5 h-5 text-primary" aria-hidden="true" />
             <CardTitle className="text-base">Chat do Grupo</CardTitle>
             <Badge variant="secondary" className="ml-auto text-xs">{initialMessages.length} msgs</Badge>
           </button>

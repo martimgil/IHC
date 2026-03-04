@@ -58,13 +58,13 @@ export default function SportSelectionPage() {
     : lobbies.filter(l => l.level === selectedLevel || l.level === 'qualquer');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" role="main" aria-label={`Página do desporto ${sport?.name}`}>
       <StickyBackButton to="/" />
 
       {/* Sport Header */}
       <div className="bg-primary rounded-xl p-6 text-primary-foreground">
         <div className="flex items-start gap-4">
-          <div className="text-6xl">{sport.icon}</div>
+          <div className="text-6xl" role="img" aria-label={sport.name}>{sport.icon}</div>
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-2">{sport.name}</h1>
             <p className="opacity-90 mb-4">{sport.description}</p>
@@ -120,8 +120,8 @@ export default function SportSelectionPage() {
       <Separator />
 
       {/* Available Sessions */}
-      <div>
-        <h2 className="text-xl font-bold mb-4">Sessões Disponíveis</h2>
+      <section aria-labelledby="sessions-heading">
+        <h2 id="sessions-heading" className="text-xl font-bold mb-4">Sessões Disponíveis</h2>
         {filteredSessions.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredSessions.map((session) => (
@@ -135,7 +135,7 @@ export default function SportSelectionPage() {
                     <div className="flex-1">
                       <CardTitle className="text-lg">{session.locationName}</CardTitle>
                       <CardDescription className="flex items-center gap-1 mt-1">
-                        <FaLocationDot className="w-3 h-3" />
+                        <FaLocationDot className="w-3 h-3" aria-hidden="true" />
                         {session.locationAddress}
                       </CardDescription>
                     </div>
@@ -146,27 +146,27 @@ export default function SportSelectionPage() {
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FaCalendarDays className="w-4 h-4" />
+                    <FaCalendarDays className="w-4 h-4" aria-hidden="true" />
                     <span>{new Date(session.date).toLocaleDateString('pt-PT')} às {session.time}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FaClock className="w-4 h-4" />
+                    <FaClock className="w-4 h-4" aria-hidden="true" />
                     <span>{session.duration} minutos</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FaUsers className="w-4 h-4" />
+                    <FaUsers className="w-4 h-4" aria-hidden="true" />
                     <span>{session.availableSpots} vagas de {session.totalSpots}</span>
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center gap-1 font-semibold text-success">
-                      <FaEuroSign className="w-4 h-4" />
-                      <span>{session.price.toFixed(2)}</span>
+                      <FaEuroSign className="w-4 h-4" aria-hidden="true" />
+                      <span aria-label={`${session.price.toFixed(2)} euros`}>{session.price.toFixed(2)}</span>
                     </div>
                     <Badge variant="outline">{getLevelLabel(session.level)}</Badge>
                   </div>
-                  <Button className="w-full mt-2">
+                  <Button className="w-full mt-2" aria-label={`Reservar sessão em ${session.locationName}`}>
                     Reservar Agora
-                    <FaChevronRight className="w-4 h-4 ml-2" />
+                    <FaChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
                   </Button>
                 </CardContent>
               </Card>
@@ -179,11 +179,11 @@ export default function SportSelectionPage() {
             </CardContent>
           </Card>
         )}
-      </div>
+      </section>
 
       {/* Active Lobbies */}
-      <div>
-        <h2 className="text-xl font-bold mb-4">Grupos à Procura de Jogadores</h2>
+      <section aria-labelledby="lobbies-heading">
+        <h2 id="lobbies-heading" className="text-xl font-bold mb-4">Grupos à Procura de Jogadores</h2>
         {filteredLobbies.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredLobbies.map((lobby) => (
@@ -197,7 +197,7 @@ export default function SportSelectionPage() {
                     <div className="flex-1">
                       <CardTitle className="text-lg">{lobby.locationName}</CardTitle>
                       <CardDescription className="flex items-center gap-1 mt-1">
-                        <FaLocationDot className="w-3 h-3" />
+                        <FaLocationDot className="w-3 h-3" aria-hidden="true" />
                         {lobby.locationAddress}
                       </CardDescription>
                     </div>
@@ -212,7 +212,7 @@ export default function SportSelectionPage() {
                 <CardContent className="space-y-2">
                   {lobby.scheduledDate && (
                     <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <FaCalendarDays className="w-4 h-4" />
+                      <FaCalendarDays className="w-4 h-4" aria-hidden="true" />
                       <span>{new Date(lobby.scheduledDate).toLocaleDateString('pt-PT')} às {lobby.scheduledTime}</span>
                     </div>
                   )}
@@ -223,9 +223,9 @@ export default function SportSelectionPage() {
                     </div>
                   )}
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FaUsers className="w-4 h-4" />
+                    <FaUsers className="w-4 h-4" aria-hidden="true" />
                     <span>{lobby.currentPlayers.length}/{lobby.maxPlayers} jogadores</span>
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
+                    <div className="flex-1 bg-gray-200 rounded-full h-2" role="progressbar" aria-valuenow={lobby.currentPlayers.length} aria-valuemin={0} aria-valuemax={lobby.maxPlayers} aria-label={`${lobby.currentPlayers.length} de ${lobby.maxPlayers} jogadores`}>
                       <div
                         className="bg-blue-600 h-2 rounded-full transition-all"
                         style={{ width: `${(lobby.currentPlayers.length / lobby.maxPlayers) * 100}%` }}
@@ -234,8 +234,8 @@ export default function SportSelectionPage() {
                   </div>
                   <div className="flex items-center justify-between pt-2">
                     <div className="flex items-center gap-1 font-semibold text-success">
-                      <FaEuroSign className="w-4 h-4" />
-                      <span>{lobby.pricePerPerson.toFixed(2)} por pessoa</span>
+                      <FaEuroSign className="w-4 h-4" aria-hidden="true" />
+                      <span aria-label={`${lobby.pricePerPerson.toFixed(2)} euros por pessoa`}>{lobby.pricePerPerson.toFixed(2)} por pessoa</span>
                     </div>
                     <Badge variant="outline">{getLevelLabel(lobby.level)}</Badge>
                   </div>
@@ -244,7 +244,7 @@ export default function SportSelectionPage() {
                     disabled={lobby.status === 'full'}
                   >
                     {lobby.status === 'full' ? 'Grupo Completo' : 'Juntar-me ao Grupo'}
-                    <FaChevronRight className="w-4 h-4 ml-2" />
+                    <FaChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
                   </Button>
                 </CardContent>
               </Card>
@@ -260,13 +260,14 @@ export default function SportSelectionPage() {
             </CardContent>
           </Card>
         )}
-      </div>
+      </section>
 
       {/* Equipment Rental Sheet (R02) */}
       <Sheet open={equipmentOpen} onOpenChange={o => { if (!o) setEquipmentOpen(false); }}>
         <SheetContent
           side="bottom"
           className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+          aria-label="Aluguer de equipamento"
         >
           <div className="overflow-y-auto max-h-[75vh] px-5">
             <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
@@ -280,9 +281,9 @@ export default function SportSelectionPage() {
             </SheetHeader>
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground mb-4">Equipamento disponível em {sport.name} por sessão:</p>
-              <div className="space-y-2">
+              <div className="space-y-2" role="list" aria-label="Lista de equipamento disponível">
                 {mockEquipment.map(e => (
-                  <div key={e.name} className="flex items-center justify-between p-4 bg-muted/40 border-2 border-border/50 rounded-2xl transition-colors hover:border-primary/20">
+                  <div key={e.name} role="listitem" className="flex items-center justify-between p-4 bg-muted/40 border-2 border-border/50 rounded-2xl transition-colors hover:border-primary/20">
                     <span className="font-bold text-sm">{e.name}</span>
                     <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 border-green-200 dark:border-green-800">
                       {e.price === 0 ? 'Grátis' : `${e.price.toFixed(2)}€/sessão`}

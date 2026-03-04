@@ -72,8 +72,10 @@ export default function SearchLocationPage() {
       {/* Search Bar */}
       <div className="space-y-3">
         <div className="relative">
-          <FaMagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+          <label htmlFor="location-search" className="sr-only">Pesquisar local</label>
+          <FaMagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" aria-hidden="true" />
           <Input
+            id="location-search"
             type="text"
             placeholder="Pesquisar local..."
             value={searchQuery}
@@ -84,8 +86,8 @@ export default function SearchLocationPage() {
         <Button variant="outline" className="w-full" onClick={() => {
           setSearchQuery('Universidade de Aveiro');
           toast.success('Localização detetada!', { description: 'Universidade de Aveiro' });
-        }}>
-          <FaCompass className="w-4 h-4 mr-2" />
+        }} aria-label="Usar a minha localização atual para pesquisar">
+          <FaCompass className="w-4 h-4 mr-2" aria-hidden="true" />
           Usar Localização Atual
         </Button>
       </div>
@@ -109,12 +111,17 @@ export default function SearchLocationPage() {
                 >
                   <CardHeader
                     onClick={() => setSelectedLocation(isExpanded ? null : location.id)}
+                    role="button"
+                    aria-expanded={isExpanded}
+                    aria-label={`${location.name}, ${location.distance} km, ${totalActivities} atividade${totalActivities !== 1 ? 's' : ''}`}
+                    tabIndex={0}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedLocation(isExpanded ? null : location.id); } }}
                   >
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <CardTitle className="text-lg">{location.name}</CardTitle>
                         <CardDescription className="flex items-center gap-1 mt-1">
-                          <FaMapPin className="w-3 h-3" />
+                          <FaMapPin className="w-3 h-3" aria-hidden="true" />
                           {location.address}
                         </CardDescription>
                         <div className="flex flex-wrap gap-1 mt-2">
@@ -174,15 +181,15 @@ export default function SearchLocationPage() {
                                   </p>
                                   <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
                                     <span className="flex items-center gap-1">
-                                      <FaCalendarDays className="w-3 h-3" />
+                                      <FaCalendarDays className="w-3 h-3" aria-hidden="true" />
                                       {new Date(session.date).toLocaleDateString('pt-PT')}
                                     </span>
                                     <span className="flex items-center gap-1">
-                                      <FaUsers className="w-3 h-3" />
+                                      <FaUsers className="w-3 h-3" aria-hidden="true" />
                                       {session.availableSpots} vagas
                                     </span>
                                     <span className="flex items-center gap-1">
-                                      <FaEuroSign className="w-3 h-3" />
+                                      <FaEuroSign className="w-3 h-3" aria-hidden="true" />
                                       {session.price.toFixed(2)}
                                     </span>
                                   </div>
@@ -245,7 +252,7 @@ export default function SearchLocationPage() {
         ) : (
           <Card>
             <CardContent className="py-12 text-center text-muted-foreground">
-              <FaMapPin className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+              <FaMapPin className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" aria-hidden="true" />
               <p>Nenhum local encontrado.</p>
             </CardContent>
           </Card>

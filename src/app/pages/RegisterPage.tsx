@@ -62,8 +62,8 @@ export default function RegisterPage() {
         <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-12">
             {/* Logo */}
             <div className="flex items-center gap-2 mb-8">
-                <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center shadow-lg">
-                    <FaBolt className="w-7 h-7 text-primary-foreground" />
+                <div className="w-12 h-12 rounded-2xl shadow-lg overflow-hidden">
+                    <img src="/icon.jpg" alt="matchIn logo" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-3xl font-bold">match<span className="text-primary">In</span></span>
             </div>
