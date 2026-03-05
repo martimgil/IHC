@@ -7,11 +7,10 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Separator } from '../components/ui/separator';
 import { Badge } from '../components/ui/badge';
-import { FaEnvelope, FaLock, FaUser, FaBolt, FaCircleCheck, FaMapPin, FaEye, FaEyeSlash } from 'react-icons/fa6';
+import { FaEnvelope, FaLock, FaUser, FaBolt, FaCircleCheck, FaMapPin, FaEye, FaEyeSlash, FaArrowLeft, FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { sports } from '../data';
 import { useTheme } from '../context/ThemeContext';
-import { FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
 import HelpSheet from '../components/HelpSheet';
 
 export default function RegisterPage() {
@@ -73,6 +72,17 @@ export default function RegisterPage() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden">
             {/* Top actions */}
+            <div className="absolute top-4 left-4 z-50">
+                <button
+                    onClick={() => navigate('/')}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label="Voltar"
+                    title="Voltar"
+                >
+                    <FaArrowLeft className="w-5 h-5" aria-hidden="true" />
+                </button>
+            </div>
+
             <div className="absolute top-4 right-4 z-50 flex gap-2">
                 <button
                     onClick={() => setHelpOpen(true)}

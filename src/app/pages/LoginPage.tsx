@@ -10,7 +10,7 @@ import { Separator } from '../components/ui/separator';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { useTheme } from '../context/ThemeContext';
-import { FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
+import { FaSun, FaMoon, FaCircleQuestion, FaArrowLeft } from 'react-icons/fa6';
 import HelpSheet from '../components/HelpSheet';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -114,6 +114,17 @@ export default function LoginPage() {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden">
             {/* Top actions */}
+            <div className="absolute top-4 left-4 z-50">
+                <button
+                    onClick={() => navigate('/')}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label="Voltar"
+                    title="Voltar"
+                >
+                    <FaArrowLeft className="w-5 h-5" aria-hidden="true" />
+                </button>
+            </div>
+
             <div className="absolute top-4 right-4 z-50 flex gap-2">
                 <button
                     onClick={() => setHelpOpen(true)}
@@ -258,10 +269,6 @@ export default function LoginPage() {
                                         Regista-te agora
                                     </button>
                                 </p>
-                                <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground/60">
-                                    <span className="flex items-center gap-1"><FaShieldHalved className="w-3 h-3" /> Secure Login</span>
-                                    <span className="flex items-center gap-1"><FaBolt className="w-3 h-3" /> Fast Access</span>
-                                </div>
                             </div>
                         </CardContent>
                     </Card>

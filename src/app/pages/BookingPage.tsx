@@ -16,8 +16,12 @@ import {
   FaEuroSign,
   FaCircleCheck,
   FaCreditCard,
-  FaCircleExclamation
+  FaCircleExclamation,
+  FaMobileScreen
 } from 'react-icons/fa6';
+import { Input } from '../components/ui/input';
+import { Label } from '../components/ui/label';
+import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
 import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
 
@@ -26,6 +30,11 @@ export default function BookingPage() {
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
   const [bookingConfirmed, setBookingConfirmed] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState('mbway');
+  const [phone, setPhone] = useState('');
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvv, setCvv] = useState('');
   const { sessionUser } = useUser();
 
   const sessionId = searchParams.get('session');
@@ -44,6 +53,15 @@ export default function BookingPage() {
   }
 
   const handlePayment = async () => {
+    if (paymentMethod === 'mbway' && phone.length < 9) {
+      toast.error('Insere um número de telemóvel válido.', { description: 'Ex: 912345678' });
+      return;
+    }
+    if (paymentMethod === 'card' && (cardNumber.length < 16 || expiry.length < 5 || cvv.length < 3)) {
+      toast.error('Preenche corretamente os dados do cartão.');
+      return;
+    }
+
     setIsProcessing(true);
 
     // Simulate payment processing
@@ -224,6 +242,59 @@ export default function BookingPage() {
           serás reembolsado em 100% do valor.
         </AlertDescription>
       </Alert>
+
+      {/* Payment Selection */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Método de Pagamento</CardTitle>
+          <CardDescription>Esta é uma plataforma com simulação segura</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+            <div className={`p-4 border-2 rounded-xl transition-all ${paymentMethod === 'mbway' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="mbway" id="mbway" />
+                <Label htmlFor="mbway" className="flex-1 font-semibold flex items-center justify-between cursor-pointer">
+                  <span className="flex items-center gap-2"><FaMobileScreen className="w-4 h-4 text-blue-500" /> MBWay</span>
+                </Label>
+              </div>
+              {paymentMethod === 'mbway' && (
+                <div className="mt-4 pl-7 space-y-2">
+                  <Label htmlFor="phone">Nº de Telemóvel</Label>
+                  <Input id="phone" type="tel" placeholder="9X XXX XX XX" value={phone} onChange={(e) => setPhone(e.target.value)} maxLength={9} />
+                </div>
+              )}
+            </div>
+
+            <div className={`p-4 border-2 rounded-xl transition-all ${paymentMethod === 'card' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="card" id="card" />
+                <Label htmlFor="card" className="flex-1 font-semibold flex items-center justify-between cursor-pointer">
+                  <span className="flex items-center gap-2"><FaCreditCard className="w-4 h-4 text-amber-500" /> Cartão de Crédito/Débito</span>
+                </Label>
+              </div>
+              {paymentMethod === 'card' && (
+                <div className="mt-4 pl-7 space-y-3">
+                  <div>
+                    <Label htmlFor="cardNumber">Número do Cartão</Label>
+                    <Input id="cardNumber" placeholder="0000 0000 0000 0000" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} maxLength={19} className="font-mono mt-1" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor="expiry">Validade</Label>
+                      <Input id="expiry" placeholder="MM/AA" value={expiry} onChange={(e) => setExpiry(e.target.value)} maxLength={5} className="font-mono mt-1" />
+                    </div>
+                    <div>
+                      <Label htmlFor="cvv">CVV</Label>
+                      <Input id="cvv" placeholder="123" type="password" value={cvv} onChange={(e) => setCvv(e.target.value)} maxLength={3} className="font-mono mt-1" />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </RadioGroup>
+        </CardContent>
+      </Card>
 
       {/* Payment Button */}
       <div className="space-y-2">

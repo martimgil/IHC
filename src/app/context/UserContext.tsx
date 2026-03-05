@@ -1,5 +1,14 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
+export interface PastActivity {
+    id: string;
+    date: string;
+    type: string;
+    duration: number;
+    calories: number;
+    location: string;
+}
+
 export interface SessionUser {
     id: string;
     name: string;
@@ -8,6 +17,9 @@ export interface SessionUser {
     location?: string;
     interestedSports?: string[];
     experienceLevels?: Record<string, string>;
+    activityHistory?: PastActivity[];
+    unlockedAchievements?: string[];
+    achievementProgress?: Record<string, number>;
 }
 
 interface UserContextType {
@@ -72,7 +84,16 @@ export function UserProvider({ children }: { children: ReactNode }) {
                 password: 'password123',
                 location: 'Aveiro',
                 interestedSports: ['hidroginastica', 'basquetebol', 'pickleball', 'trilho'],
-                experienceLevels: { hidroginastica: 'avancado', trilho: 'intermediario' }
+                experienceLevels: { hidroginastica: 'avancado', trilho: 'intermediario' },
+                activityHistory: [
+                    { id: 'act-1', date: '2026-03-04T18:00:00Z', type: 'Padel', duration: 90, calories: 650, location: 'Padel Centro Aveiro' },
+                    { id: 'act-2', date: '2026-03-01T10:00:00Z', type: 'Ténis', duration: 60, calories: 420, location: 'Club Ténis Aveiro' },
+                    { id: 'act-3', date: '2026-02-26T19:00:00Z', type: 'Futebol', duration: 120, calories: 950, location: 'Campo Universitário' },
+                    { id: 'act-4', date: '2026-02-22T18:00:00Z', type: 'Padel', duration: 60, calories: 450, location: 'Padel Centro Aveiro' },
+                    { id: 'act-5', date: '2026-02-15T10:00:00Z', type: 'Ténis', duration: 90, calories: 600, location: 'Club Ténis Aveiro' },
+                ],
+                unlockedAchievements: ['first-session', 'five-sessions', 'ten-sessions', 'first-lobby', 'first-sport', 'three-sports'],
+                achievementProgress: { 'twenty-sessions': 12, 'five-lobbies': 3, 'all-sports': 4 }
             }]);
         }
     });
@@ -106,7 +127,10 @@ export function UserProvider({ children }: { children: ReactNode }) {
             password,
             interestedSports,
             location,
-            experienceLevels: {}
+            experienceLevels: {},
+            activityHistory: [],
+            unlockedAchievements: [],
+            achievementProgress: {}
         };
 
         users.push(newUser);

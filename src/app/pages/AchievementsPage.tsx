@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 import { FaArrowLeft, FaTrophy, FaLock, FaStar, FaFire, FaBolt, FaHeart, FaMapPin, FaUsers, FaCalendarDays } from 'react-icons/fa6';
+import StickyBackButton from '../components/StickyBackButton';
 
 interface Achievement {
     id: string;
@@ -13,18 +14,17 @@ interface Achievement {
     unlockedAt?: string;
     category: string;
     rarity: 'comum' | 'raro' | 'épico' | 'lendário';
+    progressTotal?: number;
     progress?: { current: number; total: number };
 }
 
-const achievements: Achievement[] = [
+const achievementsData: Omit<Achievement, 'unlocked' | 'unlockedAt' | 'progress'>[] = [
     // Atividade
     {
         id: 'first-session',
         title: 'Primeira Sessão',
         description: 'Participaste na tua primeira atividade desportiva',
         icon: <FaStar className="w-6 h-6" />,
-        unlocked: true,
-        unlockedAt: '2026-01-10',
         category: 'Atividade',
         rarity: 'comum',
     },
@@ -33,32 +33,27 @@ const achievements: Achievement[] = [
         title: 'Veterano',
         description: 'Completa 5 sessões desportivas',
         icon: <FaFire className="w-6 h-6" />,
-        unlocked: true,
-        unlockedAt: '2026-02-05',
         category: 'Atividade',
         rarity: 'comum',
-        progress: { current: 5, total: 5 },
+        progressTotal: 5,
     },
     {
         id: 'ten-sessions',
         title: 'Entusiasta',
         description: 'Completa 10 sessões desportivas',
         icon: <FaBolt className="w-6 h-6" />,
-        unlocked: true,
-        unlockedAt: '2026-02-20',
         category: 'Atividade',
         rarity: 'raro',
-        progress: { current: 10, total: 10 },
+        progressTotal: 10,
     },
     {
         id: 'twenty-sessions',
         title: 'Maratonista',
         description: 'Completa 20 sessões desportivas',
         icon: <FaTrophy className="w-6 h-6" />,
-        unlocked: false,
         category: 'Atividade',
         rarity: 'épico',
-        progress: { current: 12, total: 20 },
+        progressTotal: 20,
     },
     // Social
     {
@@ -66,8 +61,6 @@ const achievements: Achievement[] = [
         title: 'Espírito de Equipa',
         description: 'Juntaste-te ao teu primeiro lobby',
         icon: <FaUsers className="w-6 h-6" />,
-        unlocked: true,
-        unlockedAt: '2026-01-15',
         category: 'Social',
         rarity: 'comum',
     },
@@ -76,17 +69,15 @@ const achievements: Achievement[] = [
         title: 'Jogador de Equipa',
         description: 'Participa em 5 lobbies diferentes',
         icon: <FaUsers className="w-6 h-6" />,
-        unlocked: false,
         category: 'Social',
         rarity: 'raro',
-        progress: { current: 3, total: 5 },
+        progressTotal: 5,
     },
     {
         id: 'create-lobby',
         title: 'Organizador',
         description: 'Cria o teu próprio lobby',
         icon: <FaCalendarDays className="w-6 h-6" />,
-        unlocked: false,
         category: 'Social',
         rarity: 'raro',
     },
@@ -96,8 +87,6 @@ const achievements: Achievement[] = [
         title: 'Explorador',
         description: 'Experimenta um novo desporto',
         icon: <FaMapPin className="w-6 h-6" />,
-        unlocked: true,
-        unlockedAt: '2026-01-10',
         category: 'Exploração',
         rarity: 'comum',
     },
@@ -106,8 +95,6 @@ const achievements: Achievement[] = [
         title: 'Polivalente',
         description: 'Pratica 3 desportos diferentes',
         icon: <FaHeart className="w-6 h-6" />,
-        unlocked: true,
-        unlockedAt: '2026-02-01',
         category: 'Exploração',
         rarity: 'raro',
     },
@@ -116,10 +103,9 @@ const achievements: Achievement[] = [
         title: 'Atleta Completo',
         description: 'Experimenta todos os desportos disponíveis',
         icon: <FaTrophy className="w-6 h-6" />,
-        unlocked: false,
         category: 'Exploração',
         rarity: 'lendário',
-        progress: { current: 4, total: 6 },
+        progressTotal: 6,
     },
 ];
 
@@ -137,23 +123,28 @@ const rarityBadgeColors: Record<string, string> = {
     lendário: 'bg-amber-500',
 };
 
+import { useUser } from '../context/UserContext';
+
 export default function AchievementsPage() {
     const navigate = useNavigate();
+    const { sessionUser } = useUser();
+
+    // Add reactivity per user logged in
+    const unlockedList = sessionUser?.unlockedAchievements || [];
+    const progList = sessionUser?.achievementProgress || {};
+
+    const achievements: Achievement[] = achievementsData.map(a => ({
+        ...a,
+        unlocked: unlockedList.includes(a.id),
+        progress: a.progressTotal ? { current: progList[a.id] || 0, total: a.progressTotal } : undefined
+    }));
+
     const categories = [...new Set(achievements.map(a => a.category))];
     const unlockedCount = achievements.filter(a => a.unlocked).length;
 
     return (
         <div className="max-w-4xl mx-auto space-y-6">
-            {/* Back Button */}
-            <Button
-                variant="ghost"
-                onClick={() => navigate('/profile')}
-                className="mb-2 min-h-[44px]"
-                aria-label="Voltar ao perfil"
-            >
-                <FaArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
-                Voltar ao Perfil
-            </Button>
+            <StickyBackButton to="/profile" />
 
             {/* Header */}
             <div className="flex items-center justify-between gap-4 flex-wrap">

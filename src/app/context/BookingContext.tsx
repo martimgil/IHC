@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useUser } from './UserContext';
 
 export interface Booking {
     id: string;
@@ -17,14 +18,42 @@ interface BookingContextType {
 const BookingContext = createContext<BookingContextType | null>(null);
 
 export function BookingProvider({ children }: { children: ReactNode }) {
-    const [bookings, setBookings] = useState<Booking[]>([]);
+    const { sessionUser } = useUser();
+    const storageKey = sessionUser ? `matchin_bookings_${sessionUser.id}` : null;
+
+    const [bookings, setBookings] = useState<Booking[]>(() => {
+        if (!storageKey) return [];
+        try {
+            const saved = localStorage.getItem(storageKey);
+            return saved ? JSON.parse(saved) : [];
+        } catch {
+            return [];
+        }
+    });
+
+    useEffect(() => {
+        if (!storageKey) {
+            setBookings([]);
+            return;
+        }
+        try {
+            const saved = localStorage.getItem(storageKey);
+            setBookings(saved ? JSON.parse(saved) : []);
+        } catch {
+            setBookings([]);
+        }
+    }, [storageKey]);
 
     const cancelBooking = (id: string) => {
-        setBookings(prev => prev.filter(b => b.id !== id));
+        const newBookings = bookings.filter(b => b.id !== id);
+        setBookings(newBookings);
+        if (storageKey) localStorage.setItem(storageKey, JSON.stringify(newBookings));
     };
 
     const addBooking = (booking: Booking) => {
-        setBookings(prev => [...prev, booking]);
+        const newBookings = [...bookings, booking];
+        setBookings(newBookings);
+        if (storageKey) localStorage.setItem(storageKey, JSON.stringify(newBookings));
     };
 
     return (

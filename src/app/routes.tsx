@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MapPage from "./pages/MapPage";
 import BookingsPage from "./pages/BookingsPage";
+import ActivityHistoryPage from "./pages/ActivityHistoryPage";
 import WelcomePage from "./pages/WelcomePage";
 import LandingPage from "./pages/LandingPage";
 import Root from "./Root";
@@ -36,6 +37,7 @@ export const router = createBrowserRouter([
       { path: "create-urgent", Component: CreateUrgentEventPage },
       { path: "achievements", Component: AchievementsPage },
       { path: "bookings", Component: BookingsPage },
+      { path: "history", Component: ActivityHistoryPage },
       { path: "map", Component: MapPage },
     ],
   },

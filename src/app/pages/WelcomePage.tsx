@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router';
 import { Button } from '../components/ui/button';
 import { motion } from 'motion/react';
 import { useTheme } from '../context/ThemeContext';
-import { FaHeart, FaMapLocationDot, FaTrophy, FaArrowRight, FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
+import { FaHeart, FaMapLocationDot, FaTrophy, FaArrowRight, FaSun, FaMoon, FaCircleQuestion, FaArrowLeft } from 'react-icons/fa6';
 import { useState } from 'react';
 import HelpSheet from '../components/HelpSheet';
 
@@ -39,6 +39,17 @@ export default function WelcomePage() {
             </div>
 
             {/* Top Bar Actions */}
+            <div className="absolute top-4 left-4 z-50">
+                <button
+                    onClick={() => navigate('/')}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label="Voltar à página inicial"
+                    title="Voltar"
+                >
+                    <FaArrowLeft className="w-5 h-5" aria-hidden="true" />
+                </button>
+            </div>
+
             <div className="absolute top-4 right-4 z-50 flex gap-2">
                 <button
                     onClick={() => setHelpOpen(true)}
@@ -103,7 +114,7 @@ export default function WelcomePage() {
                         className="w-full h-14 text-lg font-bold shadow-xl shadow-primary/25 rounded-2xl group transition-all focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none"
                         onClick={() => navigate('/register')}
                     >
-                        Começar agora
+                        Criar conta grátis
                         <FaArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                     </Button>
                     <p className="text-center text-sm text-muted-foreground font-medium">

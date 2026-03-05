@@ -16,7 +16,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import {
   FaArrowLeft, FaEnvelope, FaMapPin, FaCalendarDays, FaTrophy,
   FaGear, FaHeart, FaCircleCheck, FaAward, FaBell,
-  FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaXmark, FaBolt, FaMagnifyingGlass, FaTrashCan, FaUserGroup, FaUserPlus
+  FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaXmark, FaBolt, FaMagnifyingGlass, FaTrashCan, FaUserGroup, FaUserPlus, FaPersonRunning, FaChartLine
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
@@ -278,10 +278,10 @@ export default function ProfilePage() {
   const initials = displayName.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
 
   const stats = [
-    { label: 'Atividades', value: '12', icon: <FaTrophy className="w-4 h-4 text-amber-500" />, color: 'text-amber-600 dark:text-amber-400' },
+    { label: 'Atividades', value: String(sessionUser?.activityHistory?.length || 0), icon: <FaPersonRunning className="w-4 h-4 text-green-500" />, color: 'text-green-600 dark:text-green-400', action: () => navigate('/history') },
     { label: 'Reservas', value: String(bookings.length), icon: <FaCalendarDays className="w-4 h-4 text-blue-500" />, color: 'text-blue-600 dark:text-blue-400', action: () => navigate('/bookings') },
     { label: 'Desportos', value: String(userSports.length), icon: <FaHeart className="w-4 h-4 text-red-500" />, color: 'text-red-600 dark:text-red-400', action: () => setSportsEditOpen(true) },
-    { label: 'Conquistas', value: '6', icon: <FaStar className="w-4 h-4 text-purple-500" />, color: 'text-purple-600 dark:text-purple-400', action: () => navigate('/achievements') },
+    { label: 'Conquistas', value: String(sessionUser?.unlockedAchievements?.length || 0), icon: <FaStar className="w-4 h-4 text-amber-500" />, color: 'text-amber-600 dark:text-amber-400', action: () => navigate('/achievements') },
   ];
 
   const cancelBooking = (id: string) => {
@@ -474,6 +474,23 @@ export default function ProfilePage() {
       {/* Suggestions (R17) */}
       <SuggestionsSection />
 
+      {/* History (New) */}
+      <button
+        className="w-full flex items-center justify-between p-4 bg-card border rounded-xl shadow-sm hover:border-primary/50 hover:bg-primary/5 transition-all text-left group focus:outline-none focus:ring-2 focus:ring-primary"
+        onClick={() => navigate('/history')}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <FaChartLine className="w-5 h-5 text-primary" aria-hidden="true" />
+          </div>
+          <div>
+            <h3 className="font-bold text-sm">Histórico e Estatísticas</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">Analisa o teu desempenho na última semana</p>
+          </div>
+        </div>
+        <FaChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" aria-hidden="true" />
+      </button>
+
       <button
         className="w-full flex items-center justify-between p-4 bg-card border rounded-xl shadow-sm hover:border-amber-500/50 hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-all text-left group focus:outline-none focus:ring-2 focus:ring-amber-400"
         onClick={() => navigate('/achievements')}
@@ -484,7 +501,7 @@ export default function ProfilePage() {
           </div>
           <div>
             <h3 className="font-bold text-sm">As Minhas Conquistas</h3>
-            <p className="text-xs text-muted-foreground mt-0.5">Desbloqueaste 6/10 emblemas</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Desbloqueaste {sessionUser?.unlockedAchievements?.length || 0}/10 emblemas</p>
           </div>
         </div>
         <FaChevronRight className="w-5 h-5 text-muted-foreground group-hover:translate-x-1 transition-transform" aria-hidden="true" />

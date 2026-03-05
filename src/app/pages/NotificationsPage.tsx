@@ -16,6 +16,7 @@ import {
 import { Notification } from '../types';
 import { toast } from 'sonner';
 import { useNotifications } from '../context/NotificationContext';
+import StickyBackButton from '../components/StickyBackButton';
 
 export default function NotificationsPage() {
   const navigate = useNavigate();
@@ -89,16 +90,7 @@ export default function NotificationsPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      {/* Back Button */}
-      <Button
-        variant="ghost"
-        onClick={() => navigate(-1)}
-        className="mb-2 min-h-[44px]"
-        aria-label="Voltar à página anterior"
-      >
-        <FaArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
-        Voltar
-      </Button>
+      <StickyBackButton />
 
       {/* Header */}
       <div className="flex items-center justify-between gap-4 flex-wrap">

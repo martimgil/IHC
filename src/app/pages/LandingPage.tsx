@@ -2,12 +2,13 @@ import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useTheme } from '../context/ThemeContext';
-import { FaHeartPulse, FaPeopleGroup, FaTrophy, FaArrowRight, FaCalendarCheck, FaChartLine, FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
-import { useRef, useState } from 'react';
+import { FaHeartPulse, FaPeopleGroup, FaTrophy, FaArrowRight, FaCalendarCheck, FaChartLine, FaSun, FaMoon, FaCircleQuestion, FaBars, FaXmark } from 'react-icons/fa6';
+import { useRef, useState, useEffect } from 'react';
 import HelpSheet from '../components/HelpSheet';
 
 export default function LandingPage() {
     const { theme, toggleTheme } = useTheme();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [helpOpen, setHelpOpen] = useState(false);
     const targetRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start end", "end start"] });
@@ -17,37 +18,66 @@ export default function LandingPage() {
         <div className="min-h-[100dvh] flex flex-col bg-background selection:bg-primary/20 overflow-x-hidden font-sans" ref={targetRef}>
             {/* Navbar */}
             <header className="fixed top-0 inset-x-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="logótipo matchIn" className="h-8 w-auto object-contain" />
-                        <span className="font-extrabold tracking-tight text-xl">matchIn</span>
+                <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+                    <div className="flex items-center">
+                        <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="logótipo matchIn" className="h-8 sm:h-9 w-auto object-contain" />
                     </div>
-                    <nav className="flex items-center gap-3 md:gap-6 text-sm font-medium">
-                        <div className="flex items-center gap-1 mr-2">
-                            <button
-                                onClick={() => setHelpOpen(true)}
-                                className="p-2 hover:bg-accent rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary flex items-center justify-center text-foreground"
-                                aria-label="Ajuda"
-                                title="Ajuda"
-                            >
-                                <FaCircleQuestion className="w-5 h-5" aria-hidden="true" />
+
+                    {/* Desktop Navigation */}
+                    <nav className="hide-scrollbar hidden md:flex items-center gap-8 text-sm font-semibold">
+                        <Link to="/welcome" className="text-muted-foreground hover:text-foreground transition-colors">Como Funciona</Link>
+                        <Link to="/login" className="text-muted-foreground hover:text-foreground transition-colors px-4 py-2 hover:bg-accent rounded-full">Entrar</Link>
+                        <Button asChild size="sm" className="rounded-full px-6 shadow-lg shadow-primary/20">
+                            <Link to="/register">Registar</Link>
+                        </Button>
+                        <div className="flex items-center gap-1 border-l pl-6 border-border/50">
+                            <button onClick={() => setHelpOpen(true)} className="p-2 hover:bg-accent rounded-full transition-colors text-muted-foreground hover:text-foreground" aria-label="Ajuda">
+                                <FaCircleQuestion className="w-5 h-5" />
                             </button>
-                            <button
-                                onClick={toggleTheme}
-                                className="p-2 hover:bg-accent rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary flex items-center justify-center text-foreground"
-                                aria-label={theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
-                                title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
-                            >
-                                {theme === 'dark' ? <FaSun className="w-5 h-5" aria-hidden="true" /> : <FaMoon className="w-5 h-5" aria-hidden="true" />}
+                            <button onClick={toggleTheme} className="p-2 hover:bg-accent rounded-full transition-colors text-muted-foreground hover:text-foreground" aria-label="Alterar Tema">
+                                {theme === 'dark' ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
                             </button>
                         </div>
-                        <Link to="/welcome" className="flex items-center h-9 text-muted-foreground hover:text-foreground transition-colors hidden md:flex focus-visible:ring-2 focus-visible:ring-primary rounded-sm px-2">Como Funciona</Link>
-                        <Link to="/login" className="flex items-center h-9 text-muted-foreground hover:text-foreground transition-colors focus-visible:ring-2 focus-visible:ring-primary rounded-sm px-2 mt-0.5">Entrar</Link>
-                        <Button asChild size="sm" className="rounded-full shadow-lg shadow-primary/20">
-                            <Link to="/welcome">Descobrir matchIn</Link>
-                        </Button>
                     </nav>
+
+                    {/* Mobile Navigation Interface */}
+                    <div className="flex md:hidden items-center gap-1">
+                        <button onClick={toggleTheme} className="p-2.5 text-muted-foreground hover:text-primary transition-colors" aria-label="Tema">
+                            {theme === 'dark' ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
+                        </button>
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="p-2.5 text-foreground bg-accent/50 rounded-xl ml-1"
+                            aria-label="Abrir menu"
+                        >
+                            {mobileMenuOpen ? <FaXmark className="w-6 h-6" /> : <FaBars className="w-6 h-6" />}
+                        </button>
+                    </div>
                 </div>
+
+                {/* Mobile Menu Overlay */}
+                {mobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="md:hidden bg-background border-b border-border p-5 space-y-4 shadow-2xl"
+                    >
+                        <div className="grid gap-2">
+                            <Link to="/welcome" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between p-4 rounded-2xl bg-accent/20 text-foreground font-bold">
+                                Como Funciona <FaArrowRight className="w-4 h-4 opacity-50" />
+                            </Link>
+                            <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-between p-4 rounded-2xl hover:bg-accent/30 text-foreground font-semibold">
+                                Entrar
+                            </Link>
+                            <Link to="/register" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center p-4 rounded-2xl bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20">
+                                Criar conta grátis
+                            </Link>
+                        </div>
+                        <button onClick={() => { setHelpOpen(true); setMobileMenuOpen(false); }} className="w-full flex items-center justify-center gap-2 py-3 text-muted-foreground text-sm">
+                            <FaCircleQuestion className="w-4 h-4" /> Ajuda e Suporte
+                        </button>
+                    </motion.div>
+                )}
             </header>
 
             {/* Hero Section */}
