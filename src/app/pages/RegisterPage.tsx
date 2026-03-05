@@ -29,6 +29,7 @@ export default function RegisterPage() {
     const validateStep1 = () => {
         const e: Record<string, string> = {};
         if (!form.name.trim()) e.name = 'O nome é obrigatório.';
+        if (!form.location.trim()) e.location = 'A cidade é obrigatória.';
         if (!form.email) e.email = 'O email é obrigatório.';
         else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Email inválido.';
         if (!form.password) e.password = 'A password é obrigatória.';
@@ -62,10 +63,7 @@ export default function RegisterPage() {
         <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-12">
             {/* Logo */}
             <div className="flex items-center gap-2 mb-8">
-                <div className="w-12 h-12 rounded-2xl shadow-lg overflow-hidden">
-                    <img src="/icon.jpg" alt="matchIn logo" className="w-full h-full object-cover" />
-                </div>
-                <span className="text-3xl font-bold">match<span className="text-primary">In</span></span>
+                <span className="text-3xl font-bold">⚡ match<span className="text-primary">In</span></span>
             </div>
 
             <Card className="w-full max-w-sm shadow-md">
@@ -108,7 +106,7 @@ export default function RegisterPage() {
 
                             {/* Location */}
                             <div className="space-y-1.5">
-                                <Label htmlFor="reg-location">Localização <span className="text-muted-foreground font-normal">(opcional)</span></Label>
+                                <Label htmlFor="reg-location">Cidade</Label>
                                 <div className="relative">
                                     <FaMapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                                     <Input
@@ -116,9 +114,12 @@ export default function RegisterPage() {
                                         placeholder="Ex: Aveiro"
                                         value={form.location}
                                         onChange={e => set('location', e.target.value)}
-                                        className="pl-9"
+                                        className={`pl-9 ${errors.location ? 'border-destructive' : ''}`}
+                                        aria-invalid={!!errors.location}
+                                        aria-describedby={errors.location ? 'location-err' : undefined}
                                     />
                                 </div>
+                                {errors.location && <p id="location-err" className="text-xs text-destructive">{errors.location}</p>}
                             </div>
 
                             {/* Email */}

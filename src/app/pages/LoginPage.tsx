@@ -76,14 +76,8 @@ export default function LoginPage() {
                 >
                     {/* Header/Logo */}
                     <div className="flex flex-col items-center mb-8 text-center">
-                        <motion.div
-                            className="w-16 h-16 rounded-2xl shadow-2xl mb-4 rotate-3 overflow-hidden"
-                            whileHover={{ scale: 1.05, rotate: 0 }}
-                        >
-                            <img src="/icon.jpg" alt="matchIn logo" className="w-full h-full object-cover" />
-                        </motion.div>
                         <h1 className="text-4xl font-extrabold tracking-tight">
-                            match<span className="text-primary italic">In</span>
+                            ⚡ match<span className="text-primary italic">In</span>
                         </h1>
                         <p className="text-muted-foreground mt-2 font-medium">Ligas-te ao teu próximo jogo.</p>
                     </div>

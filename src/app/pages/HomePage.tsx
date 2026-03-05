@@ -123,13 +123,12 @@ export default function HomePage() {
         <div className="relative z-10 flex items-center justify-between">
           <div>
             <h2 id="welcome-heading" className="font-extrabold text-2xl leading-tight flex items-center gap-2">
-              Olá, {firstName}!
-              <img src="/icon.jpg" alt="matchIn" className="w-7 h-7 rounded-md object-cover" />
+              Olá, {firstName}! ⚡
             </h2>
             <p className="text-sm font-medium opacity-90 mt-1">Pronto para o teu próximo jogo?</p>
           </div>
-          <div className="w-12 h-12 rounded-2xl overflow-hidden backdrop-blur-md shadow-md">
-            <img src="/icon.jpg" alt="matchIn logo" className="w-full h-full object-cover" />
+          <div className="w-12 h-12 rounded-2xl overflow-hidden backdrop-blur-md shadow-md flex items-center justify-center bg-primary-foreground/20">
+            <span className="text-2xl">⚡</span>
           </div>
         </div>
         {/* Abstract shapes for premium feel */}

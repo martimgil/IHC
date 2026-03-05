@@ -47,7 +47,7 @@ export default function Root() {
               className="flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg group"
               aria-label="Ir para página inicial"
             >
-              <FaBolt className="w-6 h-6 text-primary fill-current transition-transform group-hover:scale-110" aria-label="Taça UA Logótipo" />
+              <img src="/icon.jpg" alt="matchIn logo" className="w-8 h-8 object-contain transition-transform group-hover:scale-110" />
               <h1 className="text-xl font-extrabold text-foreground tracking-tighter">
                 match<span className="text-primary italic">In</span>
               </h1>
