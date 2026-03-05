@@ -30,7 +30,7 @@ export default function Root() {
 
   return (
     <>
-      <div className="flex flex-col h-screen bg-background text-foreground">
+      <div className="flex flex-col h-[100dvh] bg-background text-foreground overflow-hidden">
         {/* Skip to Content */}
         <a
           href="#main-content"
@@ -40,17 +40,14 @@ export default function Root() {
         </a>
 
         {/* Header */}
-        <header className="bg-card border-b border-border px-4 py-3 sticky top-0 z-10 shadow-sm">
+        <header className="bg-card border-b border-border px-4 py-3 sticky top-0 z-10 shadow-sm safe-area-top flex-none">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
             <Link
               to="/"
-              className="flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg group"
+              className="flex items-center focus:outline-none focus:ring-2 focus:ring-primary rounded-lg group"
               aria-label="Ir para página inicial"
             >
-              <img src="/icon.jpg" alt="matchIn logo" className="w-8 h-8 object-contain transition-transform group-hover:scale-110" />
-              <h1 className="text-xl font-extrabold text-foreground tracking-tighter">
-                match<span className="text-primary italic">In</span>
-              </h1>
+              <img src="/favicon.ico" alt="matchIn logo" className="h-10 w-auto object-contain transition-transform group-hover:scale-110" />
             </Link>
 
             <nav className="flex items-center gap-1" aria-label="Navegação principal">
@@ -110,7 +107,7 @@ export default function Root() {
         {/* Main Content */}
         <main id="main-content" className="flex-1 flex flex-col min-h-0" role="main">
           <ScrollBounce>
-            <div className="max-w-7xl mx-auto p-4 pb-20 md:pb-4">
+            <div className="max-w-7xl mx-auto p-4 pb-4">
               <Outlet />
             </div>
           </ScrollBounce>
@@ -118,7 +115,7 @@ export default function Root() {
 
         {/* Bottom Navigation - Mobile */}
         <nav
-          className="bg-card border-t border-border px-1 py-1 md:hidden safe-area-bottom fixed bottom-0 left-0 right-0 shadow-lg z-50"
+          className="bg-card border-t border-border px-1 py-1 md:hidden safe-area-bottom shadow-lg z-50 flex-none"
           aria-label="Navegação inferior"
         >
           <div className="flex justify-around items-center">

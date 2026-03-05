@@ -211,6 +211,10 @@
     padding-bottom: env(safe-area-inset-bottom);
   }
 
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+
   /* Estilo para elementos acessíveis apenas para leitores de tela */
   .sr-only {
     position: absolute;

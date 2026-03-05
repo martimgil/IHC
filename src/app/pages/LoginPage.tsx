@@ -76,9 +76,7 @@ export default function LoginPage() {
                 >
                     {/* Header/Logo */}
                     <div className="flex flex-col items-center mb-8 text-center">
-                        <h1 className="text-4xl font-extrabold tracking-tight">
-                            ⚡ match<span className="text-primary italic">In</span>
-                        </h1>
+                        <img src="/favicon.ico" alt="matchIn logo" className="h-16 w-auto object-contain mb-4" />
                         <p className="text-muted-foreground mt-2 font-medium">Ligas-te ao teu próximo jogo.</p>
                     </div>
 
