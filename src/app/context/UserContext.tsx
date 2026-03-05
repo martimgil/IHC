@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useMemo, useCallback } from 'react';
 
 export interface PastActivity {
     id: string;
@@ -35,7 +35,7 @@ const UserContext = createContext<UserContextType | null>(null);
 const STORAGE_KEY_SESSION = 'matchin_session_user';
 const STORAGE_KEY_USERS = 'matchin_registered_users';
 
-export function UserProvider({ children }: { children: ReactNode }) {
+export function UserProvider({ children }: { readonly children: ReactNode }) {
     const [sessionUser, setSessionUser] = useState<SessionUser | null>(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY_SESSION);
@@ -74,7 +74,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     };
 
     // Initialize with a demo user if empty
-    useState(() => {
+    useEffect(() => {
         const users = getUsers();
         if (users.length === 0) {
             saveUsers([{
@@ -96,7 +96,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
                 achievementProgress: { 'twenty-sessions': 12, 'five-lobbies': 3, 'all-sports': 4 }
             }]);
         }
-    });
+    }, []);
 
     const login = (email: string, password?: string) => {
         const users = getUsers();
@@ -114,9 +114,9 @@ export function UserProvider({ children }: { children: ReactNode }) {
         return { success: true };
     };
 
-    const register = (name: string, email: string, interestedSports: string[], location?: string, password?: string) => {
+    const register = useCallback((name: string, email: string, interestedSports: string[], location?: string, password?: string) => {
         const users = getUsers();
-        if (users.find(u => u.email === email)) {
+        if (users.some(u => u.email === email)) {
             return { success: false, message: 'O email já está registado.' };
         }
 
@@ -138,21 +138,25 @@ export function UserProvider({ children }: { children: ReactNode }) {
         saveSession(newUser);
 
         return { success: true };
-    };
+    }, []);
 
-    const updateUser = (updates: Partial<SessionUser>) => {
+    const updateUser = useCallback((updates: Partial<SessionUser>) => {
         if (sessionUser) {
             saveSession({ ...sessionUser, ...updates });
         }
-    };
+    }, [sessionUser]);
 
-    const logout = () => {
+    const logout = useCallback(() => {
         setSessionUser(null);
         localStorage.removeItem(STORAGE_KEY_SESSION);
-    };
+    }, []);
+
+    const contextValue = useMemo(() => ({
+        sessionUser, login, register, updateUser, logout
+    }), [sessionUser, login, register, updateUser, logout]);
 
     return (
-        <UserContext.Provider value={{ sessionUser, login, register, updateUser, logout }}>
+        <UserContext.Provider value={contextValue}>
             {children}
         </UserContext.Provider>
     );

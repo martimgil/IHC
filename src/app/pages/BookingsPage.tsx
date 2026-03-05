@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { FaArrowLeft, FaCalendarDays, FaCircleCheck, FaXmark } from 'react-icons/fa6';
+import { FaArrowLeft, FaCalendarDays, FaCircleCheck } from 'react-icons/fa6';
 import { sports } from '../data';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { Separator } from '../components/ui/separator';
 import { Button } from '../components/ui/button';
 import { toast } from 'sonner';
 import {

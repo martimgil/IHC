@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { useUser } from './UserContext';
 
 export interface Booking {
@@ -17,7 +17,7 @@ interface BookingContextType {
 
 const BookingContext = createContext<BookingContextType | null>(null);
 
-export function BookingProvider({ children }: { children: ReactNode }) {
+export function BookingProvider({ children }: { readonly children: ReactNode }) {
     const { sessionUser } = useUser();
     const storageKey = sessionUser ? `matchin_bookings_${sessionUser.id}` : null;
 
@@ -44,20 +44,26 @@ export function BookingProvider({ children }: { children: ReactNode }) {
         }
     }, [storageKey]);
 
-    const cancelBooking = (id: string) => {
-        const newBookings = bookings.filter(b => b.id !== id);
-        setBookings(newBookings);
-        if (storageKey) localStorage.setItem(storageKey, JSON.stringify(newBookings));
-    };
+    const cancelBooking = useCallback((id: string) => {
+        setBookings(prev => {
+            const newBookings = prev.filter(b => b.id !== id);
+            if (storageKey) localStorage.setItem(storageKey, JSON.stringify(newBookings));
+            return newBookings;
+        });
+    }, [storageKey]);
 
-    const addBooking = (booking: Booking) => {
-        const newBookings = [...bookings, booking];
-        setBookings(newBookings);
-        if (storageKey) localStorage.setItem(storageKey, JSON.stringify(newBookings));
-    };
+    const addBooking = useCallback((booking: Booking) => {
+        setBookings(prev => {
+            const newBookings = [...prev, booking];
+            if (storageKey) localStorage.setItem(storageKey, JSON.stringify(newBookings));
+            return newBookings;
+        });
+    }, [storageKey]);
+
+    const contextValue = useMemo(() => ({ bookings, cancelBooking, addBooking }), [bookings, cancelBooking, addBooking]);
 
     return (
-        <BookingContext.Provider value={{ bookings, cancelBooking, addBooking }}>
+        <BookingContext.Provider value={contextValue}>
             {children}
         </BookingContext.Provider>
     );

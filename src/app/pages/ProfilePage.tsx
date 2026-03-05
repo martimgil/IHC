@@ -208,7 +208,7 @@ function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void
                               className={`px-2 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${(levels[id] || 'iniciante') === lv ? 'bg-primary text-primary-foreground shadow-sm' : 'bg-background text-muted-foreground hover:bg-muted'}`}
                               aria-pressed={(levels[id] || 'iniciante') === lv}
                             >
-                              {lv === 'iniciante' ? 'Ini' : lv === 'intermediario' ? 'Int' : 'Av'}
+                              {{ 'iniciante': 'Ini', 'intermediario': 'Int' }[lv] || 'Av'}
                             </button>
                           ))}
                         </div>
@@ -437,20 +437,24 @@ export default function ProfilePage() {
                         </Badge>
                       </div>
                     </div>
-                    {communityTab === 'following' ? (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 text-xs shrink-0"
-                        aria-label={`Deixar de seguir ${user.name}`}
-                        onClick={() => handleUnfollow(user.id)}
-                      >
-                        A seguir
-                      </Button>
-                    ) : (
-                      isMutual ? (
-                        <Badge variant="secondary" className="text-xs shrink-0 py-1 px-2">Mútuo</Badge>
-                      ) : (
+                    {(() => {
+                      if (communityTab === 'following') {
+                        return (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 text-xs shrink-0"
+                            aria-label={`Deixar de seguir ${user.name}`}
+                            onClick={() => handleUnfollow(user.id)}
+                          >
+                            A seguir
+                          </Button>
+                        );
+                      }
+                      if (isMutual) {
+                        return <Badge variant="secondary" className="text-xs shrink-0 py-1 px-2">Mútuo</Badge>;
+                      }
+                      return (
                         <Button
                           variant="default"
                           size="sm"
@@ -461,8 +465,8 @@ export default function ProfilePage() {
                           <FaUserPlus className="w-3 h-3 mr-1" aria-hidden="true" />
                           Seguir
                         </Button>
-                      )
-                    )}
+                      );
+                    })()}
                   </div>
                 );
               })}

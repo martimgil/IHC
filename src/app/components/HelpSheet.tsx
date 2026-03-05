@@ -65,8 +65,8 @@ const faqs = [
 ];
 
 interface HelpSheetProps {
-    open: boolean;
-    onClose: () => void;
+    readonly open: boolean;
+    readonly onClose: () => void;
 }
 
 export default function HelpSheet({ open, onClose }: HelpSheetProps) {
@@ -89,11 +89,11 @@ export default function HelpSheet({ open, onClose }: HelpSheetProps) {
                     </SheetHeader>
 
                     {/* FAQs */}
-                    <section role="region" aria-label="Perguntas frequentes">
+                    <section aria-label="Perguntas frequentes">
                         <p className="text-sm text-muted-foreground mb-4 font-medium">Perguntas Frequentes</p>
                         <Accordion type="single" collapsible className="space-y-2">
                             {faqs.map((faq, i) => (
-                                <AccordionItem key={i} value={`faq-${i}`} className="border-2 border-border/50 rounded-2xl px-2 bg-card/50 transition-colors data-[state=open]:border-primary/30">
+                                <AccordionItem key={faq.q} value={`faq-${i}`} className="border-2 border-border/50 rounded-2xl px-2 bg-card/50 transition-colors data-[state=open]:border-primary/30">
                                     <AccordionTrigger className="text-sm font-bold text-left py-4 px-2 hover:no-underline group">
                                         <span className="group-hover:text-primary transition-colors">{faq.q}</span>
                                     </AccordionTrigger>
@@ -108,7 +108,7 @@ export default function HelpSheet({ open, onClose }: HelpSheetProps) {
                     <Separator className="my-6" />
 
                     {/* Contact & Support */}
-                    <section role="region" aria-label="Contacto e suporte">
+                    <section aria-label="Contacto e suporte">
                         <p className="text-sm font-bold mb-3 flex items-center gap-2">
                             <FaUniversalAccess className="w-4 h-4 text-primary" aria-hidden="true" />
                             Contacto & Suporte

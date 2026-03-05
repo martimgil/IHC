@@ -2,10 +2,10 @@ import * as React from 'react';
 import { motion, useMotionValue, useSpring } from 'motion/react';
 
 interface ScrollBounceProps {
-    children: React.ReactNode;
-    className?: string;
-    id?: string;
-    role?: string;
+    readonly children: React.ReactNode;
+    readonly className?: string;
+    readonly id?: string;
+    readonly role?: string;
 }
 
 /**

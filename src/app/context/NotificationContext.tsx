@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useMemo, useCallback } from 'react';
 import { mockNotifications } from '../data';
 import { Notification } from '../types';
 
@@ -12,27 +12,31 @@ interface NotificationContextType {
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined);
 
-export function NotificationProvider({ children }: { children: ReactNode }) {
+export function NotificationProvider({ children }: { readonly children: ReactNode }) {
     const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
 
     const unreadCount = notifications.filter(n => !n.read).length;
 
-    const markAsRead = (id: string) => {
+    const markAsRead = useCallback((id: string) => {
         setNotifications(prev =>
             prev.map(n => n.id === id ? { ...n, read: true } : n)
         );
-    };
+    }, []);
 
-    const markAllAsRead = () => {
+    const markAllAsRead = useCallback(() => {
         setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-    };
+    }, []);
 
-    const deleteNotification = (id: string) => {
+    const deleteNotification = useCallback((id: string) => {
         setNotifications(prev => prev.filter(n => n.id !== id));
-    };
+    }, []);
+
+    const contextValue = useMemo(() => ({
+        notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification
+    }), [notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification]);
 
     return (
-        <NotificationContext.Provider value={{ notifications, unreadCount, markAsRead, markAllAsRead, deleteNotification }}>
+        <NotificationContext.Provider value={contextValue}>
             {children}
         </NotificationContext.Provider>
     );

@@ -17,11 +17,11 @@ export function SkeletonCard() {
   );
 }
 
-export function SkeletonList({ count = 3 }: { count?: number }) {
+export function SkeletonList({ count = 3 }: { readonly count?: number }) {
   return (
     <div className="space-y-3">
       {Array.from({ length: count }).map((_, i) => (
-        <SkeletonCard key={i} />
+        <SkeletonCard key={`skeleton-card-${i}`} />
       ))}
     </div>
   );

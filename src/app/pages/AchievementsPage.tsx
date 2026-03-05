@@ -1,8 +1,6 @@
-import { useNavigate } from 'react-router';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
+import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { Button } from '../components/ui/button';
-import { FaArrowLeft, FaTrophy, FaLock, FaStar, FaFire, FaBolt, FaHeart, FaMapPin, FaUsers, FaCalendarDays } from 'react-icons/fa6';
+import { FaTrophy, FaLock, FaStar, FaFire, FaBolt, FaHeart, FaMapPin, FaUsers, FaCalendarDays } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 
 interface Achievement {
@@ -126,7 +124,6 @@ const rarityBadgeColors: Record<string, string> = {
 import { useUser } from '../context/UserContext';
 
 export default function AchievementsPage() {
-    const navigate = useNavigate();
     const { sessionUser } = useUser();
 
     // Add reactivity per user logged in
@@ -163,11 +160,6 @@ export default function AchievementsPage() {
                         <div
                             className="h-full bg-amber-500 rounded-full transition-all"
                             style={{ width: `${(unlockedCount / achievements.length) * 100}%` }}
-                            role="progressbar"
-                            aria-valuenow={unlockedCount}
-                            aria-valuemin={0}
-                            aria-valuemax={achievements.length}
-                            aria-label={`${unlockedCount} de ${achievements.length} conquistas desbloqueadas`}
                         />
                     </div>
                     <span className="text-sm font-medium text-muted-foreground">
@@ -210,10 +202,12 @@ export default function AchievementsPage() {
                                                     aria-hidden="true"
                                                 >
                                                     {achievement.unlocked ? (
-                                                        <span className={achievement.rarity === 'lendário' ? 'text-amber-600 dark:text-amber-400' :
-                                                            achievement.rarity === 'épico' ? 'text-purple-600 dark:text-purple-400' :
-                                                                achievement.rarity === 'raro' ? 'text-cyan-600 dark:text-cyan-400' :
-                                                                    'text-gray-600 dark:text-gray-300'}>
+                                                        <span className={
+                                                            achievement.rarity === 'lendário' ? 'text-amber-600 dark:text-amber-400' :
+                                                                achievement.rarity === 'épico' ? 'text-purple-600 dark:text-purple-400' :
+                                                                    achievement.rarity === 'raro' ? 'text-cyan-600 dark:text-cyan-400' :
+                                                                        'text-gray-600 dark:text-gray-300'
+                                                        }>
                                                             {achievement.icon}
                                                         </span>
                                                     ) : (
@@ -244,10 +238,6 @@ export default function AchievementsPage() {
                                                                 <div
                                                                     className="h-full bg-primary rounded-full transition-all"
                                                                     style={{ width: `${(achievement.progress.current / achievement.progress.total) * 100}%` }}
-                                                                    role="progressbar"
-                                                                    aria-valuenow={achievement.progress.current}
-                                                                    aria-valuemin={0}
-                                                                    aria-valuemax={achievement.progress.total}
                                                                 />
                                                             </div>
                                                             <p className="text-xs text-muted-foreground">

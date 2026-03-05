@@ -21,7 +21,7 @@ export default function ActivityHistoryPage() {
     const totalMinutos = historyData.reduce((acc, curr) => acc + curr.duration, 0);
     const totalHoras = Math.floor(totalMinutos / 60);
     const rMaxMinutos = totalMinutos % 60;
-    const totalTimeStr = `${totalHoras}h${rMaxMinutos > 0 ? ` ${rMaxMinutos}m` : ''}`;
+    const totalTimeStr = rMaxMinutos > 0 ? `${totalHoras}h ${rMaxMinutos}m` : `${totalHoras}h`;
 
     const totalCalories = historyData.reduce((acc, curr) => acc + curr.calories, 0);
     const formattedCalories = totalCalories > 1000 ? `${(totalCalories / 1000).toFixed(1)}k` : totalCalories.toString();

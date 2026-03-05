@@ -23,7 +23,7 @@ import { toast } from 'sonner';
 import { Lobby } from '../types';
 
 // ── Chat ──────────────────────────────────────────────────────────────
-interface ChatMsg { id: string; sender: string; text: string; time: string; isMe: boolean; }
+interface ChatMsg { readonly id: string; readonly sender: string; readonly text: string; readonly time: string; readonly isMe: boolean; }
 const initialMessages: ChatMsg[] = [
   { id: '1', sender: 'Eduardo OrangeTree', text: 'Olá! Estamos à espera de mais 1 jogador 👋', time: '18:45', isMe: false },
   { id: '2', sender: 'Ana Oliveira', text: 'Estou a caminho, chego em 5 min!', time: '18:46', isMe: false },

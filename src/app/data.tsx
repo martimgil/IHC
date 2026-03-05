@@ -1,6 +1,6 @@
-import { Sport, Session, Lobby, User, Notification, Player } from './types';
-import { FaPersonSwimming, FaVolleyball, FaBasketball, FaTableTennisPaddleBall, FaPersonHiking, FaFutbol, FaBaseballBatBall, FaPersonRunning, FaFootball, FaPersonBiking, FaPersonWalking } from 'react-icons/fa6';
-import { GiTennisRacket, GiSurfBoard, GiRollerSkate, GiSoccerField } from 'react-icons/gi';
+import { Sport, Session, Lobby, User, Notification } from './types';
+import { FaPersonSwimming, FaVolleyball, FaBasketball, FaTableTennisPaddleBall, FaPersonHiking, FaFutbol, FaPersonRunning, FaFootball, FaPersonBiking, FaPersonWalking } from 'react-icons/fa6';
+import { GiTennisRacket, GiRollerSkate, GiSoccerField } from 'react-icons/gi';
 import { MdSurfing, MdSportsHandball, MdSportsTennis } from 'react-icons/md';
 import React from 'react';
 

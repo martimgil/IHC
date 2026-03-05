@@ -6,7 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa6';
  * Consistent sticky back button used across all pages.
  * Sticks to the top of the scroll area, flush under the navbar.
  */
-export default function StickyBackButton({ to }: { to?: string }) {
+export default function StickyBackButton({ to }: { readonly to?: string }) {
     const navigate = useNavigate();
 
     return (

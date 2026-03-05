@@ -81,9 +81,9 @@ export default function OnboardingTutorial() {
 
                     {/* Dot indicators */}
                     <div className="flex gap-1.5" role="tablist" aria-label="Passos do tutorial">
-                        {steps.map((_, i) => (
+                        {steps.map((s, i) => (
                             <button
-                                key={i}
+                                key={s.title}
                                 role="tab"
                                 aria-selected={i === step}
                                 aria-label={`Passo ${i + 1}`}
