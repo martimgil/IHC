@@ -70,7 +70,7 @@ export default function LoginPage() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03] pattern-grid" />
             </div>
 
-            <main className="relative z-10 w-full max-w-md px-6 py-12">
+            <main className="relative z-10 w-full max-w-md px-4 sm:px-6 py-8 sm:py-12">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -87,7 +87,7 @@ export default function LoginPage() {
                             <CardTitle className="text-2xl font-bold tracking-tight">Bem-vindo!</CardTitle>
                             <CardDescription>Inicia sessão ou usa uma conta de demonstração.</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-6">
+                        <CardContent className="space-y-6 px-4 sm:px-6">
                             <form onSubmit={(e) => { e.preventDefault(); if (validate()) handleLogin(undefined); }} className="space-y-4" noValidate>
                                 {/* Email */}
                                 <div className="space-y-2">
@@ -173,7 +173,7 @@ export default function LoginPage() {
 
                             <div className="relative flex items-center py-2">
                                 <Separator className="flex-grow" />
-                                <span className="mx-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Demo Accounts</span>
+                                <span className="mx-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">Demo Accounts</span>
                                 <Separator className="flex-grow" />
                             </div>
 

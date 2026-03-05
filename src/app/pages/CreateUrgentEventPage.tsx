@@ -236,19 +236,19 @@ export default function CreateUrgentEventPage() {
             </div>
 
             {/* Date and Time */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col sm:grid sm:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="date">
                   Data <span className="text-red-600" aria-label="obrigatório">*</span>
                 </Label>
                 <div className="relative">
-                  <FaCalendarDays className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
+                  <FaCalendarDays className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none z-10" aria-hidden="true" />
                   <Input
                     id="date"
                     type="date"
                     value={formData.date}
                     onChange={(e) => handleChange('date', e.target.value)}
-                    className={`pl-10 h-12 ${errors.date ? 'border-red-500' : ''}`}
+                    className={`pl-10 h-12 w-full appearance-none ${errors.date ? 'border-red-500' : ''}`}
                     required
                     aria-invalid={!!errors.date}
                     aria-describedby={errors.date ? 'date-error' : undefined}
@@ -265,13 +265,13 @@ export default function CreateUrgentEventPage() {
                   Hora <span className="text-red-600" aria-label="obrigatório">*</span>
                 </Label>
                 <div className="relative">
-                  <FaClock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
+                  <FaClock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none z-10" aria-hidden="true" />
                   <Input
                     id="time"
                     type="time"
                     value={formData.time}
                     onChange={(e) => handleChange('time', e.target.value)}
-                    className={`pl-10 h-12 ${errors.time ? 'border-red-500' : ''}`}
+                    className={`pl-10 h-12 w-full appearance-none ${errors.time ? 'border-red-500' : ''}`}
                     required
                     aria-invalid={!!errors.time}
                     aria-describedby={errors.time ? 'time-error' : undefined}
@@ -374,12 +374,12 @@ export default function CreateUrgentEventPage() {
             </div>
 
             {/* Última Hora Toggle */}
-            <div className="flex items-center justify-between p-4 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40">
-              <div className="flex items-center gap-3">
-                <FaClock className="w-5 h-5 text-orange-600 dark:text-orange-400" aria-hidden="true" />
-                <div>
-                  <p className="font-semibold text-sm text-orange-900 dark:text-orange-100">Opção de Última Hora</p>
-                  <p className="text-xs text-orange-700 dark:text-orange-300">Notifica jogadores próximos imediatamente</p>
+            <div className="flex items-center justify-between p-4 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40 gap-4 overflow-hidden">
+              <div className="flex items-center gap-3 min-w-0">
+                <FaClock className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0" aria-hidden="true" />
+                <div className="min-w-0">
+                  <p className="font-semibold text-sm text-orange-900 dark:text-orange-100 truncate sm:whitespace-normal">Opção de Última Hora</p>
+                  <p className="text-xs text-orange-700 dark:text-orange-300 line-clamp-2 md:line-clamp-none">Notifica jogadores próximos imediatamente</p>
                 </div>
               </div>
               <button
@@ -387,7 +387,7 @@ export default function CreateUrgentEventPage() {
                 role="switch"
                 aria-checked={formData.isUltimaHora}
                 onClick={() => setFormData(prev => ({ ...prev, isUltimaHora: !prev.isUltimaHora }))}
-                className={`relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 ${formData.isUltimaHora ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-600'
+                className={`relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 shrink-0 ${formData.isUltimaHora ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-600'
                   }`}
               >
                 <span

@@ -62,7 +62,7 @@ export default function RegisterPage() {
         setInterestIds(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-12">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 sm:px-6 py-8 sm:py-12">
             {/* Logo */}
             <div className="flex items-center justify-center mb-8">
                 <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="matchIn logo" className="h-16 w-auto object-contain" />
