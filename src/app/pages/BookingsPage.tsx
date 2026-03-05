@@ -19,14 +19,14 @@ import {
     AlertDialogTrigger,
 } from '../components/ui/alert-dialog';
 
+import { useBookings } from '../context/BookingContext';
+
 export default function BookingsPage() {
     const navigate = useNavigate();
-    const [bookings, setBookings] = useState([
-        { id: 'lobby-1', sportId: 'voleibol', location: 'Pavilhão Universitário', date: '2026-03-05', time: '20:00' },
-    ]);
+    const { bookings, cancelBooking: cancelBookingGlobal } = useBookings();
 
     const cancelBooking = (id: string) => {
-        setBookings(prev => prev.filter(b => b.id !== id));
+        cancelBookingGlobal(id);
         toast.success('Reserva cancelada.', { description: 'Receberá o reembolso em 3-5 dias úteis.' });
     };
 

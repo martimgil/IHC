@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { currentUser, sports, getLevelLabel, lobbies, sessions, mockFollowing, mockFollowers, FollowUser } from '../data';
 import { useNavigate } from 'react-router';
 import { useUser } from '../context/UserContext';
+import { useBookings } from '../context/BookingContext';
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -60,6 +62,7 @@ function SuggestionsSection() {
 
 // Edit Profile Sheet — only name & location
 function EditProfileSheet({ open, onClose, userName, userLocation }: { open: boolean; onClose: () => void; userName: string; userLocation: string }) {
+  const { updateUser } = useUser();
   const [name, setName] = useState(userName);
   const [location, setLocation] = useState(userLocation);
 
@@ -91,7 +94,11 @@ function EditProfileSheet({ open, onClose, userName, userLocation }: { open: boo
                 <Input id="edit-location" value={location} onChange={e => setLocation(e.target.value)} className="pl-9" />
               </div>
             </div>
-            <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => { toast.success('Perfil atualizado!'); onClose(); }}>
+            <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => {
+              updateUser({ name, location });
+              toast.success('Perfil atualizado!');
+              onClose();
+            }}>
               Guardar Alterações
             </Button>
           </div>
@@ -103,7 +110,9 @@ function EditProfileSheet({ open, onClose, userName, userLocation }: { open: boo
 
 // Edit Sports Sheet — only sports & levels
 function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [interests, setInterests] = useState<string[]>([...currentUser.interestedSports]);
+  const { sessionUser, updateUser } = useUser();
+  const currentSports = sessionUser?.interestedSports ?? currentUser.interestedSports;
+  const [interests, setInterests] = useState<string[]>([...currentSports]);
   const [levels, setLevels] = useState<Record<string, string>>({ ...currentUser.experienceLevels });
   const levelOptions = ['iniciante', 'intermediario', 'avancado'];
 
@@ -202,7 +211,11 @@ function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void
                 </div>
               </div>
             )}
-            <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => { toast.success('Desportos atualizados!'); onClose(); }}>
+            <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => {
+              updateUser({ interestedSports: interests });
+              toast.success('Desportos atualizados!');
+              onClose();
+            }}>
               Guardar Alterações
             </Button>
           </div>
@@ -244,13 +257,10 @@ export default function ProfilePage() {
   const displayName = sessionUser?.name ?? currentUser.name;
   const displayEmail = sessionUser?.email ?? currentUser.email;
   const displayLocation = sessionUser?.location || currentUser.location;
-  const [bookings, setBookings] = useState([
-    { id: '1', sportId: 'hidroginastica', location: 'Pavilhão Rosa Mota', date: '2026-03-05', time: '19:00' },
-    { id: '2', sportId: 'pickleball', location: 'Centro Desportivo Municipal', date: '2026-03-07', time: '18:30' },
-    { id: '3', sportId: 'trilho', location: 'Passadiços de Aveiro', date: '2026-03-10', time: '10:00' },
-  ]);
+  const { bookings, cancelBooking: cancelBookingGlobal } = useBookings();
 
-  const userSports = sports.filter(s => currentUser.interestedSports.includes(s.id));
+  const userInterestedSports = sessionUser?.interestedSports ?? currentUser.interestedSports;
+  const userSports = sports.filter(s => userInterestedSports.includes(s.id));
   const initials = displayName.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
 
   const stats = [
@@ -261,7 +271,7 @@ export default function ProfilePage() {
   ];
 
   const cancelBooking = (id: string) => {
-    setBookings(prev => prev.filter(b => b.id !== id));
+    cancelBookingGlobal(id);
     toast.success('Reserva cancelada.', { description: 'Receberá o reembolso em 3-5 dias úteis.' });
   };
 
@@ -350,8 +360,8 @@ export default function ProfilePage() {
               <button
                 onClick={() => setCommunityTab('following')}
                 className={`flex-1 py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'following'
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'bg-muted/50 text-muted-foreground hover:bg-muted'
                   }`}
                 aria-pressed={communityTab === 'following'}
               >
@@ -360,8 +370,8 @@ export default function ProfilePage() {
               <button
                 onClick={() => setCommunityTab('followers')}
                 className={`flex-1 py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'followers'
-                    ? 'bg-primary text-primary-foreground shadow-sm'
-                    : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'bg-muted/50 text-muted-foreground hover:bg-muted'
                   }`}
                 aria-pressed={communityTab === 'followers'}
               >

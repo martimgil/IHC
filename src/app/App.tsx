@@ -4,14 +4,18 @@ import { Toaster } from './components/ui/sonner';
 import { ThemeProvider } from './context/ThemeContext';
 import { UserProvider } from './context/UserContext';
 import { NotificationProvider } from './context/NotificationContext';
+import { BookingProvider } from './context/BookingContext';
+
 
 export default function App() {
   return (
     <ThemeProvider>
       <UserProvider>
         <NotificationProvider>
-          <RouterProvider router={router} />
-          <Toaster position="top-right" richColors closeButton />
+          <BookingProvider>
+            <RouterProvider router={router} />
+            <Toaster position="top-right" richColors closeButton />
+          </BookingProvider>
         </NotificationProvider>
       </UserProvider>
     </ThemeProvider>

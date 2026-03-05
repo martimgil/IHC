@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { getLobbyById, getSportById, currentUser, lobbies } from '../data';
 import { useUser } from '../context/UserContext';
+import { useBookings } from '../context/BookingContext';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -149,7 +151,8 @@ export default function LobbyPage() {
   const { lobbyId } = useParams<{ lobbyId: string }>();
   const navigate = useNavigate();
   const { sessionUser } = useUser();
-  const [hasJoined, setHasJoined] = useState(() => lobbyId === 'lobby-1' || lobbyId === 'lobby-2');
+  const { bookings, cancelBooking } = useBookings();
+  const [hasJoined, setHasJoined] = useState(() => bookings.some(b => b.id === lobbyId));
   const [isProcessing, setIsProcessing] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showRating, setShowRating] = useState(false);
@@ -157,11 +160,10 @@ export default function LobbyPage() {
 
   // Sync state when navigating between lobbies
   useEffect(() => {
-    if (lobbyId === 'lobby-1') setHasJoined(true);
-    else setHasJoined(false);
+    setHasJoined(bookings.some(b => b.id === lobbyId));
     setShowChat(false);
     setShowRating(false);
-  }, [lobbyId]);
+  }, [lobbyId, bookings]);
 
   const [pendingRequests, setPendingRequests] = useState(() =>
     lobbyId === 'lobby-1'
@@ -248,6 +250,7 @@ export default function LobbyPage() {
   };
 
   const handleLeave = () => {
+    if (lobbyId) cancelBooking(lobbyId);
     setHasJoined(false);
     toast.info('Saíste do grupo.');
   };
