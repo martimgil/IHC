@@ -12,9 +12,13 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import MapPage from "./pages/MapPage";
 import BookingsPage from "./pages/BookingsPage";
+import WelcomePage from "./pages/WelcomePage";
+import LandingPage from "./pages/LandingPage";
 import Root from "./Root";
 
 export const router = createBrowserRouter([
+  { path: "/landing", Component: LandingPage },
+  { path: "/welcome", Component: WelcomePage },
   { path: "/login", Component: LoginPage },
   { path: "/register", Component: RegisterPage },
   {

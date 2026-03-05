@@ -52,10 +52,16 @@ export default function RegisterPage() {
         }
         setIsLoading(true);
         await new Promise(r => setTimeout(r, 1400));
+
+        const result = register(form.name.trim(), form.email, interestIds, form.location.trim(), form.password);
         setIsLoading(false);
-        register(form.name.trim(), form.email, interestIds, form.location.trim());
-        toast.success('Conta criada com sucesso! 🎉', { description: `Bem-vindo, ${form.name.split(' ')[0]}!` });
-        navigate('/');
+
+        if (result.success) {
+            toast.success('Conta criada com sucesso! 🎉', { description: `Bem-vindo, ${form.name.split(' ')[0]}!` });
+            navigate('/');
+        } else {
+            toast.error(result.message || 'Erro ao criar conta.');
+        }
     };
 
     const toggleSport = (id: string) =>

@@ -19,7 +19,7 @@ export default function Root() {
 
   useEffect(() => {
     if (!sessionUser) {
-      navigate('/login');
+      navigate('/landing');
     }
   }, [sessionUser, navigate]);
 

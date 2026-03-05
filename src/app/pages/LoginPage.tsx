@@ -92,15 +92,19 @@ export default function LoginPage() {
         // Simulação de delay de rede
         await new Promise(r => setTimeout(r, 1200));
 
-        const userToLogin = customUser || {
-            name: email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-            email
-        };
+        const userEmail = customUser ? customUser.email : email;
+        const userPassword = customUser ? 'password123' : password; // default password for quick logins
 
-        login(userToLogin.name, userToLogin.email);
-        toast.success('Sessão iniciada!', { description: `Bem-vindo de volta, ${userToLogin.name}!` });
+        const result = login(userEmail, userPassword);
+
         setIsLoading(false);
-        navigate('/');
+
+        if (result.success) {
+            toast.success('Sessão iniciada!');
+            navigate('/');
+        } else {
+            toast.error(result.message || 'Erro ao iniciar sessão.');
+        }
     };
 
 
