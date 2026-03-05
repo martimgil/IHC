@@ -5,6 +5,7 @@ interface SessionUser {
     email: string;
     location?: string;
     interestedSports?: string[];
+    experienceLevels?: Record<string, string>;
 }
 
 interface UserContextType {

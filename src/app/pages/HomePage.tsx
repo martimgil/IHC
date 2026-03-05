@@ -27,7 +27,7 @@ function SportDetailSheet({
         side="bottom"
         className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
       >
-        <div className="overflow-y-auto max-h-[75vh] px-5">
+        <div className="overflow-y-auto max-h-[85dvh] px-5">
           <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
           <SheetHeader className="mb-4 text-left">
             <div className="flex items-center gap-3">
@@ -76,19 +76,19 @@ function SportDetailSheet({
             {/* Actions */}
             <div className="flex gap-2">
               <Button
-                className="flex-1"
+                className="flex-1 h-12 text-sm font-bold"
                 onClick={() => { onClose(); navigate(`/sport/${sport.id}`); }}
                 aria-label={`Ver sessões de ${sport.name}`}
               >
-                Ver Sessões
+                Ver Atividades
               </Button>
               <Button
                 variant="outline"
-                className="flex-1"
-                onClick={() => { onClose(); navigate(`/sport/${sport.id}?tab=lobby`); }}
-                aria-label={`Ver lobbies de ${sport.name}`}
+                className="flex-1 h-12 text-sm font-bold border-primary text-primary"
+                onClick={() => { onClose(); navigate(`/create-urgent?sport=${sport.id}`); }}
+                aria-label={`Criar nova sessão de ${sport.name}`}
               >
-                Ver Lobbies
+                Criar Sessão
               </Button>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function HomePage() {
   );
 
   const userInterestedSports = sports.filter(sport =>
-    currentUser.interestedSports.includes(sport.id)
+    (sessionUser?.interestedSports ?? currentUser.interestedSports).includes(sport.id)
   );
 
   return (
@@ -140,7 +140,7 @@ export default function HomePage() {
         <h2 id="actions-heading" className="sr-only">Ações rápidas</h2>
         <div className="grid grid-cols-2 gap-3">
           <button
-            className="flex items-center gap-2 p-3 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40 active:scale-[0.97] transition-all text-left focus:outline-none focus:ring-2 focus:ring-orange-400 min-h-[60px]"
+            className="flex items-center gap-2 p-2.5 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40 active:scale-[0.97] transition-all text-left focus:outline-none focus:ring-2 focus:ring-orange-400 min-h-[48px]"
             onClick={() => navigate('/lobby')}
             aria-label="Procurar uma atividade de última hora"
           >
@@ -148,7 +148,7 @@ export default function HomePage() {
             <span className="text-sm font-semibold text-orange-900 dark:text-orange-100 leading-tight">Última Hora</span>
           </button>
           <button
-            className="flex items-center gap-2 p-3 rounded-xl border-2 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/40 active:scale-[0.97] transition-all text-left focus:outline-none focus:ring-2 focus:ring-green-400 min-h-[60px]"
+            className="flex items-center gap-2 p-2.5 rounded-xl border-2 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/40 active:scale-[0.97] transition-all text-left focus:outline-none focus:ring-2 focus:ring-green-400 min-h-[48px]"
             onClick={() => navigate('/search-location')}
             aria-label="Procurar atividades por localização"
           >
@@ -181,61 +181,26 @@ export default function HomePage() {
         )}
       </div>
 
-      {/* Autocomplete Search Results or Favourites Table */}
-      {searchQuery ? (
-        <section aria-labelledby="search-heading" className="mt-4">
-          <h3 id="search-heading" className="text-sm font-semibold text-muted-foreground mb-3 px-0.5">
-            Resultados para "{searchQuery}"
+      {/* Favourites Section */}
+      {!searchQuery && userInterestedSports.length > 0 && (
+        <section aria-labelledby="fav-heading" className="mt-4">
+          <h3 id="fav-heading" className="text-sm font-semibold text-muted-foreground mb-3 px-0.5">
+            ⭐ Desportos Favoritos
           </h3>
-          {filteredSports.length > 0 ? (
-            <div className="bg-card border rounded-xl overflow-hidden shadow-sm" role="list">
-              {filteredSports.map((sport, idx) => (
-                <div key={sport.id}>
-                  {idx > 0 && <Separator />}
-                  <button
-                    role="listitem"
-                    onClick={() => setSelectedSport(sport)}
-                    className="w-full flex items-center gap-3 p-3 bg-card hover:bg-muted/50 transition-colors text-left focus:outline-none focus:bg-muted"
-                  >
-                    <span className="text-2xl" role="img">{sport.icon}</span>
-                    <span className="text-sm font-medium flex-1">{sport.name}</span>
-                    <FaChevronRight className="w-4 h-4 text-muted-foreground" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="py-8 text-center">
-                <p className="text-muted-foreground text-sm">Nenhum desporto encontrado.</p>
-                <Button variant="outline" className="mt-3 h-9 text-sm" onClick={() => setSearchQuery('')}>
-                  Limpar pesquisa
-                </Button>
-              </CardContent>
-            </Card>
-          )}
+          <div className="grid grid-cols-2 gap-2" role="list">
+            {userInterestedSports.map(sport => (
+              <button
+                key={sport.id}
+                role="listitem"
+                onClick={() => setSelectedSport(sport)}
+                className="flex items-center gap-3 p-3 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left focus:outline-none focus:ring-2 focus:ring-primary min-h-[56px]"
+              >
+                <span className="text-2xl shrink-0" role="img">{sport.icon}</span>
+                <span className="text-sm font-medium leading-tight">{sport.name}</span>
+              </button>
+            ))}
+          </div>
         </section>
-      ) : (
-        userInterestedSports.length > 0 && (
-          <section aria-labelledby="fav-heading" className="mt-4">
-            <h3 id="fav-heading" className="text-sm font-semibold text-muted-foreground mb-3 px-0.5">
-              ⭐ Os teus desportos
-            </h3>
-            <div className="grid grid-cols-2 gap-2" role="list">
-              {userInterestedSports.map(sport => (
-                <button
-                  key={sport.id}
-                  role="listitem"
-                  onClick={() => setSelectedSport(sport)}
-                  className="flex items-center gap-3 p-3 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left focus:outline-none focus:ring-2 focus:ring-primary min-h-[56px]"
-                >
-                  <span className="text-2xl shrink-0" role="img">{sport.icon}</span>
-                  <span className="text-sm font-medium leading-tight">{sport.name}</span>
-                </button>
-              ))}
-            </div>
-          </section>
-        )
       )}
 
       {/* All Sports – compact grid */}

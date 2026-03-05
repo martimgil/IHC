@@ -16,6 +16,7 @@ export default defineConfig({
         short_name: 'matchIn',
         description: 'Encontra o teu match no desporto',
         theme_color: '#3b82f6',
+        background_color: '#ffffff',
         icons: [
           {
             src: 'icon.svg',

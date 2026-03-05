@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { sports, getLevelLabel } from '../data';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -29,16 +29,19 @@ import { toast } from 'sonner';
 
 export default function CreateUrgentEventPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [isCreating, setIsCreating] = useState(false);
   const [eventCreated, setEventCreated] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const initialSportId = searchParams.get('sport') || '';
+
   const [formData, setFormData] = useState({
-    sportId: '',
+    sportId: initialSportId,
     date: '',
     time: '',
     location: '',
-    level: 'intermediario' as ExperienceLevel,
+    level: 'intermedio' as ExperienceLevel,
     spotsNeeded: '1',
     notes: '',
     isUltimaHora: false,
@@ -52,7 +55,6 @@ export default function CreateUrgentEventPage() {
     if (!formData.time) newErrors.time = 'Selecione uma hora';
     if (!formData.location.trim()) newErrors.location = 'Indique o local';
 
-    // Validate date is not in the past
     if (formData.date && formData.time) {
       const selectedDateTime = new Date(`${formData.date}T${formData.time}`);
       const now = new Date();
@@ -60,57 +62,34 @@ export default function CreateUrgentEventPage() {
         newErrors.date = 'A data não pode ser no passado';
       }
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleCreate = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
 
     if (!validateForm()) {
-      toast.error('Preencha todos os campos obrigatórios');
-      // Focus on first error
-      const firstError = Object.keys(errors)[0];
-      document.getElementById(firstError)?.focus();
+      toast.error('Por favor, corrija os erros no formulário');
       return;
     }
 
     setIsCreating(true);
-
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
+    await new Promise(resolve => setTimeout(resolve, 1500));
     setIsCreating(false);
     setEventCreated(true);
-
-    toast.success('Evento criado!', {
-      description: 'A procurar jogadores disponíveis...',
-    });
-
-    // Announce to screen readers
-    const announcement = document.createElement('div');
-    announcement.setAttribute('role', 'status');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.textContent = 'Evento criado com sucesso. A procurar jogadores disponíveis.';
-    announcement.className = 'sr-only';
-    document.body.appendChild(announcement);
-    setTimeout(() => document.body.removeChild(announcement), 1000);
-
-    // Simulate finding a match
-    setTimeout(() => {
-      toast.success('Match encontrado!', {
-        description: 'Um jogador aceitou o convite.',
-      });
-    }, 3000);
-  };
-
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
+    toast.success('Evento criado com sucesso!');
   };
 
   if (eventCreated) {
@@ -202,7 +181,7 @@ export default function CreateUrgentEventPage() {
           <CardTitle>Detalhes do Evento</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+          <form onSubmit={handleCreate} className="space-y-5" noValidate>
             {/* Sport Selection */}
             <div className="space-y-2">
               <Label htmlFor="sportId">
@@ -325,8 +304,8 @@ export default function CreateUrgentEventPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="qualquer">Qualquer Nível</SelectItem>
-                  <SelectItem value="iniciante">Iniciante</SelectItem>
-                  <SelectItem value="intermediario">Intermediário</SelectItem>
+                  <SelectItem value="principiante">Principiante</SelectItem>
+                  <SelectItem value="intermedio">Intermédio</SelectItem>
                   <SelectItem value="avancado">Avançado</SelectItem>
                   <SelectItem value="senior-federado">Sénior Federado</SelectItem>
                 </SelectContent>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { currentUser, sports, getLevelLabel, lobbies, sessions, mockFollowing, mockFollowers, FollowUser } from '../data';
 import { useNavigate } from 'react-router';
 import { useUser } from '../context/UserContext';
@@ -66,13 +66,20 @@ function EditProfileSheet({ open, onClose, userName, userLocation }: { open: boo
   const [name, setName] = useState(userName);
   const [location, setLocation] = useState(userLocation);
 
+  useEffect(() => {
+    if (open) {
+      setName(userName);
+      setLocation(userLocation);
+    }
+  }, [open, userName, userLocation]);
+
   return (
     <Sheet open={open} onOpenChange={o => { if (!o) onClose(); }}>
       <SheetContent
         side="bottom"
         className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
       >
-        <div className="overflow-y-auto max-h-[75vh] px-5">
+        <div className="overflow-y-auto max-h-[85dvh] px-5">
           <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
           <SheetHeader className="mb-6 text-left">
             <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
@@ -116,6 +123,13 @@ function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void
   const [levels, setLevels] = useState<Record<string, string>>({ ...currentUser.experienceLevels });
   const levelOptions = ['iniciante', 'intermediario', 'avancado'];
 
+  useEffect(() => {
+    if (open) {
+      setInterests([...(sessionUser?.interestedSports ?? currentUser.interestedSports)]);
+      setLevels({ ...currentUser.experienceLevels });
+    }
+  }, [open, sessionUser?.interestedSports]);
+
   const toggleSport = (id: string) =>
     setInterests(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
 
@@ -135,7 +149,7 @@ function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void
         side="bottom"
         className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
       >
-        <div className="overflow-y-auto max-h-[75vh] px-5">
+        <div className="overflow-y-auto max-h-[85dvh] px-5">
           <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
           <SheetHeader className="mb-6 text-left">
             <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
@@ -212,7 +226,7 @@ function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void
               </div>
             )}
             <Button className="w-full mt-2 h-12 text-base font-bold shadow-lg shadow-primary/10 rounded-2xl active:scale-[0.98] transition-transform" onClick={() => {
-              updateUser({ interestedSports: interests });
+              updateUser({ interestedSports: interests, experienceLevels: levels });
               toast.success('Desportos atualizados!');
               onClose();
             }}>
@@ -265,9 +279,9 @@ export default function ProfilePage() {
 
   const stats = [
     { label: 'Atividades', value: '12', icon: <FaTrophy className="w-4 h-4 text-amber-500" />, color: 'text-amber-600 dark:text-amber-400' },
-    { label: 'Reservas', value: String(bookings.length), icon: <FaCalendarDays className="w-4 h-4 text-blue-500" />, color: 'text-blue-600 dark:text-blue-400' },
-    { label: 'Desportos', value: String(userSports.length), icon: <FaHeart className="w-4 h-4 text-red-500" />, color: 'text-red-600 dark:text-red-400' },
-    { label: 'Conquistas', value: '6', icon: <FaStar className="w-4 h-4 text-purple-500" />, color: 'text-purple-600 dark:text-purple-400' },
+    { label: 'Reservas', value: String(bookings.length), icon: <FaCalendarDays className="w-4 h-4 text-blue-500" />, color: 'text-blue-600 dark:text-blue-400', action: () => navigate('/bookings') },
+    { label: 'Desportos', value: String(userSports.length), icon: <FaHeart className="w-4 h-4 text-red-500" />, color: 'text-red-600 dark:text-red-400', action: () => setSportsEditOpen(true) },
+    { label: 'Conquistas', value: '6', icon: <FaStar className="w-4 h-4 text-purple-500" />, color: 'text-purple-600 dark:text-purple-400', action: () => navigate('/achievements') },
   ];
 
   const cancelBooking = (id: string) => {
@@ -304,13 +318,28 @@ export default function ProfilePage() {
 
           {/* Stats row — includes Following / Followers counts */}
           <div className="grid grid-cols-4 gap-2 mb-3">
-            {stats.map(s => (
-              <div key={s.label} className="flex flex-col items-center gap-1 p-2 bg-muted/50 rounded-xl">
-                {s.icon}
-                <span className={`text-lg font-bold leading-none ${s.color}`}>{s.value}</span>
-                <span className="text-xs text-muted-foreground text-center leading-tight">{s.label}</span>
-              </div>
-            ))}
+            {stats.map(s => {
+              const content = (
+                <>
+                  {s.icon}
+                  <span className={`text-lg font-bold leading-none ${s.color}`}>{s.value}</span>
+                  <span className="text-xs text-muted-foreground text-center leading-tight">{s.label}</span>
+                </>
+              );
+              return s.action ? (
+                <button
+                  key={s.label}
+                  onClick={s.action}
+                  className="flex flex-col items-center gap-1 p-2 bg-muted/50 rounded-xl hover:bg-primary/10 active:scale-[0.97] transition-all"
+                >
+                  {content}
+                </button>
+              ) : (
+                <div key={s.label} className="flex flex-col items-center gap-1 p-2 bg-muted/50 rounded-xl">
+                  {content}
+                </div>
+              );
+            })}
           </div>
 
           {/* Following / Followers — clickable counters */}
@@ -344,7 +373,7 @@ export default function ProfilePage() {
           className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
           aria-label="Comunidade"
         >
-          <div className="overflow-y-auto max-h-[75vh] px-5">
+          <div className="overflow-y-auto max-h-[85dvh] px-5">
             <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
             <SheetHeader className="mb-4 text-left">
               <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
@@ -486,7 +515,7 @@ export default function ProfilePage() {
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm truncate">{sport.name}</p>
                   <Badge variant="outline" className="mt-0.5 text-xs px-1.5 py-0">
-                    {getLevelLabel(currentUser.experienceLevels[sport.id] || 'iniciante')}
+                    {getLevelLabel((sessionUser?.experienceLevels?.[sport.id] ?? currentUser.experienceLevels[sport.id]) || 'iniciante')}
                   </Badge>
                 </div>
               </button>

@@ -125,14 +125,14 @@ const achievements: Achievement[] = [
 
 const rarityConfig: Record<string, { label: string; colors: string }> = {
     comum: { label: 'Comum', colors: 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300' },
-    raro: { label: 'Raro', colors: 'bg-blue-50 dark:bg-blue-950/50 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300' },
+    raro: { label: 'Raro', colors: 'bg-cyan-100 dark:bg-cyan-900 border-cyan-400 dark:border-cyan-600 text-cyan-800 dark:text-cyan-200' },
     épico: { label: 'Épico', colors: 'bg-purple-50 dark:bg-purple-950/50 border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300' },
     lendário: { label: 'Lendário', colors: 'bg-amber-50 dark:bg-amber-950/50 border-amber-300 dark:border-amber-700 text-amber-700 dark:text-amber-300' },
 };
 
 const rarityBadgeColors: Record<string, string> = {
     comum: 'bg-gray-500',
-    raro: 'bg-blue-600',
+    raro: 'bg-cyan-600',
     épico: 'bg-purple-600',
     lendário: 'bg-amber-500',
 };
@@ -221,7 +221,7 @@ export default function AchievementsPage() {
                                                     {achievement.unlocked ? (
                                                         <span className={achievement.rarity === 'lendário' ? 'text-amber-600 dark:text-amber-400' :
                                                             achievement.rarity === 'épico' ? 'text-purple-600 dark:text-purple-400' :
-                                                                achievement.rarity === 'raro' ? 'text-blue-600 dark:text-blue-400' :
+                                                                achievement.rarity === 'raro' ? 'text-cyan-600 dark:text-cyan-400' :
                                                                     'text-gray-600 dark:text-gray-300'}>
                                                             {achievement.icon}
                                                         </span>

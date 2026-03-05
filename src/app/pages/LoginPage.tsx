@@ -35,7 +35,7 @@ function ForgotPasswordSheet({ open, onClose }: { open: boolean, onClose: () => 
                 side="bottom"
                 className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
             >
-                <div className="overflow-y-auto max-h-[75vh] px-5">
+                <div className="overflow-y-auto max-h-[85dvh] px-5">
                     <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
                     <SheetHeader className="mb-6 text-left">
                         <SheetTitle className="text-2xl font-extrabold tracking-tight">Recuperar Password</SheetTitle>

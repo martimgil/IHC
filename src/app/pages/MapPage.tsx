@@ -184,12 +184,14 @@ export default function MapPage() {
                                 </Badge>
                             ))}
                         </div>
-                        <Button size="sm" className="w-full" onClick={() => {
-                            const sportId = selected.sportIds[0];
-                            navigate(`/sport/${sportId}`);
-                        }}>
-                            Ver sessões neste local
-                        </Button>
+                        <div className="flex flex-col gap-2">
+                            {getSportsForLocation(selected.sportIds).map(s => s && (
+                                <Button key={s.id} size="sm" variant="secondary" className="w-full justify-start gap-2 bg-primary/10 hover:bg-primary/20 text-primary border-primary/20" onClick={() => navigate(`/sport/${s.id}`)}>
+                                    <span className="text-base" aria-hidden="true">{s.icon}</span>
+                                    <span>Ver sessões de <span className="font-bold">{s.name}</span></span>
+                                </Button>
+                            ))}
+                        </div>
                     </CardContent>
                 </Card>
             )}

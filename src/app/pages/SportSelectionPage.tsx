@@ -122,14 +122,25 @@ export default function SportSelectionPage() {
 
       {/* Activities Section */}
       <section aria-labelledby="activities-heading">
-        <div className="flex items-center justify-between mb-4">
-          <h2 id="activities-heading" className="text-xl font-bold">Atividades Disponíveis</h2>
-          <div className="flex gap-2">
-            <Button size="sm" variant="outline" className="text-xs h-8" onClick={() => navigate('/create-urgent')}>
-              Normal
+        <div className="flex flex-col gap-4 mb-6">
+          <div className="flex items-center justify-between">
+            <h2 id="activities-heading" className="text-xl font-bold">Atividades Disponíveis</h2>
+            <Badge variant="outline" className="text-[10px] font-bold tracking-widest uppercase">Aveiro</Badge>
+          </div>
+
+          <div className="flex gap-2.5">
+            <Button
+              variant="outline"
+              className="flex-1 h-12 border-primary text-primary font-bold shadow-sm"
+              onClick={() => navigate(`/create-urgent?sport=${sportId}`)}
+            >
+              Criar Sessão Normal
             </Button>
-            <Button size="sm" className="text-xs h-8" onClick={() => navigate('/create-urgent')}>
-              <FaBolt className="w-3 h-3 mr-1" /> Urgente
+            <Button
+              className="flex-1 h-12 font-bold shadow-lg shadow-primary/20"
+              onClick={() => navigate(`/create-urgent?sport=${sportId}`)}
+            >
+              <FaBolt className="w-4 h-4 mr-1.5" /> Criar Urgente
             </Button>
           </div>
         </div>
@@ -260,7 +271,7 @@ export default function SportSelectionPage() {
           className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
           aria-label="Aluguer de equipamento"
         >
-          <div className="overflow-y-auto max-h-[75vh] px-5">
+          <div className="overflow-y-auto max-h-[85dvh] px-5">
             <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
             <SheetHeader className="mb-6 text-left">
               <SheetTitle className="flex items-center gap-2.5 text-2xl font-extrabold tracking-tight">
