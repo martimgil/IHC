@@ -63,7 +63,7 @@ export default function RegisterPage() {
         <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-12">
             {/* Logo */}
             <div className="flex items-center justify-center mb-8">
-                <img src="/favicon.ico" alt="matchIn logo" className="h-16 w-auto object-contain" />
+                <img src="/icon.svg" alt="matchIn logo" className="h-16 w-auto object-contain" />
             </div>
 
             <Card className="w-full max-w-sm shadow-md">

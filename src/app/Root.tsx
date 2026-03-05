@@ -47,7 +47,11 @@ export default function Root() {
               className="flex items-center focus:outline-none focus:ring-2 focus:ring-primary rounded-lg group"
               aria-label="Ir para página inicial"
             >
-              <img src="/favicon.ico" alt="matchIn logo" className="h-10 w-auto object-contain transition-transform group-hover:scale-110" />
+              <img
+                src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"}
+                alt="matchIn logo"
+                className="h-10 w-auto object-contain transition-transform group-hover:scale-110"
+              />
             </Link>
 
             <nav className="flex items-center gap-1" aria-label="Navegação principal">
