@@ -249,6 +249,19 @@ export const sessions: Session[] = [
     totalSpots: 25,
     level: 'qualquer',
   },
+  {
+    id: 'session-4',
+    sportId: 'voleibol',
+    locationName: 'Pavilhão de Desportos',
+    locationAddress: 'Alameda da Universidade',
+    date: '2026-03-06',
+    time: '17:00',
+    duration: 60,
+    price: 15,
+    availableSpots: 6,
+    totalSpots: 12,
+    level: 'intermedio',
+  },
 ];
 
 // Mock lobbies data
@@ -294,6 +307,23 @@ export const lobbies: Lobby[] = [
     createdBy: 'user-eduardo',
     isUrgent: true,
     tags: ['Urgente', 'Substituto'],
+  },
+  {
+    id: 'lobby-3',
+    sportId: 'voleibol',
+    locationName: 'Pavilhão Rosa Mota',
+    locationAddress: 'Rua Rosa Mota, Aveiro',
+    scheduledDate: '2026-03-07',
+    scheduledTime: '21:00',
+    level: 'avancado',
+    currentPlayers: [
+      { id: 'p9', name: 'Tiago Silva', level: 'avancado', skillRating: 8 },
+    ],
+    minPlayers: 6,
+    maxPlayers: 12,
+    pricePerPerson: 4,
+    status: 'waiting',
+    createdBy: 'p9',
   },
 ];
 

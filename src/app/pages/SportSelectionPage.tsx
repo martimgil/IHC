@@ -16,7 +16,8 @@ import {
   FaCircleExclamation,
   FaCircleCheck,
   FaChevronRight,
-  FaDumbbell
+  FaDumbbell,
+  FaBolt
 } from 'react-icons/fa6';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
@@ -119,132 +120,121 @@ export default function SportSelectionPage() {
 
       <Separator />
 
-      {/* Available Sessions */}
-      <section aria-labelledby="sessions-heading">
-        <h2 id="sessions-heading" className="text-xl font-bold mb-4">Sessões Disponíveis</h2>
-        {filteredSessions.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {filteredSessions.map((session) => (
-              <Card
-                key={session.id}
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-                onClick={() => navigate(`/booking?session=${session.id}`)}
-              >
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg">{session.locationName}</CardTitle>
-                      <CardDescription className="flex items-center gap-1 mt-1">
-                        <FaLocationDot className="w-3 h-3" aria-hidden="true" />
-                        {session.locationAddress}
-                      </CardDescription>
-                    </div>
-                    {session.isUrgent && (
-                      <Badge variant="destructive" className="ml-2">Urgente</Badge>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FaCalendarDays className="w-4 h-4" aria-hidden="true" />
-                    <span>{new Date(session.date).toLocaleDateString('pt-PT')} às {session.time}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FaClock className="w-4 h-4" aria-hidden="true" />
-                    <span>{session.duration} minutos</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FaUsers className="w-4 h-4" aria-hidden="true" />
-                    <span>{session.availableSpots} vagas de {session.totalSpots}</span>
-                  </div>
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex items-center gap-1 font-semibold text-success">
-                      <FaEuroSign className="w-4 h-4" aria-hidden="true" />
-                      <span aria-label={`${session.price.toFixed(2)} euros`}>{session.price.toFixed(2)}</span>
-                    </div>
-                    <Badge variant="outline">{getLevelLabel(session.level)}</Badge>
-                  </div>
-                  <Button className="w-full mt-2" aria-label={`Reservar sessão em ${session.locationName}`}>
-                    Reservar Agora
-                    <FaChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+      {/* Activities Section */}
+      <section aria-labelledby="activities-heading">
+        <div className="flex items-center justify-between mb-4">
+          <h2 id="activities-heading" className="text-xl font-bold">Atividades Disponíveis</h2>
+          <div className="flex gap-2">
+            <Button size="sm" variant="outline" className="text-xs h-8" onClick={() => navigate('/create-urgent')}>
+              Normal
+            </Button>
+            <Button size="sm" className="text-xs h-8" onClick={() => navigate('/create-urgent')}>
+              <FaBolt className="w-3 h-3 mr-1" /> Urgente
+            </Button>
           </div>
-        ) : (
-          <Card>
-            <CardContent className="py-8 text-center text-gray-500">
-              <p>Nenhuma sessão disponível no momento.</p>
-            </CardContent>
-          </Card>
-        )}
-      </section>
+        </div>
 
-      {/* Active Lobbies */}
-      <section aria-labelledby="lobbies-heading">
-        <h2 id="lobbies-heading" className="text-xl font-bold mb-4">Grupos à Procura de Jogadores</h2>
-        {filteredLobbies.length > 0 ? (
+        {[...filteredSessions, ...filteredLobbies].length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Lobbies - Grouped first since they involve players */}
             {filteredLobbies.map((lobby) => (
               <Card
                 key={lobby.id}
-                className="cursor-pointer hover:shadow-lg transition-shadow"
+                className="cursor-pointer hover:shadow-lg transition-all border-l-4 border-l-blue-500 active:scale-[0.98]"
                 onClick={() => navigate(`/lobby/${lobby.id}`)}
               >
-                <CardHeader>
+                <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle className="text-lg">{lobby.locationName}</CardTitle>
-                      <CardDescription className="flex items-center gap-1 mt-1">
-                        <FaLocationDot className="w-3 h-3" aria-hidden="true" />
+                      <CardDescription className="flex items-center gap-1 mt-0.5">
+                        <FaLocationDot className="w-3 h-3" />
                         {lobby.locationAddress}
                       </CardDescription>
+                      <Badge variant="secondary" className="mt-2 text-[10px] uppercase font-extrabold tracking-wider bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">Grupo de Jogadores</Badge>
                     </div>
-                    {lobby.status === 'full' && (
-                      <Badge variant="secondary" className="ml-2">Completo</Badge>
-                    )}
                     {lobby.isUrgent && (
-                      <Badge variant="destructive" className="ml-2">Urgente</Badge>
+                      <div className="flex flex-col items-end gap-1">
+                        <Badge variant="destructive" className="animate-pulse">URGENTE</Badge>
+                        <FaBolt className="text-destructive w-4 h-4" />
+                      </div>
                     )}
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-2">
-                  {lobby.scheduledDate && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <FaCalendarDays className="w-4 h-4" aria-hidden="true" />
-                      <span>{new Date(lobby.scheduledDate).toLocaleDateString('pt-PT')} às {lobby.scheduledTime}</span>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center gap-3 text-sm font-medium">
+                    <div className="p-2 bg-muted rounded-lg">
+                      <FaCalendarDays className="w-4 h-4 text-primary" />
                     </div>
-                  )}
-                  {lobby.isRecurring && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <FaCircleCheck className="w-4 h-4 text-green-600" />
-                      <span>Treino semanal às {lobby.recurringDay}s</span>
+                    <span>{new Date(lobby.scheduledDate!).toLocaleDateString('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' })} às {lobby.scheduledTime}</span>
+                  </div>
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between text-xs font-bold text-muted-foreground uppercase tracking-tight">
+                      <div className="flex items-center gap-1.5">
+                        <FaUsers className="w-3.5 h-3.5" />
+                        <span>Inscritos</span>
+                      </div>
+                      <span>{lobby.currentPlayers.length} / {lobby.maxPlayers}</span>
                     </div>
-                  )}
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <FaUsers className="w-4 h-4" aria-hidden="true" />
-                    <span>{lobby.currentPlayers.length}/{lobby.maxPlayers} jogadores</span>
-                    <div className="flex-1 bg-gray-200 rounded-full h-2" role="progressbar" aria-valuenow={lobby.currentPlayers.length} aria-valuemin={0} aria-valuemax={lobby.maxPlayers} aria-label={`${lobby.currentPlayers.length} de ${lobby.maxPlayers} jogadores`}>
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
                       <div
-                        className="bg-blue-600 h-2 rounded-full transition-all"
+                        className="h-full bg-blue-500 transition-all duration-500"
                         style={{ width: `${(lobby.currentPlayers.length / lobby.maxPlayers) * 100}%` }}
                       />
                     </div>
                   </div>
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex items-center gap-1 font-semibold text-success">
-                      <FaEuroSign className="w-4 h-4" aria-hidden="true" />
-                      <span aria-label={`${lobby.pricePerPerson.toFixed(2)} euros por pessoa`}>{lobby.pricePerPerson.toFixed(2)} por pessoa</span>
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-muted-foreground font-bold uppercase">Preço p/ pessoa</span>
+                      <span className="font-extrabold text-lg text-primary">{lobby.pricePerPerson.toFixed(2)}€</span>
                     </div>
-                    <Badge variant="outline">{getLevelLabel(lobby.level)}</Badge>
+                    <Badge variant="outline" className="font-bold border-primary/20">{getLevelLabel(lobby.level)}</Badge>
                   </div>
-                  <Button
-                    className="w-full mt-2"
-                    disabled={lobby.status === 'full'}
-                  >
-                    {lobby.status === 'full' ? 'Grupo Completo' : 'Juntar-me ao Grupo'}
-                    <FaChevronRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                </CardContent>
+              </Card>
+            ))}
+
+            {/* Sessions - Listed next */}
+            {filteredSessions.map((session) => (
+              <Card
+                key={session.id}
+                className="cursor-pointer hover:shadow-lg transition-all border-l-4 border-l-green-500 active:scale-[0.98]"
+                onClick={() => navigate(`/booking?session=${session.id}`)}
+              >
+                <CardHeader className="pb-2">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <CardTitle className="text-lg">{session.locationName}</CardTitle>
+                      <CardDescription className="flex items-center gap-1 mt-0.5">
+                        <FaLocationDot className="w-3 h-3" />
+                        {session.locationAddress}
+                      </CardDescription>
+                      <Badge variant="outline" className="mt-2 text-[10px] uppercase font-extrabold tracking-wider text-green-600 border-green-200">Aluguer de Campo</Badge>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center gap-3 text-sm font-medium">
+                    <div className="p-2 bg-muted rounded-lg">
+                      <FaCalendarDays className="w-4 h-4 text-primary" />
+                    </div>
+                    <span>{new Date(session.date).toLocaleDateString('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' })} às {session.time}</span>
+                  </div>
+                  <div className="flex items-center gap-3 text-sm font-medium">
+                    <div className="p-2 bg-muted rounded-lg">
+                      <FaClock className="w-4 h-4 text-primary" />
+                    </div>
+                    <span>{session.duration} minutos · Individual ou Pares</span>
+                  </div>
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-muted-foreground font-bold uppercase">Total Reserva</span>
+                      <span className="font-extrabold text-lg text-primary">{session.price.toFixed(2)}€</span>
+                    </div>
+                    <Badge variant="outline" className="font-bold border-primary/20">{getLevelLabel(session.level)}</Badge>
+                  </div>
+                  <Button className="w-full h-10 font-bold bg-green-600 hover:bg-green-700">
+                    Reservar Agora
                   </Button>
                 </CardContent>
               </Card>
@@ -252,11 +242,12 @@ export default function SportSelectionPage() {
           </div>
         ) : (
           <Card>
-            <CardContent className="py-8 text-center">
-              <p className="text-gray-500 mb-4">Nenhum grupo ativo no momento.</p>
-              <Button onClick={() => navigate('/create-urgent')}>
-                Criar Novo Grupo
-              </Button>
+            <CardContent className="py-12 text-center">
+              <p className="text-muted-foreground mb-4">Sem atividades disponíveis para os filtros selecionados.</p>
+              <div className="flex justify-center gap-2">
+                <Button onClick={() => navigate('/create-urgent')}>Criar Grupo</Button>
+                <Button variant="outline" onClick={() => setSelectedLevel('all')}>Limpar Filtros</Button>
+              </div>
             </CardContent>
           </Card>
         )}

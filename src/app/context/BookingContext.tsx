@@ -19,8 +19,8 @@ const BookingContext = createContext<BookingContextType | null>(null);
 export function BookingProvider({ children }: { children: ReactNode }) {
     const [bookings, setBookings] = useState<Booking[]>([
         { id: 'lobby-1', sportId: 'voleibol', location: 'Pavilhão Universitário', date: '2026-03-05', time: '20:00' },
-        { id: '2', sportId: 'pickleball', location: 'Centro Desportivo Municipal', date: '2026-03-07', time: '18:30' },
-        { id: '3', sportId: 'trilho', location: 'Passadiços de Aveiro', date: '2026-03-10', time: '10:00' },
+        { id: 'session-2', sportId: 'pickleball', location: 'Centro Desportivo Municipal', date: '2026-03-07', time: '18:30' },
+        { id: 'session-3', sportId: 'trilho', location: 'Passadiços de Aveiro', date: '2026-03-10', time: '10:00' },
     ]);
 
     const cancelBooking = (id: string) => {

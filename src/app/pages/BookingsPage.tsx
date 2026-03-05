@@ -69,7 +69,13 @@ export default function BookingsPage() {
                             <div key={booking.id}>
                                 <div
                                     className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors bg-card border shadow-sm cursor-pointer"
-                                    onClick={() => navigate(`/lobby/${booking.id}`)}
+                                    onClick={() => {
+                                        if (booking.id.startsWith('session-')) {
+                                            navigate(`/booking?session=${booking.id}`);
+                                        } else {
+                                            navigate(`/lobby/${booking.id}`);
+                                        }
+                                    }}
                                 >
                                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl shrink-0">{sport?.icon}</div>
                                     <div className="flex-1 min-w-0 py-1">
