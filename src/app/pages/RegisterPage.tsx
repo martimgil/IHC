@@ -10,10 +10,12 @@ import { Badge } from '../components/ui/badge';
 import { FaEnvelope, FaLock, FaUser, FaBolt, FaCircleCheck, FaMapPin, FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { sports } from '../data';
+import { useTheme } from '../context/ThemeContext';
 
 export default function RegisterPage() {
     const navigate = useNavigate();
     const { register } = useUser();
+    const { theme } = useTheme();
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [step, setStep] = useState<1 | 2>(1);
@@ -63,7 +65,7 @@ export default function RegisterPage() {
         <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 py-12">
             {/* Logo */}
             <div className="flex items-center justify-center mb-8">
-                <img src="/icon.svg" alt="matchIn logo" className="h-16 w-auto object-contain" />
+                <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="matchIn logo" className="h-16 w-auto object-contain" />
             </div>
 
             <Card className="w-full max-w-sm shadow-md">

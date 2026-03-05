@@ -10,7 +10,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg', 'apple-touch-icon.png'],
+      includeAssets: ['icon.svg', 'icon-dark.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'matchIn',
         short_name: 'matchIn',

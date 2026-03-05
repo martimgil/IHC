@@ -10,10 +10,12 @@ import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved, FaUserCh
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'motion/react';
 import { sports, currentUser } from '../data';
+import { useTheme } from '../context/ThemeContext';
 
 export default function LoginPage() {
     const navigate = useNavigate();
     const { login } = useUser();
+    const { theme } = useTheme();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -76,7 +78,7 @@ export default function LoginPage() {
                 >
                     {/* Header/Logo */}
                     <div className="flex flex-col items-center mb-8 text-center">
-                        <img src="/icon.svg" alt="matchIn logo" className="h-16 w-auto object-contain mb-4" />
+                        <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="matchIn logo" className="h-16 w-auto object-contain mb-4" />
                         <p className="text-muted-foreground mt-2 font-medium">Ligas-te ao teu próximo jogo.</p>
                     </div>
 
