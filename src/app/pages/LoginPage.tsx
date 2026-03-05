@@ -9,8 +9,10 @@ import { Label } from '../components/ui/label';
 import { Separator } from '../components/ui/separator';
 import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved } from 'react-icons/fa6';
 import { toast } from 'sonner';
-import { motion, AnimatePresence } from 'motion/react';
 import { useTheme } from '../context/ThemeContext';
+import { FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
+import HelpSheet from '../components/HelpSheet';
+import { motion, AnimatePresence } from 'motion/react';
 
 function ForgotPasswordSheet({ open, onClose }: { open: boolean, onClose: () => void }) {
     const [email, setEmail] = useState('');
@@ -66,7 +68,8 @@ function ForgotPasswordSheet({ open, onClose }: { open: boolean, onClose: () => 
 export default function LoginPage() {
     const navigate = useNavigate();
     const { login } = useUser();
-    const { theme } = useTheme();
+    const { theme, toggleTheme } = useTheme();
+    const [helpOpen, setHelpOpen] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -109,7 +112,27 @@ export default function LoginPage() {
 
 
     return (
-        <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-background">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden">
+            {/* Top actions */}
+            <div className="absolute top-4 right-4 z-50 flex gap-2">
+                <button
+                    onClick={() => setHelpOpen(true)}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label="Ajuda"
+                    title="Ajuda"
+                >
+                    <FaCircleQuestion className="w-5 h-5" aria-hidden="true" />
+                </button>
+                <button
+                    onClick={toggleTheme}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label={theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
+                    title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+                >
+                    {theme === 'dark' ? <FaSun className="w-5 h-5" aria-hidden="true" /> : <FaMoon className="w-5 h-5" aria-hidden="true" />}
+                </button>
+            </div>
+
             {/* Dynamic Background */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[120px] animate-pulse" />
@@ -124,10 +147,10 @@ export default function LoginPage() {
                     transition={{ duration: 0.6, ease: "easeOut" }}
                 >
                     {/* Header/Logo */}
-                    <div className="flex flex-col items-center mb-8 text-center">
-                        <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="matchIn logo" className="h-16 w-auto object-contain mb-4" />
-                        <p className="text-muted-foreground mt-2 font-medium">Ligas-te ao teu próximo jogo.</p>
+                    <div className="flex items-center justify-center mb-8 relative z-10">
+                        <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="" aria-hidden="true" className="h-16 w-auto object-contain" />
                     </div>
+                    <p className="text-muted-foreground mt-2 font-medium text-center">Ligas-te ao teu próximo jogo.</p>
 
                     <Card className="border-border/50 bg-card/50 backdrop-blur-xl shadow-2xl">
                         <CardHeader className="pb-4">
@@ -254,6 +277,8 @@ export default function LoginPage() {
 
             {/* Forgot Password Sheet */}
             <ForgotPasswordSheet open={showForgot} onClose={() => setShowForgot(false)} />
+            {/* Help Sheet */}
+            <HelpSheet open={helpOpen} onClose={() => setHelpOpen(false)} />
         </div>
     );
 }

@@ -11,11 +11,14 @@ import { FaEnvelope, FaLock, FaUser, FaBolt, FaCircleCheck, FaMapPin, FaEye, FaE
 import { toast } from 'sonner';
 import { sports } from '../data';
 import { useTheme } from '../context/ThemeContext';
+import { FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
+import HelpSheet from '../components/HelpSheet';
 
 export default function RegisterPage() {
     const navigate = useNavigate();
     const { register } = useUser();
-    const { theme } = useTheme();
+    const { theme, toggleTheme } = useTheme();
+    const [helpOpen, setHelpOpen] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [step, setStep] = useState<1 | 2>(1);
@@ -68,10 +71,30 @@ export default function RegisterPage() {
         setInterestIds(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 sm:px-6 py-8 sm:py-12">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 sm:px-6 py-8 sm:py-12 relative overflow-hidden">
+            {/* Top actions */}
+            <div className="absolute top-4 right-4 z-50 flex gap-2">
+                <button
+                    onClick={() => setHelpOpen(true)}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label="Ajuda"
+                    title="Ajuda"
+                >
+                    <FaCircleQuestion className="w-5 h-5" aria-hidden="true" />
+                </button>
+                <button
+                    onClick={toggleTheme}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label={theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
+                    title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+                >
+                    {theme === 'dark' ? <FaSun className="w-5 h-5" aria-hidden="true" /> : <FaMoon className="w-5 h-5" aria-hidden="true" />}
+                </button>
+            </div>
+
             {/* Logo */}
-            <div className="flex items-center justify-center mb-8">
-                <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="matchIn logo" className="h-16 w-auto object-contain" />
+            <div className="flex items-center justify-center mb-8 relative z-10">
+                <img src={theme === 'dark' ? "/icon-dark.svg" : "/icon.svg"} alt="" aria-hidden="true" className="h-16 w-auto object-contain" />
             </div>
 
             <Card className="w-full max-w-sm shadow-md">
@@ -255,6 +278,9 @@ export default function RegisterPage() {
                     </p>
                 </CardContent>
             </Card>
+
+            {/* Help Sheet */}
+            <HelpSheet open={helpOpen} onClose={() => setHelpOpen(false)} />
         </div>
     );
 }

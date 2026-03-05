@@ -2,11 +2,13 @@ import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useTheme } from '../context/ThemeContext';
-import { FaHeartPulse, FaPeopleGroup, FaTrophy, FaArrowRight, FaCalendarCheck, FaChartLine } from 'react-icons/fa6';
-import { useRef } from 'react';
+import { FaHeartPulse, FaPeopleGroup, FaTrophy, FaArrowRight, FaCalendarCheck, FaChartLine, FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
+import { useRef, useState } from 'react';
+import HelpSheet from '../components/HelpSheet';
 
 export default function LandingPage() {
-    const { theme } = useTheme();
+    const { theme, toggleTheme } = useTheme();
+    const [helpOpen, setHelpOpen] = useState(false);
     const targetRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({ target: targetRef, offset: ["start end", "end start"] });
     const yVal = useTransform(scrollYProgress, [0, 1], [100, -100]);
@@ -21,8 +23,26 @@ export default function LandingPage() {
                         <span className="font-extrabold tracking-tight text-xl">matchIn</span>
                     </div>
                     <nav className="flex items-center gap-3 md:gap-6 text-sm font-medium">
-                        <Link to="/welcome" className="text-muted-foreground hover:text-foreground transition-colors hidden md:block focus-visible:ring-2 focus-visible:ring-primary rounded-sm px-1">Como Funciona</Link>
-                        <Link to="/login" className="text-muted-foreground hover:text-foreground transition-colors focus-visible:ring-2 focus-visible:ring-primary rounded-sm px-1">Entrar</Link>
+                        <div className="flex items-center gap-1 mr-2">
+                            <button
+                                onClick={() => setHelpOpen(true)}
+                                className="p-2 hover:bg-accent rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary flex items-center justify-center text-foreground"
+                                aria-label="Ajuda"
+                                title="Ajuda"
+                            >
+                                <FaCircleQuestion className="w-5 h-5" aria-hidden="true" />
+                            </button>
+                            <button
+                                onClick={toggleTheme}
+                                className="p-2 hover:bg-accent rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary flex items-center justify-center text-foreground"
+                                aria-label={theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
+                                title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+                            >
+                                {theme === 'dark' ? <FaSun className="w-5 h-5" aria-hidden="true" /> : <FaMoon className="w-5 h-5" aria-hidden="true" />}
+                            </button>
+                        </div>
+                        <Link to="/welcome" className="flex items-center h-9 text-muted-foreground hover:text-foreground transition-colors hidden md:flex focus-visible:ring-2 focus-visible:ring-primary rounded-sm px-2">Como Funciona</Link>
+                        <Link to="/login" className="flex items-center h-9 text-muted-foreground hover:text-foreground transition-colors focus-visible:ring-2 focus-visible:ring-primary rounded-sm px-2 mt-0.5">Entrar</Link>
                         <Button asChild size="sm" className="rounded-full shadow-lg shadow-primary/20">
                             <Link to="/welcome">Descobrir matchIn</Link>
                         </Button>
@@ -46,14 +66,6 @@ export default function LandingPage() {
                             transition={{ duration: 0.8, ease: "easeOut" }}
                             className="max-w-3xl mx-auto space-y-8"
                         >
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-semibold border border-primary/20">
-                                <span className="relative flex h-2 w-2">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                                </span>
-                                Lançamento em Aveiro
-                            </div>
-
                             <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-balance leading-[1.1]">
                                 O desporto não tem <span className="bg-clip-text text-transparent bg-gradient-to-br from-primary to-blue-600">de parar</span>
                             </h1>
@@ -151,6 +163,8 @@ export default function LandingPage() {
                     <p className="text-sm font-medium">© 2026 matchIn Platform. Protótipo para Interação Humano-Computador.</p>
                 </div>
             </footer>
+            {/* Help Sheet */}
+            <HelpSheet open={helpOpen} onClose={() => setHelpOpen(false)} />
         </div>
     );
 }

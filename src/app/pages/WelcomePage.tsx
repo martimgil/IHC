@@ -2,11 +2,14 @@ import { useNavigate } from 'react-router';
 import { Button } from '../components/ui/button';
 import { motion } from 'motion/react';
 import { useTheme } from '../context/ThemeContext';
-import { FaHeart, FaMapLocationDot, FaTrophy, FaArrowRight } from 'react-icons/fa6';
+import { FaHeart, FaMapLocationDot, FaTrophy, FaArrowRight, FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
+import { useState } from 'react';
+import HelpSheet from '../components/HelpSheet';
 
 export default function WelcomePage() {
     const navigate = useNavigate();
-    const { theme } = useTheme();
+    const { theme, toggleTheme } = useTheme();
+    const [helpOpen, setHelpOpen] = useState(false);
 
     const features = [
         {
@@ -35,7 +38,27 @@ export default function WelcomePage() {
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03] pattern-grid" />
             </div>
 
-            <main id="main-content" className="relative z-10 flex-1 flex flex-col w-full max-w-md mx-auto px-6 py-12 justify-between" role="main">
+            {/* Top Bar Actions */}
+            <div className="absolute top-4 right-4 z-50 flex gap-2">
+                <button
+                    onClick={() => setHelpOpen(true)}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label="Ajuda"
+                    title="Ajuda"
+                >
+                    <FaCircleQuestion className="w-5 h-5" aria-hidden="true" />
+                </button>
+                <button
+                    onClick={toggleTheme}
+                    className="p-3 hover:bg-accent/80 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary min-h-[44px] min-w-[44px] flex items-center justify-center text-foreground bg-background/50 backdrop-blur-sm shadow-sm border border-border/50"
+                    aria-label={theme === 'dark' ? 'Mudar para modo claro' : 'Mudar para modo escuro'}
+                    title={theme === 'dark' ? 'Modo claro' : 'Modo escuro'}
+                >
+                    {theme === 'dark' ? <FaSun className="w-5 h-5" aria-hidden="true" /> : <FaMoon className="w-5 h-5" aria-hidden="true" />}
+                </button>
+            </div>
+
+            <main id="main-content" className="relative z-10 flex-1 flex flex-col w-full max-w-md mx-auto px-6 py-12 justify-between mt-12" role="main">
                 <div>
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -102,6 +125,7 @@ export default function WelcomePage() {
                     background-size: 32px 32px;
                 }
             `}</style>
+            <HelpSheet open={helpOpen} onClose={() => setHelpOpen(false)} />
         </div>
     );
 }
