@@ -2,15 +2,66 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useUser } from '../context/UserContext';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '../components/ui/sheet';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Separator } from '../components/ui/separator';
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved, FaUserCheck, FaHeart } from 'react-icons/fa6';
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'motion/react';
-import { sports, currentUser } from '../data';
 import { useTheme } from '../context/ThemeContext';
+
+function ForgotPasswordSheet({ open, onClose }: { open: boolean, onClose: () => void }) {
+    const [email, setEmail] = useState('');
+    const [isSending, setIsSending] = useState(false);
+
+    const handleReset = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!email) {
+            toast.error('Insere o teu email.');
+            return;
+        }
+        setIsSending(true);
+        await new Promise(r => setTimeout(r, 1500));
+        setIsSending(false);
+        toast.success('Email enviado!', { description: 'Verifica a tua caixa de entrada.' });
+        onClose();
+    };
+
+    return (
+        <Sheet open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+            <SheetContent
+                side="bottom"
+                className="inset-x-4 bottom-4 w-[calc(100%-2rem)] mx-auto rounded-[2.5rem] border-2 border-border shadow-2xl p-6 px-1 transition-all duration-300"
+            >
+                <div className="overflow-y-auto max-h-[75vh] px-5">
+                    <div className="mx-auto w-12 h-1.5 rounded-full bg-muted-foreground/20 mb-6" />
+                    <SheetHeader className="mb-6 text-left">
+                        <SheetTitle className="text-2xl font-extrabold tracking-tight">Recuperar Password</SheetTitle>
+                        <SheetDescription className="text-base font-medium">Insere o teu email para receberes instruções de recuperação.</SheetDescription>
+                    </SheetHeader>
+                    <form onSubmit={handleReset} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="reset-email" className="font-semibold px-1">Email</Label>
+                            <Input
+                                id="reset-email"
+                                type="email"
+                                placeholder="o.teu@email.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="h-12 bg-background/50 border-border/50"
+                            />
+                        </div>
+                        <Button type="submit" className="w-full h-12 text-base font-bold shadow-lg shadow-primary/20" disabled={isSending}>
+                            {isSending ? 'A enviar...' : 'Enviar Instruções'}
+                        </Button>
+                    </form>
+                </div>
+            </SheetContent>
+        </Sheet>
+    );
+}
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -20,12 +71,9 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [showForgot, setShowForgot] = useState(false);
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
-    const demoAccounts = [
-        { name: 'Alice Silva', email: 'alice@example.com', role: 'Utilizadora Ativa' },
-        { name: 'Bruno Santos', email: 'bruno@example.com', role: 'Novo Membro' }
-    ];
 
     const validate = () => {
         const e: typeof errors = {};
@@ -55,11 +103,6 @@ export default function LoginPage() {
         navigate('/');
     };
 
-    const handleQuickLogin = (email: string, name: string) => {
-        setEmail(email);
-        setPassword('password123'); // Fictícia
-        handleLogin(undefined, { name, email });
-    };
 
     return (
         <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-background">
@@ -85,7 +128,7 @@ export default function LoginPage() {
                     <Card className="border-border/50 bg-card/50 backdrop-blur-xl shadow-2xl">
                         <CardHeader className="pb-4">
                             <CardTitle className="text-2xl font-bold tracking-tight">Bem-vindo!</CardTitle>
-                            <CardDescription>Inicia sessão ou usa uma conta de demonstração.</CardDescription>
+                            <CardDescription>Inicia sessão para continuares.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6 px-4 sm:px-6">
                             <form onSubmit={(e) => { e.preventDefault(); if (validate()) handleLogin(undefined); }} className="space-y-4" noValidate>
@@ -121,7 +164,11 @@ export default function LoginPage() {
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between">
                                         <Label htmlFor="password">Password</Label>
-                                        <button type="button" className="text-xs text-primary font-medium hover:underline">
+                                        <button
+                                            type="button"
+                                            className="text-xs text-primary font-medium hover:underline"
+                                            onClick={() => setShowForgot(true)}
+                                        >
                                             Esqueci-me?
                                         </button>
                                     </div>
@@ -171,46 +218,6 @@ export default function LoginPage() {
                                 </Button>
                             </form>
 
-                            <div className="relative flex items-center py-2">
-                                <Separator className="flex-grow" />
-                                <span className="mx-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground whitespace-nowrap">Demo Accounts</span>
-                                <Separator className="flex-grow" />
-                            </div>
-
-                            {/* Demo Accounts */}
-                            <div className="grid grid-cols-2 gap-3">
-                                {demoAccounts.map((acc, i) => (
-                                    <button
-                                        key={i}
-                                        type="button"
-                                        onClick={() => handleQuickLogin(acc.email, acc.name)}
-                                        className="flex flex-col items-start p-3 text-left border border-border/50 rounded-xl bg-accent/30 hover:bg-accent/50 hover:border-primary/50 transition-all active:scale-[0.97] group"
-                                    >
-                                        <div className="flex items-center gap-1.5 mb-1">
-                                            <FaUserCheck className="w-3.5 h-3.5 text-primary" />
-                                            <span className="text-xs font-bold truncate">{acc.name.split(' ')[0]}</span>
-                                        </div>
-                                        <span className="text-[10px] text-muted-foreground leading-none">{acc.role}</span>
-                                    </button>
-                                ))}
-                            </div>
-
-                            {/* Favorite Sports */}
-                            <div className="space-y-2">
-                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-1.5">
-                                    <FaHeart className="w-3 h-3 text-red-500" />Os teus desportos favoritos
-                                </p>
-                                <div className="flex flex-wrap gap-1.5">
-                                    {currentUser.interestedSports.map(id => {
-                                        const sport = sports.find(s => s.id === id);
-                                        return sport ? (
-                                            <span key={id} className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-primary/10 text-primary text-xs font-semibold border border-primary/20">
-                                                <span>{sport.icon}</span>{sport.name}
-                                            </span>
-                                        ) : null;
-                                    })}
-                                </div>
-                            </div>
 
                             <Separator className="opacity-50" />
 
@@ -240,6 +247,9 @@ export default function LoginPage() {
                     background-size: 32px 32px;
                 }
             `}</style>
+
+            {/* Forgot Password Sheet */}
+            <ForgotPasswordSheet open={showForgot} onClose={() => setShowForgot(false)} />
         </div>
     );
 }
