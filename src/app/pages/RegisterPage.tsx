@@ -7,7 +7,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Separator } from '../components/ui/separator';
 import { Badge } from '../components/ui/badge';
-import { FaEnvelope, FaLock, FaUser, FaBolt, FaCircleCheck, FaMapPin, FaEye, FaEyeSlash, FaArrowLeft, FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
+import { FaEnvelope, FaLock, FaUser, FaBolt, FaCircleCheck, FaMapPin, FaEye, FaEyeSlash, FaArrowLeft, FaSun, FaMoon, FaCircleQuestion, FaRocket } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { sports } from '../data';
 import { useTheme } from '../context/ThemeContext';
@@ -59,7 +59,7 @@ export default function RegisterPage() {
         setIsLoading(false);
 
         if (result.success) {
-            toast.success('Conta criada com sucesso! 🎉', { description: `Bem-vindo, ${form.name.split(' ')[0]}!` });
+            toast.success('Conta criada com sucesso!', { description: `Bem-vindo, ${form.name.split(' ')[0]}!` });
             navigate('/');
         } else {
             toast.error(result.message || 'Erro ao criar conta.');
@@ -269,7 +269,7 @@ export default function RegisterPage() {
                                 >
                                     {isLoading
                                         ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />A criar...</>
-                                        : 'Criar Conta 🚀'}
+                                        : <span className="flex items-center justify-center gap-2">Criar Conta <FaRocket className="w-4 h-4" /></span>}
                                 </Button>
                             </div>
                         </div>

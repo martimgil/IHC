@@ -17,7 +17,8 @@ import {
   FaCircleCheck,
   FaChevronRight,
   FaDumbbell,
-  FaBolt
+  FaBolt,
+  FaShirt
 } from 'react-icons/fa6';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
@@ -88,8 +89,8 @@ export default function SportSelectionPage() {
               Materiais necessários: {sport.requiredMaterials.join(', ')}
             </AlertDescription>
           </Alert>
-          <Button variant="outline" size="sm" className="w-full" onClick={() => setEquipmentOpen(true)} aria-label="Ver equipamento para aluguer">
-            🎽 Ver equipamento disponível para aluguer
+          <Button variant="outline" size="sm" className="w-full block" onClick={() => setEquipmentOpen(true)} aria-label="Ver equipamento para aluguer">
+            <FaShirt className="inline w-3.5 h-3.5 mr-1" aria-hidden="true" /> Ver equipamento disponível para aluguer
           </Button>
         </div>
       )}

@@ -16,7 +16,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import {
   FaArrowLeft, FaCalendarDay, FaMapPin, FaUsers, FaEuroSign, FaCircleCheck,
   FaClock, FaShieldHalved, FaCircleExclamation, FaPaperPlane, FaUserPlus, FaUserMinus,
-  FaThumbsUp, FaStar, FaHeart, FaRightFromBracket, FaMessage
+  FaThumbsUp, FaStar, FaHeart, FaRightFromBracket, FaMessage, FaCircle
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
@@ -25,7 +25,7 @@ import { Lobby } from '../types';
 // ── Chat ──────────────────────────────────────────────────────────────
 interface ChatMsg { readonly id: string; readonly sender: string; readonly text: string; readonly time: string; readonly isMe: boolean; }
 const initialMessages: ChatMsg[] = [
-  { id: '1', sender: 'Eduardo OrangeTree', text: 'Olá! Estamos à espera de mais 1 jogador 👋', time: '18:45', isMe: false },
+  { id: '1', sender: 'Eduardo OrangeTree', text: 'Olá! Estamos à espera de mais 1 jogador.', time: '18:45', isMe: false },
   { id: '2', sender: 'Ana Oliveira', text: 'Estou a caminho, chego em 5 min!', time: '18:46', isMe: false },
 ];
 
@@ -401,7 +401,7 @@ export default function LobbyPage() {
                 <Avatar className="w-8 h-8"><AvatarFallback className="text-xs">{req.name.split(' ').map(n => n[0]).join('').slice(0, 2)}</AvatarFallback></Avatar>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm truncate">{req.name}</p>
-                  <p className="text-xs text-muted-foreground">{req.level} · ⭐ {req.skillRating}/10</p>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1.5">{req.level} <span className="text-[10px] text-muted-foreground/30">•</span> <FaStar className="w-3 h-3 text-amber-500" /> {req.skillRating}/10</p>
                 </div>
                 <div className="flex gap-1.5">
                   <Button size="sm" className="h-8 px-2 text-xs" onClick={() => handleApprove(req.id, req.name)}>
@@ -434,7 +434,7 @@ export default function LobbyPage() {
                 </Avatar>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-sm truncate">{player.name}</p>
-                  <p className="text-xs text-muted-foreground">{player.level}{player.skillRating ? ` · ⭐ ${player.skillRating}/10` : ''}</p>
+                  <p className="text-xs text-muted-foreground flex items-center">{player.level}{player.skillRating ? <><span className="mx-1.5 text-[10px] text-muted-foreground/30">•</span><FaStar className="w-3 h-3 text-amber-500 mr-1" />{player.skillRating}/10</> : null}</p>
                 </div>
                 {player.id === lobby.createdBy && (
                   <Badge variant="outline" className="text-xs shrink-0 border-amber-300 text-amber-700">
@@ -480,11 +480,11 @@ export default function LobbyPage() {
           </CardHeader>
           <CardContent className="grid grid-cols-2 gap-3">
             <div>
-              <p className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-1">🔵 Equipa A</p>
+              <p className="text-sm font-bold text-blue-700 dark:text-blue-300 mb-1 flex items-center gap-1.5"><FaCircle className="w-3 h-3" /> Equipa A</p>
               {teams.t1.map(p => <p key={p.id} className="text-xs text-muted-foreground">{p.name}</p>)}
             </div>
             <div>
-              <p className="text-sm font-bold text-red-700 dark:text-red-300 mb-1">🔴 Equipa B</p>
+              <p className="text-sm font-bold text-red-700 dark:text-red-300 mb-1 flex items-center gap-1.5"><FaCircle className="w-3 h-3" /> Equipa B</p>
               {teams.t2.map(p => <p key={p.id} className="text-xs text-muted-foreground">{p.name}</p>)}
             </div>
           </CardContent>

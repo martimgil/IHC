@@ -9,7 +9,7 @@ import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { Separator } from '../components/ui/separator';
-import { FaMagnifyingGlass, FaMapPin, FaUsers, FaEuroSign, FaChevronRight, FaBell, FaBolt, FaDumbbell, FaXmark } from 'react-icons/fa6';
+import { FaMagnifyingGlass, FaMapPin, FaUsers, FaEuroSign, FaChevronRight, FaBell, FaBolt, FaDumbbell, FaXmark, FaStar, FaMedal } from 'react-icons/fa6';
 
 function SportDetailSheet({
   sport,
@@ -123,12 +123,12 @@ export default function HomePage() {
         <div className="relative z-10 flex items-center justify-between">
           <div>
             <h2 id="welcome-heading" className="font-extrabold text-2xl leading-tight flex items-center gap-2">
-              Olá, {firstName}! ⚡
+              Olá, {firstName}!
             </h2>
             <p className="text-sm font-medium opacity-90 mt-1">Pronto para o teu próximo jogo?</p>
           </div>
           <div className="w-12 h-12 rounded-2xl overflow-hidden backdrop-blur-md shadow-md flex items-center justify-center bg-primary-foreground/20">
-            <span className="text-2xl">⚡</span>
+            <FaBolt className="w-6 h-6 text-yellow-500" />
           </div>
         </div>
         {/* Abstract shapes for premium feel */}
@@ -156,10 +156,10 @@ export default function HomePage() {
             <span className="text-sm font-semibold text-green-900 dark:text-green-100 leading-tight">Por Local</span>
           </button>
         </div>
-      </section>
+      </section >
 
       {/* Search */}
-      <div className="relative">
+      < div className="relative" >
         <label htmlFor="sport-search" className="sr-only">Pesquisar outros desportos</label>
         <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" aria-hidden="true" />
         <Input
@@ -170,43 +170,46 @@ export default function HomePage() {
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-9 h-10 text-sm"
         />
-        {searchQuery && (
-          <button
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
-            onClick={() => setSearchQuery('')}
-            aria-label="Limpar pesquisa"
-          >
-            <FaXmark className="w-4 h-4" />
-          </button>
-        )}
-      </div>
+        {
+          searchQuery && (
+            <button
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+              onClick={() => setSearchQuery('')}
+              aria-label="Limpar pesquisa"
+            >
+              <FaXmark className="w-4 h-4" />
+            </button>
+          )
+        }
+      </div >
 
       {/* Favourites Section */}
-      {!searchQuery && userInterestedSports.length > 0 && (
-        <section aria-labelledby="fav-heading" className="mt-4">
-          <h3 id="fav-heading" className="text-sm font-semibold text-muted-foreground mb-3 px-0.5">
-            ⭐ Desportos Favoritos
-          </h3>
-          <div className="grid grid-cols-2 gap-2" role="list">
-            {userInterestedSports.map(sport => (
-              <button
-                key={sport.id}
-                role="listitem"
-                onClick={() => setSelectedSport(sport)}
-                className="flex items-center gap-3 p-3 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left focus:outline-none focus:ring-2 focus:ring-primary min-h-[56px]"
-              >
-                <span className="text-2xl shrink-0" role="img">{sport.icon}</span>
-                <span className="text-sm font-medium leading-tight">{sport.name}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
+      {
+        !searchQuery && userInterestedSports.length > 0 && (
+          <section aria-labelledby="fav-heading" className="mt-4">
+            <h3 id="fav-heading" className="text-sm font-semibold text-muted-foreground mb-3 px-0.5 flex items-center gap-1.5">
+              <FaStar className="w-4 h-4 text-amber-500" /> Desportos Favoritos
+            </h3>
+            <div className="grid grid-cols-2 gap-2" role="list">
+              {userInterestedSports.map(sport => (
+                <button
+                  key={sport.id}
+                  role="listitem"
+                  onClick={() => setSelectedSport(sport)}
+                  className="flex items-center gap-3 p-3 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left focus:outline-none focus:ring-2 focus:ring-primary min-h-[56px]"
+                >
+                  <span className="text-2xl shrink-0" role="img">{sport.icon}</span>
+                  <span className="text-sm font-medium leading-tight">{sport.name}</span>
+                </button>
+              ))}
+            </div>
+          </section>
+        )
+      }
 
-      {/* All Sports – compact grid */}
       <section aria-labelledby="all-heading">
-        <h3 id="all-heading" className="text-sm font-semibold text-muted-foreground mb-2 px-0.5">
-          {searchQuery ? `Resultados para "${searchQuery}"` : '🏅 Todos os desportos'}
+        <h3 id="all-heading" className="text-sm font-semibold text-muted-foreground mb-2 px-0.5 flex items-center gap-1.5">
+          {searchQuery ? `Resultados para "${searchQuery}"` : <><FaMedal className="w-4 h-4 text-amber-500" /> Todos os desportos</>}
         </h3>
 
         {filteredSports.length > 0 ? (
@@ -238,6 +241,6 @@ export default function HomePage() {
 
       {/* Sport Detail Sheet */}
       <SportDetailSheet sport={selectedSport} onClose={() => setSelectedSport(null)} />
-    </div>
+    </div >
   );
 }

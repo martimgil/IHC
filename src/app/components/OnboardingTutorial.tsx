@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Dialog, DialogContent } from './ui/dialog';
 import { Button } from './ui/button';
-import { FaHouse, FaMapPin, FaUsers, FaBell, FaBolt } from 'react-icons/fa6';
+import { FaHouse, FaMapPin, FaUsers, FaBell, FaBolt, FaRocket } from 'react-icons/fa6';
 
 const steps = [
     {
         icon: <FaBolt className="w-12 h-12 text-primary" />,
-        title: 'Bem-vindo ao matchIn! ⚡',
+        title: 'Bem-vindo ao matchIn!',
         description: 'A tua app para encontrar atividades desportivas, juntar lobbies e fazer novas conexões.',
     },
     {
@@ -104,7 +104,7 @@ export default function OnboardingTutorial() {
                             Saltar
                         </Button>
                         <Button className="flex-1" onClick={handleNext} aria-label={step < steps.length - 1 ? 'Próximo passo' : 'Terminar tutorial'}>
-                            {step < steps.length - 1 ? 'Seguinte' : 'Começar! 🚀'}
+                            {step < steps.length - 1 ? 'Seguinte' : <span className="flex items-center gap-2 justify-center">Começar! <FaRocket /></span>}
                         </Button>
                     </div>
                 </div>
