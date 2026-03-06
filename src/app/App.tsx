@@ -5,6 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { UserProvider } from './context/UserContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { BookingProvider } from './context/BookingContext';
+import { LobbyProvider } from './context/LobbyContext';
 
 
 export default function App() {
@@ -12,10 +13,12 @@ export default function App() {
     <ThemeProvider>
       <UserProvider>
         <NotificationProvider>
-          <BookingProvider>
-            <RouterProvider router={router} />
-            <Toaster position="top-right" richColors closeButton />
-          </BookingProvider>
+          <LobbyProvider>
+            <BookingProvider>
+              <RouterProvider router={router} />
+              <Toaster position="top-right" richColors closeButton />
+            </BookingProvider>
+          </LobbyProvider>
         </NotificationProvider>
       </UserProvider>
     </ThemeProvider>

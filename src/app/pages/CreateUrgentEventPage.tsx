@@ -24,12 +24,18 @@ import {
   FaCircleCheck
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
-import { ExperienceLevel } from '../types';
+import { useLobbies } from '../context/LobbyContext';
+import { useBookings } from '../context/BookingContext';
+import { useUser } from '../context/UserContext';
+import { Lobby, Player, ExperienceLevel } from '../types';
 import { toast } from 'sonner';
 
 export default function CreateUrgentEventPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { addLobby } = useLobbies();
+  const { addBooking } = useBookings();
+  const { sessionUser } = useUser();
   const [isCreating, setIsCreating] = useState(false);
   const [eventCreated, setEventCreated] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -87,6 +93,45 @@ export default function CreateUrgentEventPage() {
 
     setIsCreating(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Create the lobby object
+    const newLobbyId = `lobby-${Date.now()}`;
+    const me: Player = {
+      id: sessionUser?.id || 'me',
+      name: sessionUser?.name || 'Tu',
+      level: formData.level,
+      skillRating: 7
+    };
+
+    const newLobby: Lobby = {
+      id: newLobbyId,
+      sportId: formData.sportId,
+      locationName: formData.location,
+      locationAddress: formData.location, // simplified
+      scheduledDate: formData.date,
+      scheduledTime: formData.time,
+      level: formData.level,
+      currentPlayers: [me],
+      minPlayers: 6, // default
+      maxPlayers: 12, // default
+      pricePerPerson: 5, // default
+      status: 'waiting',
+      createdBy: me.id,
+      isUrgent: formData.isUltimaHora,
+      tags: formData.isUltimaHora ? ['Urgente'] : []
+    };
+
+    addLobby(newLobby);
+
+    // Also add to bookings so it shows in "Reservas"
+    addBooking({
+      id: newLobbyId,
+      sportId: formData.sportId,
+      location: formData.location,
+      date: formData.date,
+      time: formData.time
+    });
+
     setIsCreating(false);
     setEventCreated(true);
     toast.success('Evento criado com sucesso!');

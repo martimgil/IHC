@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { getLobbyById, getSportById, currentUser, lobbies } from '../data';
+import { getSportById, currentUser } from '../data';
 import { useUser } from '../context/UserContext';
 import { useBookings } from '../context/BookingContext';
+import { useLobbies } from '../context/LobbyContext';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -20,7 +21,7 @@ import {
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
-import { Lobby } from '../types';
+import { Lobby, Player } from '../types';
 
 // ── Chat ──────────────────────────────────────────────────────────────
 interface ChatMsg { readonly id: string; readonly sender: string; readonly text: string; readonly time: string; readonly isMe: boolean; }
@@ -151,7 +152,9 @@ export default function LobbyPage() {
   const { lobbyId } = useParams<{ lobbyId: string }>();
   const navigate = useNavigate();
   const { sessionUser } = useUser();
-  const { bookings, cancelBooking } = useBookings();
+  const { bookings, cancelBooking, addBooking } = useBookings();
+  const { lobbies, getLobbyById, joinLobby, leaveLobby } = useLobbies();
+
   const [hasJoined, setHasJoined] = useState(() => bookings.some(b => b.id === lobbyId));
   const [isProcessing, setIsProcessing] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -238,9 +241,27 @@ export default function LobbyPage() {
   const isCreator = !sessionUser && currentUser.id === lobby.createdBy;
 
   const handleJoin = async () => {
+    if (!lobbyId || !lobby) return;
     setIsProcessing(true);
     await new Promise(r => setTimeout(r, 800));
     setIsProcessing(false);
+
+    const me: Player = {
+      id: sessionUser?.id || 'me',
+      name: sessionUser?.name || 'Tu',
+      level: sessionUser?.experienceLevels?.[lobby.sportId] as any || 'intermedio',
+      skillRating: 7
+    };
+
+    joinLobby(lobbyId, me);
+    addBooking({
+      id: lobbyId,
+      sportId: lobby.sportId,
+      location: lobby.locationName,
+      date: lobby.scheduledDate || new Date().toISOString().split('T')[0],
+      time: lobby.scheduledTime || '00:00'
+    });
+
     setHasJoined(true);
     if (lobby.isUrgent) {
       toast.success('Entraste no jogo!', { description: 'Sendo uma atividade urgente, a entrada é imediata.' });
@@ -250,7 +271,10 @@ export default function LobbyPage() {
   };
 
   const handleLeave = () => {
-    if (lobbyId) cancelBooking(lobbyId);
+    if (lobbyId) {
+      cancelBooking(lobbyId);
+      leaveLobby(lobbyId, sessionUser?.id || 'me');
+    }
     setHasJoined(false);
     toast.info('Saíste do grupo.');
   };

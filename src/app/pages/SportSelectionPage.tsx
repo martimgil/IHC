@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { getSportById, getSessionsBySport, getLobbiesBySport, getLevelLabel } from '../data';
+import { getSportById, getSessionsBySport, getLevelLabel } from '../data';
+import { useLobbies } from '../context/LobbyContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -36,9 +37,10 @@ export default function SportSelectionPage() {
     { name: 'Kit completo', price: 4 },
   ];
 
+  const { lobbies: allLobbies } = useLobbies();
   const sport = getSportById(sportId || '');
   const sessions = getSessionsBySport(sportId || '');
-  const lobbies = getLobbiesBySport(sportId || '');
+  const lobbies = allLobbies.filter(l => l.sportId === sportId);
 
   if (!sport) {
     return (

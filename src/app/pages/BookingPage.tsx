@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { getSessionById, getSportById, currentUser, getLevelLabel } from '../data';
 import { useUser } from '../context/UserContext';
+import { useBookings } from '../context/BookingContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -36,6 +37,7 @@ export default function BookingPage() {
   const [expiry, setExpiry] = useState('');
   const [cvv, setCvv] = useState('');
   const { sessionUser } = useUser();
+  const { addBooking } = useBookings();
 
   const sessionId = searchParams.get('session');
   const session = sessionId ? getSessionById(sessionId) : null;
@@ -69,6 +71,16 @@ export default function BookingPage() {
 
     setIsProcessing(false);
     setBookingConfirmed(true);
+
+    if (session) {
+      addBooking({
+        id: session.id,
+        sportId: session.sportId,
+        location: session.locationName,
+        date: session.date,
+        time: session.time
+      });
+    }
 
     toast.success('Pagamento confirmado!', {
       description: 'A tua vaga foi garantida.',
