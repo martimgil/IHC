@@ -73,25 +73,20 @@ export default function SportSelectionPage() {
           <div className="flex-1">
             <h1 className="text-3xl font-bold mb-2">{sport.name}</h1>
             <p className="opacity-90 mb-4">{sport.description}</p>
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="secondary" className="bg-white/10 text-white border-white/20">
-                {sport.recommendedPlayers ? `${sport.recommendedPlayers} jogadores (recomendado)` : `${sport.minPlayers}-${sport.maxPlayers} jogadores`}
-              </Badge>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {sport.requiredMaterials.length > 0 && (
+                <Badge variant="secondary" className="bg-blue-500/20 text-blue-100 border-blue-400/30 whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
+                  Materiais: {sport.requiredMaterials.join(', ')}
+                </Badge>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Required Materials Alert */}
+      {/* Required Materials Button */}
       {sport.requiredMaterials.length > 0 && (
         <div className="space-y-2">
-          <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-950/40 dark:border-blue-800">
-            <FaCircleExclamation className="h-4 w-4 text-blue-600" />
-            <AlertTitle className="text-blue-900 dark:text-blue-200">Não te Esqueças!</AlertTitle>
-            <AlertDescription className="text-blue-800 dark:text-blue-300">
-              Materiais necessários: {sport.requiredMaterials.join(', ')}
-            </AlertDescription>
-          </Alert>
           <Button variant="outline" size="sm" className="w-full block" onClick={() => setEquipmentOpen(true)} aria-label="Ver equipamento para aluguer">
             <FaShirt className="inline w-3.5 h-3.5 mr-1" aria-hidden="true" /> Ver equipamento disponível para aluguer
           </Button>
