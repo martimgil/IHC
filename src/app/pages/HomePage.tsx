@@ -9,7 +9,7 @@ import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { Separator } from '../components/ui/separator';
-import { FaMagnifyingGlass, FaMapPin, FaUsers, FaEuroSign, FaChevronRight, FaBell, FaBolt, FaDumbbell, FaXmark, FaStar, FaMedal } from 'react-icons/fa6';
+import { FaMagnifyingGlass, FaUsers, FaBolt, FaDumbbell, FaXmark, FaStar, FaMedal, FaChevronDown } from 'react-icons/fa6';
 
 function SportDetailSheet({
   sport,
@@ -102,16 +102,17 @@ export default function HomePage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedSport, setSelectedSport] = useState<Sport | null>(null);
+  const [showAllSports, setShowAllSports] = useState(false);
   const { sessionUser } = useUser();
   const firstName = (sessionUser?.name ?? currentUser.name).split(' ')[0];
 
-  const filteredSports = sports.filter(sport =>
-    sport.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredSports = sports
+    .filter(sport => sport.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
-  const userInterestedSports = sports.filter(sport =>
-    (sessionUser?.interestedSports ?? currentUser.interestedSports).includes(sport.id)
-  );
+  const userInterestedSports = sports
+    .filter(sport => (sessionUser?.interestedSports ?? currentUser.interestedSports).includes(sport.id))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
     <div className="space-y-4">
@@ -134,29 +135,6 @@ export default function HomePage() {
         {/* Abstract shapes for premium feel */}
         <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-3xl" />
       </section>
-
-      {/* Quick Actions – 2 compact cards */}
-      <section aria-labelledby="actions-heading">
-        <h2 id="actions-heading" className="sr-only">Ações rápidas</h2>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            className="flex items-center gap-2 p-2.5 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40 active:scale-[0.97] transition-all text-left focus:outline-none focus:ring-2 focus:ring-orange-400 min-h-[48px]"
-            onClick={() => navigate('/lobby')}
-            aria-label="Procurar uma atividade de última hora"
-          >
-            <FaBell className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0" aria-hidden="true" />
-            <span className="text-sm font-semibold text-orange-900 dark:text-orange-100 leading-tight">Última Hora</span>
-          </button>
-          <button
-            className="flex items-center gap-2 p-2.5 rounded-xl border-2 border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-950/40 active:scale-[0.97] transition-all text-left focus:outline-none focus:ring-2 focus:ring-green-400 min-h-[48px]"
-            onClick={() => navigate('/search-location')}
-            aria-label="Procurar atividades por localização"
-          >
-            <FaMapPin className="w-5 h-5 text-green-600 dark:text-green-400 shrink-0" aria-hidden="true" />
-            <span className="text-sm font-semibold text-green-900 dark:text-green-100 leading-tight">Por Local</span>
-          </button>
-        </div>
-      </section >
 
       {/* Search */}
       < div className="relative" >
@@ -207,37 +185,43 @@ export default function HomePage() {
         )
       }
 
-      <section aria-labelledby="all-heading">
-        <h3 id="all-heading" className="text-sm font-semibold text-muted-foreground mb-2 px-0.5 flex items-center gap-1.5">
-          {searchQuery ? `Resultados para "${searchQuery}"` : <><FaMedal className="w-4 h-4 text-amber-500" /> Todos os desportos</>}
-        </h3>
+      {(!searchQuery && !showAllSports && userInterestedSports.length > 0) ? (
+        <Button variant="outline" className="w-full text-sm font-medium h-12" onClick={() => setShowAllSports(true)}>
+          Ver outros desportos <FaChevronDown className="ml-2 w-4 h-4" />
+        </Button>
+      ) : (
+        <section aria-labelledby="all-heading">
+          <h3 id="all-heading" className="text-sm font-semibold text-muted-foreground mb-2 px-0.5 flex items-center gap-1.5">
+            {searchQuery ? `Resultados para "${searchQuery}"` : <><FaMedal className="w-4 h-4 text-amber-500" /> Todos os desportos</>}
+          </h3>
 
-        {filteredSports.length > 0 ? (
-          <div className="grid grid-cols-3 gap-2" role="list" aria-label="Lista de desportos">
-            {filteredSports.map(sport => (
-              <button
-                key={sport.id}
-                role="listitem"
-                onClick={() => setSelectedSport(sport)}
-                className="flex flex-col items-center justify-center p-3 bg-card border-2 border-border/50 rounded-2xl hover:border-primary hover:bg-primary/5 transition-all shadow-sm active:scale-[0.96] focus:outline-none focus:ring-2 focus:ring-primary group"
-                aria-label={`${sport.name} – toca para ver detalhes`}
-              >
-                <span className="text-3xl mb-2 transform group-hover:scale-110 transition-transform duration-300" role="img" aria-label={sport.name}>{sport.icon}</span>
-                <span className="text-xs font-extrabold text-foreground tracking-tight text-center leading-tight">{sport.name}</span>
-              </button>
-            ))}
-          </div>
-        ) : (
-          <Card>
-            <CardContent className="py-8 text-center">
-              <p className="text-muted-foreground text-sm">Nenhum desporto encontrado.</p>
-              <Button variant="outline" className="mt-3 h-9 text-sm" onClick={() => setSearchQuery('')}>
-                Limpar pesquisa
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-      </section>
+          {filteredSports.length > 0 ? (
+            <div className="grid grid-cols-3 gap-2" role="list" aria-label="Lista de desportos">
+              {filteredSports.map(sport => (
+                <button
+                  key={sport.id}
+                  role="listitem"
+                  onClick={() => setSelectedSport(sport)}
+                  className="flex flex-col items-center justify-center p-3 bg-card border-2 border-border/50 rounded-2xl hover:border-primary hover:bg-primary/5 transition-all shadow-sm active:scale-[0.96] focus:outline-none focus:ring-2 focus:ring-primary group"
+                  aria-label={`${sport.name} – toca para ver detalhes`}
+                >
+                  <span className="text-3xl mb-2 transform group-hover:scale-110 transition-transform duration-300" role="img" aria-label={sport.name}>{sport.icon}</span>
+                  <span className="text-xs font-extrabold text-foreground tracking-tight text-center leading-tight">{sport.name}</span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="py-8 text-center">
+                <p className="text-muted-foreground text-sm">Nenhum desporto encontrado.</p>
+                <Button variant="outline" className="mt-3 h-9 text-sm" onClick={() => setSearchQuery('')}>
+                  Limpar pesquisa
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </section>
+      )}
 
       {/* Sport Detail Sheet */}
       <SportDetailSheet sport={selectedSport} onClose={() => setSelectedSport(null)} />

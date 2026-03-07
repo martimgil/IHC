@@ -70,7 +70,7 @@ export default function LandingPage() {
                                 Entrar
                             </Link>
                             <Link to="/register" onClick={() => setMobileMenuOpen(false)} className="flex items-center justify-center p-4 rounded-2xl bg-primary text-primary-foreground font-bold shadow-lg shadow-primary/20">
-                                Criar conta grátis
+                                Criar Conta
                             </Link>
                         </div>
                         <button onClick={() => { setHelpOpen(true); setMobileMenuOpen(false); }} className="w-full flex items-center justify-center gap-2 py-3 text-muted-foreground text-sm">
@@ -82,7 +82,7 @@ export default function LandingPage() {
 
             {/* Hero Section */}
             <main id="main-content" className="flex-1 pt-16" role="main">
-                <section className="relative overflow-hidden px-4 pt-20 pb-24 sm:pt-32 sm:pb-32 lg:pb-40">
+                <section className="relative overflow-hidden px-4 pt-16 pb-16 sm:pt-24 sm:pb-24 lg:pb-28">
                     <div className="absolute inset-0 pointer-events-none">
                         <div className="absolute -top-[20%] -right-[10%] w-[60%] h-[60%] rounded-full bg-primary/20 blur-[150px] animate-pulse" />
                         <div className="absolute top-[40%] text-border w-full h-[1px] bg-gradient-to-r from-transparent via-border to-transparent" />
@@ -107,18 +107,21 @@ export default function LandingPage() {
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                                 <Button asChild size="lg" className="w-full sm:w-auto h-14 px-8 text-lg rounded-full shadow-xl shadow-primary/20 group">
                                     <Link to="/register">
-                                        Criar conta grátis
+                                        Criar Conta
                                         <FaArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" aria-hidden="true" />
                                     </Link>
                                 </Button>
                                 <Button asChild variant="outline" size="lg" className="w-full sm:w-auto h-14 px-8 text-lg rounded-full">
-                                    <Link to="/welcome">Ver experiência</Link>
+                                    <Link to="/welcome">Ver Experiência</Link>
+                                </Button>
+                                <Button asChild variant="secondary" size="lg" className="w-full sm:w-auto h-14 px-8 text-lg rounded-full">
+                                    <Link to="/login">Iniciar Sessão</Link>
                                 </Button>
                             </div>
                         </motion.div>
 
                         {/* Floating elements representing features */}
-                        <motion.div style={{ y: yVal }} className="mt-20 max-w-5xl mx-auto relative hidden md:block">
+                        <motion.div style={{ y: yVal }} className="mt-12 max-w-5xl mx-auto relative hidden md:block">
                             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 h-full" />
                             <div className="grid grid-cols-3 gap-6 opacity-60">
                                 <div className="bg-card border border-border rounded-2xl p-6 shadow-sm transform -rotate-6 translate-y-12">
@@ -141,7 +144,7 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                <section className="bg-muted/30 py-24 sm:py-32 border-y border-border/50">
+                <section className="bg-muted/30 py-16 sm:py-24 border-y border-border/50">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6">
                         <div className="text-center mb-16">
                             <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-balance">Desenhado para desportistas</h2>

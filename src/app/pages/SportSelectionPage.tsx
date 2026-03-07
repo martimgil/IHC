@@ -133,17 +133,10 @@ export default function SportSelectionPage() {
 
           <div className="flex gap-2.5">
             <Button
-              variant="outline"
-              className="flex-1 h-12 border-primary text-primary font-bold shadow-sm"
+              className="w-full h-12 font-bold shadow-sm text-base"
               onClick={() => navigate(`/create-urgent?sport=${sportId}`)}
             >
-              Criar Sessão Normal
-            </Button>
-            <Button
-              className="flex-1 h-12 font-bold shadow-lg shadow-primary/20"
-              onClick={() => navigate(`/create-urgent?sport=${sportId}`)}
-            >
-              <FaBolt className="w-4 h-4 mr-1.5" /> Criar Urgente
+              Criar Nova Atividade
             </Button>
           </div>
         </div>
