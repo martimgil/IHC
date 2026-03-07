@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { currentUser, sports, getLevelLabel, lobbies, sessions, mockFollowing, mockFollowers, FollowUser } from '../data';
+import { currentUser, sports, getLevelLabel, lobbies, sessions, mockFollowing, mockFollowers, mockUsers } from '../data';
+import { User } from '../types';
 import { useNavigate } from 'react-router';
 import { useUser } from '../context/UserContext';
 import { useBookings } from '../context/BookingContext';
@@ -243,24 +244,27 @@ function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void
 export default function ProfilePage() {
   const navigate = useNavigate();
   const { sessionUser, logout } = useUser();
+  const { bookings, cancelBooking: cancelBookingGlobal } = useBookings();
   const [editOpen, setEditOpen] = useState(false);
   const [sportsEditOpen, setSportsEditOpen] = useState(false);
-  const [followingList, setFollowingList] = useState<FollowUser[]>([...mockFollowing]);
-  const [followersList] = useState<FollowUser[]>([...mockFollowers]);
+  const [followingIds, setFollowingIds] = useState<string[]>([...mockFollowing]);
+  const [followersIds] = useState<string[]>([...mockFollowers]);
   const [communityOpen, setCommunityOpen] = useState(false);
-  const [communityTab, setCommunityTab] = useState<'following' | 'followers'>('following');
+  const [communityTab, setCommunityTab] = useState<'following' | 'followers' | 'discover'>('following');
+  const [userSearchQuery, setUserSearchQuery] = useState('');
 
-  const handleFollow = (user: FollowUser) => {
-    if (!followingList.find(u => u.id === user.id)) {
-      setFollowingList(prev => [...prev, user]);
-      toast.success(`A seguir ${user.name}`);
+  const handleFollow = (userId: string) => {
+    if (!followingIds.includes(userId)) {
+      setFollowingIds(prev => [...prev, userId]);
+      const user = mockUsers.find(u => u.id === userId);
+      toast.success(`A seguir ${user?.name || 'utilizador'}`);
     }
   };
 
   const handleUnfollow = (userId: string) => {
-    const user = followingList.find(u => u.id === userId);
-    setFollowingList(prev => prev.filter(u => u.id !== userId));
-    if (user) toast.info(`Deixaste de seguir ${user.name}`);
+    setFollowingIds(prev => prev.filter(id => id !== userId));
+    const user = mockUsers.find(u => u.id === userId);
+    toast.info(`Deixaste de seguir ${user?.name || 'utilizador'}`);
   };
 
   const openCommunity = (tab: 'following' | 'followers') => {
@@ -271,11 +275,25 @@ export default function ProfilePage() {
   const displayName = sessionUser?.name ?? currentUser.name;
   const displayEmail = sessionUser?.email ?? currentUser.email;
   const displayLocation = sessionUser?.location || currentUser.location;
-  const { bookings, cancelBooking: cancelBookingGlobal } = useBookings();
-
   const userInterestedSports = sessionUser?.interestedSports ?? currentUser.interestedSports;
   const userSports = sports.filter(s => userInterestedSports.includes(s.id));
   const initials = displayName.split(' ').map((n: string) => n[0]).join('').slice(0, 2).toUpperCase();
+
+  const followingUsers = mockUsers.filter(u => followingIds.includes(u.id));
+  const followersUsers = mockUsers.filter(u => followersIds.includes(u.id));
+  const discoverUsers = mockUsers.filter(u => u.id !== currentUser.id && !followingIds.includes(u.id));
+
+  const getFilteredList = () => {
+    let list: User[] = [];
+    if (communityTab === 'following') list = followingUsers;
+    else if (communityTab === 'followers') list = followersUsers;
+    else list = discoverUsers;
+
+    if (!userSearchQuery) return list;
+    return list.filter(u => u.name.toLowerCase().includes(userSearchQuery.toLowerCase()));
+  };
+
+  const communityList = getFilteredList();
 
   const stats = [
     { label: 'Atividades', value: String(sessionUser?.activityHistory?.length || 0), icon: <FaPersonRunning className="w-4 h-4 text-green-500" />, color: 'text-green-600 dark:text-green-400', action: () => navigate('/history') },
@@ -289,8 +307,7 @@ export default function ProfilePage() {
     toast.success('Reserva cancelada.', { description: 'Receberá o reembolso em 3-5 dias úteis.' });
   };
 
-  const followingIds = new Set(followingList.map(u => u.id));
-  const communityList = communityTab === 'following' ? followingList : followersList;
+  const isFollowing = (id: string) => followingIds.includes(id);
 
   return (
     <div className="max-w-4xl mx-auto space-y-5">
@@ -343,23 +360,23 @@ export default function ProfilePage() {
           </div>
 
           {/* Following / Followers — clickable counters */}
-          <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => openCommunity('following')}
               className="flex flex-col items-center gap-0.5 p-3 bg-muted/50 rounded-xl hover:bg-primary/5 hover:border-primary/30 border-2 border-transparent transition-all active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary"
-              aria-label={`${followingList.length} pessoas que segues. Toca para ver`}
+              aria-label={`${followingIds.length} pessoas que segues. Toca para ver`}
             >
               <FaUserGroup className="w-4 h-4 text-blue-500 mb-0.5" aria-hidden="true" />
-              <span className="text-lg font-bold leading-none text-blue-600 dark:text-blue-400">{followingList.length}</span>
+              <span className="text-lg font-bold leading-none text-blue-600 dark:text-blue-400">{followingIds.length}</span>
               <span className="text-xs text-muted-foreground">A Seguir</span>
             </button>
             <button
               onClick={() => openCommunity('followers')}
               className="flex flex-col items-center gap-0.5 p-3 bg-muted/50 rounded-xl hover:bg-primary/5 hover:border-primary/30 border-2 border-transparent transition-all active:scale-[0.97] focus:outline-none focus:ring-2 focus:ring-primary"
-              aria-label={`${followersList.length} seguidores. Toca para ver`}
+              aria-label={`${followersIds.length} seguidores. Toca para ver`}
             >
               <FaUserGroup className="w-4 h-4 text-purple-500 mb-0.5" aria-hidden="true" />
-              <span className="text-lg font-bold leading-none text-purple-600 dark:text-purple-400">{followersList.length}</span>
+              <span className="text-lg font-bold leading-none text-purple-600 dark:text-purple-400">{followersIds.length}</span>
               <span className="text-xs text-muted-foreground">Seguidores</span>
             </button>
           </div>
@@ -385,88 +402,117 @@ export default function ProfilePage() {
             </SheetHeader>
 
             {/* Tabs */}
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-1 no-scrollbar">
               <button
                 onClick={() => setCommunityTab('following')}
-                className={`flex-1 py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'following'
+                className={`flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'following'
                   ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'bg-muted/50 text-muted-foreground hover:bg-muted'
                   }`}
                 aria-pressed={communityTab === 'following'}
               >
-                A Seguir ({followingList.length})
+                Seguindo ({followingIds.length})
               </button>
               <button
                 onClick={() => setCommunityTab('followers')}
-                className={`flex-1 py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'followers'
+                className={`flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'followers'
                   ? 'bg-primary text-primary-foreground shadow-sm'
                   : 'bg-muted/50 text-muted-foreground hover:bg-muted'
                   }`}
                 aria-pressed={communityTab === 'followers'}
               >
-                Seguidores ({followersList.length})
+                Seguidores ({followersIds.length})
+              </button>
+              <button
+                onClick={() => setCommunityTab('discover')}
+                className={`flex-1 min-w-[100px] py-2.5 px-3 rounded-xl text-center text-sm font-bold transition-all ${communityTab === 'discover'
+                  ? 'bg-primary text-primary-foreground shadow-sm'
+                  : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                  }`}
+                aria-pressed={communityTab === 'discover'}
+              >
+                Descobrir
               </button>
             </div>
 
-            {/* User list */}
-            <div className="space-y-2" role="list" aria-label={communityTab === 'following' ? 'Pessoas que segues' : 'Pessoas que te seguem'}>
+            {/* Search Bar */}
+            <div className="relative mb-4">
+              <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Pesquisar por nome..."
+                value={userSearchQuery}
+                onChange={e => setUserSearchQuery(e.target.value)}
+                className="pl-9 h-11 bg-muted/30 border-none rounded-xl focus-visible:ring-primary"
+              />
+            </div>
+
+            <div className="space-y-3" role="list">
               {communityList.length === 0 && (
-                <p className="text-sm text-muted-foreground text-center py-4">
-                  {communityTab === 'following' ? 'Ainda não segues ninguém.' : 'Ainda não tens seguidores.'}
-                </p>
+                <div className="text-center py-10 opacity-60">
+                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
+                    <FaMagnifyingGlass className="w-6 h-6" />
+                  </div>
+                  <p className="text-sm font-medium">
+                    {userSearchQuery ? 'Nenhum resultado encontrado' : (
+                      communityTab === 'following' ? 'Ainda não segues ninguém.' :
+                      communityTab === 'followers' ? 'Ainda não tens seguidores.' : 'Nenhum utilizador disponível.'
+                    )}
+                  </p>
+                </div>
               )}
               {communityList.map(user => {
-                const uSports = user.sports.map(sid => sports.find(s => s.id === sid)).filter(Boolean);
+                const userInterestedArr = user.interestedSports || [];
+                const uSports = userInterestedArr.map(sid => sports.find(s => s.id === sid)).filter(Boolean);
                 const uInitials = user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
-                const isMutual = followingIds.has(user.id);
+                const userIsFollowing = isFollowing(user.id);
+                
                 return (
-                  <div key={user.id} role="listitem" className="flex items-center gap-3 p-3 bg-muted/40 border-2 border-border/50 rounded-2xl transition-colors hover:border-primary/20">
-                    <Avatar className="w-10 h-10 border-2 border-background shadow-sm">
-                      <AvatarFallback className="text-xs font-bold bg-primary/10 text-primary">
+                  <div key={user.id} role="listitem" className="flex items-center gap-4 p-3.5 bg-card border-2 border-border/40 rounded-2xl shadow-sm hover:border-primary/30 transition-all">
+                    <Avatar className="w-12 h-12 border-2 border-primary/10 shadow-sm">
+                      <AvatarFallback className="text-sm font-bold bg-primary/5 text-primary">
                         {uInitials}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <p className="font-bold text-sm truncate">{user.name}</p>
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        {uSports.slice(0, 3).map(s => (
-                          <span key={s!.id} className="text-sm" aria-hidden="true">{s!.icon}</span>
-                        ))}
-                        <Badge variant="outline" className="text-[10px] px-1.5 py-0 ml-1">
-                          {getLevelLabel(user.level)}
-                        </Badge>
+                      <div className="flex items-center gap-1.5">
+                        <p className="font-bold text-sm truncate">{user.name}</p>
+                        {followersIds.includes(user.id) && <Badge variant="secondary" className="text-[9px] px-1 py-0 h-4">Te segue</Badge>}
+                      </div>
+                      <p className="text-xs text-muted-foreground truncate flex items-center gap-1">
+                        <FaMapPin className="w-2.5 h-2.5" />{user.location}
+                      </p>
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <div className="flex -space-x-1">
+                          {uSports.slice(0, 3).map(s => (
+                            <span key={s!.id} className="text-sm p-1 bg-muted rounded-full ring-2 ring-card" title={s!.name}>{s!.icon}</span>
+                          ))}
+                        </div>
+                        {userInterestedArr.length > 3 && <span className="text-[10px] text-muted-foreground">+{userInterestedArr.length - 3}</span>}
                       </div>
                     </div>
-                    {(() => {
-                      if (communityTab === 'following') {
-                        return (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-8 text-xs shrink-0"
-                            aria-label={`Deixar de seguir ${user.name}`}
-                            onClick={() => handleUnfollow(user.id)}
-                          >
-                            A seguir
-                          </Button>
-                        );
-                      }
-                      if (isMutual) {
-                        return <Badge variant="secondary" className="text-xs shrink-0 py-1 px-2">Mútuo</Badge>;
-                      }
-                      return (
-                        <Button
-                          variant="default"
-                          size="sm"
-                          className="h-8 text-xs shrink-0"
-                          aria-label={`Seguir ${user.name} de volta`}
-                          onClick={() => handleFollow(user)}
-                        >
-                          <FaUserPlus className="w-3 h-3 mr-1" aria-hidden="true" />
-                          Seguir
-                        </Button>
-                      );
-                    })()}
+                    {userIsFollowing ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-9 px-3 rounded-xl border-2 hover:bg-destructive/5 hover:text-destructive hover:border-destructive/30 transition-all group"
+                        aria-label={`Deixar de seguir ${user.name}`}
+                        onClick={() => handleUnfollow(user.id)}
+                      >
+                        <span className="group-hover:hidden">Seguindo</span>
+                        <span className="hidden group-hover:inline">Parar</span>
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="default"
+                        size="sm"
+                        className="h-9 px-3 rounded-xl shadow-md shadow-primary/10 active:scale-95 transition-all"
+                        aria-label={`Seguir ${user.name}`}
+                        onClick={() => handleFollow(user.id)}
+                      >
+                        <FaUserPlus className="w-3.5 h-3.5 mr-1.5" />
+                        Seguir
+                      </Button>
+                    )}
                   </div>
                 );
               })}

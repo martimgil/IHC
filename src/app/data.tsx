@@ -342,27 +342,122 @@ export const currentUser: User = {
   location: 'Aveiro',
 };
 
-// Mock followers/following data
-export type FollowUser = {
-  id: string;
-  name: string;
-  sports: string[];
-  level: string;
-};
-
-export const mockFollowing: FollowUser[] = [
-  { id: 'p1', name: 'João Silva', sports: ['voleibol', 'futebol'], level: 'intermedio' },
-  { id: 'p5', name: 'Ana Oliveira', sports: ['voleibol', 'basquetebol'], level: 'avancado' },
-  { id: 'p4', name: 'Eduardo OrangeTree', sports: ['voleibol', 'padel'], level: 'senior-federado' },
+// Mock all users in the system
+export const mockUsers: User[] = [
+  {
+    id: 'user-alice',
+    name: 'Alice PineTree',
+    email: 'alice@example.com',
+    interestedSports: ['hidroginastica', 'basquetebol', 'pickleball', 'trilho'],
+    experienceLevels: {
+      hidroginastica: 'principiante',
+      basquetebol: 'intermedio',
+      pickleball: 'principiante',
+      trilho: 'qualquer',
+    },
+    location: 'Aveiro',
+  },
+  {
+    id: 'p1',
+    name: 'João Silva',
+    email: 'joao.silva@example.com',
+    interestedSports: ['voleibol', 'futebol'],
+    experienceLevels: { voleibol: 'intermedio', futebol: 'intermedio' },
+    location: 'Aveiro',
+  },
+  {
+    id: 'p2',
+    name: 'Maria Santos',
+    email: 'maria.santos@example.com',
+    interestedSports: ['hidroginastica'],
+    experienceLevels: { hidroginastica: 'principiante' },
+    location: 'Aveiro',
+  },
+  {
+    id: 'p3',
+    name: 'Pedro Costa',
+    email: 'pedro.costa@example.com',
+    interestedSports: ['voleibol', 'basquetebol'],
+    experienceLevels: { voleibol: 'intermedio', basquetebol: 'intermedio' },
+    location: 'Ílhavo',
+  },
+  {
+    id: 'p4',
+    name: 'Eduardo OrangeTree',
+    email: 'eduardo@example.com',
+    interestedSports: ['voleibol', 'padel'],
+    experienceLevels: { voleibol: 'senior-federado', padel: 'avancado' },
+    location: 'Aveiro',
+  },
+  {
+    id: 'p5',
+    name: 'Ana Oliveira',
+    email: 'ana.oliveira@example.com',
+    interestedSports: ['voleibol', 'basquetebol'],
+    experienceLevels: { voleibol: 'avancado', basquetebol: 'avancado' },
+    location: 'Aveiro',
+  },
+  {
+    id: 'p6',
+    name: 'Carlos Pereira',
+    email: 'carlos.p@example.com',
+    interestedSports: ['futebol', 'futsal'],
+    experienceLevels: { futebol: 'intermedio', futsal: 'intermedio' },
+    location: 'Porto',
+  },
+  {
+    id: 'p7',
+    name: 'Sofia Lima',
+    email: 'sofia.l@example.com',
+    interestedSports: ['pickleball', 'tenis'],
+    experienceLevels: { pickleball: 'intermedio', tenis: 'intermedio' },
+    location: 'Aveiro',
+  },
+  {
+    id: 'p8',
+    name: 'Miguel Ferreira',
+    email: 'miguel.f@example.com',
+    interestedSports: ['voleibol'],
+    experienceLevels: { voleibol: 'avancado' },
+    location: 'Aveiro',
+  },
+  {
+    id: 'p9',
+    name: 'Tiago Silva',
+    email: 'tiago.s@example.com',
+    interestedSports: ['voleibol'],
+    experienceLevels: { voleibol: 'avancado' },
+    location: 'Aveiro',
+  },
+  {
+    id: 'req-1',
+    name: 'Marta Rodrigues',
+    email: 'marta.r@example.com',
+    interestedSports: ['voleibol', 'andebol'],
+    experienceLevels: { voleibol: 'intermedio', andebol: 'intermedio' },
+    location: 'Coimbra',
+  },
+  {
+    id: 'user-10',
+    name: 'Ricardo Sousa',
+    email: 'ricardo.s@example.com',
+    interestedSports: ['ciclismo', 'trilho'],
+    experienceLevels: { ciclismo: 'avancado', trilho: 'avancado' },
+    location: 'Viseu',
+  },
+  {
+    id: 'user-11',
+    name: 'Beatriz Almeida',
+    email: 'beatriz.a@example.com',
+    interestedSports: ['surf', 'natacao'],
+    experienceLevels: { surf: 'principiante', natacao: 'intermedio' },
+    location: 'Aveiro',
+  }
 ];
 
-export const mockFollowers: FollowUser[] = [
-  { id: 'p1', name: 'João Silva', sports: ['voleibol', 'futebol'], level: 'intermedio' },
-  { id: 'p3', name: 'Pedro Costa', sports: ['voleibol', 'basquetebol'], level: 'intermedio' },
-  { id: 'p6', name: 'Carlos Pereira', sports: ['futebol', 'futsal'], level: 'intermedio' },
-  { id: 'p7', name: 'Sofia Lima', sports: ['pickleball', 'tenis'], level: 'intermedio' },
-  { id: 'req-1', name: 'Marta Rodrigues', sports: ['voleibol', 'andebol'], level: 'intermedio' },
-];
+// Mock followers/following data using IDs from mockUsers
+export const mockFollowing: string[] = ['p1', 'p5', 'p4'];
+export const mockFollowers: string[] = ['p1', 'p3', 'p6', 'p7', 'req-1'];
 
 // Mock notifications
 export const mockNotifications: Notification[] = [
