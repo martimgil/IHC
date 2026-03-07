@@ -80,7 +80,7 @@ function SportDetailSheet({
                 onClick={() => { onClose(); navigate(`/sport/${sport.id}`); }}
                 aria-label={`Ver sessões de ${sport.name}`}
               >
-                Ver Atividades
+                Sessões Abertas
               </Button>
               <Button
                 variant="outline"

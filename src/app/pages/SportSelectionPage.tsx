@@ -23,6 +23,7 @@ import {
 } from 'react-icons/fa6';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 
 export default function SportSelectionPage() {
   const { sportId } = useParams<{ sportId: string }>();
@@ -100,25 +101,19 @@ export default function SportSelectionPage() {
       {/* Level Filter */}
       <div>
         <h3 className="font-semibold mb-3">Filtrar por Nível</h3>
-        <div className="flex flex-wrap gap-2">
-          <Button
-            variant={selectedLevel === 'all' ? 'default' : 'outline'}
-            onClick={() => setSelectedLevel('all')}
-            size="sm"
-          >
-            Todos
-          </Button>
-          {sport.difficulty.map((level) => (
-            <Button
-              key={level}
-              variant={selectedLevel === level ? 'default' : 'outline'}
-              onClick={() => setSelectedLevel(level)}
-              size="sm"
-            >
-              {getLevelLabel(level)}
-            </Button>
-          ))}
-        </div>
+        <Select value={selectedLevel} onValueChange={setSelectedLevel}>
+          <SelectTrigger className="w-full sm:w-[200px]">
+            <SelectValue placeholder="Selecionar nível" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Todos</SelectItem>
+            {sport.difficulty.map((level) => (
+              <SelectItem key={level} value={level}>
+                {getLevelLabel(level)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <Separator />
@@ -129,15 +124,6 @@ export default function SportSelectionPage() {
           <div className="flex items-center justify-between">
             <h2 id="activities-heading" className="text-xl font-bold">Atividades Disponíveis</h2>
             <Badge variant="outline" className="text-[10px] font-bold tracking-widest uppercase">Aveiro</Badge>
-          </div>
-
-          <div className="flex gap-2.5">
-            <Button
-              className="w-full h-12 font-bold shadow-sm text-base"
-              onClick={() => navigate(`/create-urgent?sport=${sportId}`)}
-            >
-              Criar Nova Atividade
-            </Button>
           </div>
         </div>
 
@@ -250,11 +236,21 @@ export default function SportSelectionPage() {
         ) : (
           <Card>
             <CardContent className="py-12 text-center">
-              <p className="text-muted-foreground mb-4">Sem atividades disponíveis para os filtros selecionados.</p>
-              <div className="flex justify-center gap-2">
-                <Button onClick={() => navigate('/create-urgent')}>Criar Grupo</Button>
-                <Button variant="outline" onClick={() => setSelectedLevel('all')}>Limpar Filtros</Button>
-              </div>
+              <p className="text-muted-foreground mb-4">
+                Não há salas disponíveis, pode{' '}
+                <button
+                  onClick={() => navigate(`/create-urgent?sport=${sportId}`)}
+                  className="font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded px-0.5"
+                >
+                  criar uma
+                </button>
+                .
+              </p>
+              {selectedLevel !== 'all' && (
+                <div className="flex justify-center gap-2">
+                  <Button variant="outline" onClick={() => setSelectedLevel('all')}>Limpar Filtros</Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         )}
