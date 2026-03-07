@@ -195,37 +195,9 @@ export default function CreateUrgentEventPage() {
     <div className="max-w-2xl mx-auto space-y-6">
       <StickyBackButton />
 
-      {/* Header */}
-      <Card className="border-orange-200 bg-orange-50">
-        <CardHeader>
-          <div className="flex items-center gap-3">
-            <FaClock className="w-8 h-8 text-orange-600" aria-hidden="true" />
-            <div>
-              <CardTitle className="text-2xl text-orange-900">Procurar Substituto</CardTitle>
-              <CardDescription className="text-orange-800">
-                Encontre um jogador de última hora para o seu evento
-              </CardDescription>
-            </div>
-          </div>
-        </CardHeader>
-      </Card>
-
-      {/* Info Alert */}
-      <Alert>
-        <FaCircleExclamation className="h-4 w-4" aria-hidden="true" />
-        <AlertTitle>Como Funciona</AlertTitle>
-        <AlertDescription>
-          Preencha os detalhes do evento e a aplicação procurará automaticamente jogadores disponíveis
-          que correspondam ao nível e localização. Receberá notificações quando alguém aceitar.
-        </AlertDescription>
-      </Alert>
-
       {/* Form */}
       <Card>
-        <CardHeader>
-          <CardTitle>Detalhes do Evento</CardTitle>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-6">
           <form onSubmit={handleCreate} className="space-y-5" noValidate>
             {/* Sport Selection */}
             <div className="space-y-2">
@@ -426,7 +398,7 @@ export default function CreateUrgentEventPage() {
               type="submit"
               className="w-full h-14 text-lg"
               disabled={isCreating}
-              aria-label={isCreating ? 'A criar evento' : 'Criar evento urgente'}
+              aria-label={isCreating ? 'A criar sessão' : 'Criar sessão'}
             >
               {isCreating ? (
                 <>
@@ -435,12 +407,12 @@ export default function CreateUrgentEventPage() {
                     role="status"
                     aria-label="A processar"
                   />
-                  A Criar Evento...
+                  A Criar Sessão...
                 </>
               ) : (
                 <>
                   <FaClock className="w-5 h-5 mr-2" aria-hidden="true" />
-                  Criar Evento Urgente
+                  Criar Sessão
                 </>
               )}
             </Button>

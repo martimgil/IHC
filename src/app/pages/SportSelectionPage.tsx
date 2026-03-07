@@ -70,12 +70,12 @@ export default function SportSelectionPage() {
       <div className="bg-primary rounded-xl p-6 text-primary-foreground">
         <div className="flex items-start gap-4">
           <div className="text-6xl" role="img" aria-label={sport.name}>{sport.icon}</div>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold mb-2">{sport.name}</h1>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-3xl font-bold mb-2 truncate">{sport.name}</h1>
             <p className="opacity-90 mb-4">{sport.description}</p>
             <div className="flex flex-wrap gap-2 mt-2">
               {sport.requiredMaterials.length > 0 && (
-                <Badge variant="secondary" className="bg-blue-500/20 text-blue-100 border-blue-400/30 whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
+                <Badge variant="secondary" className="bg-blue-500/20 text-blue-100 border-blue-400/30 whitespace-normal text-left h-auto py-1.5 px-3 leading-tight w-full sm:w-auto">
                   Materiais: {sport.requiredMaterials.join(', ')}
                 </Badge>
               )}

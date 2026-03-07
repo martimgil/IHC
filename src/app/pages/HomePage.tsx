@@ -9,6 +9,7 @@ import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { Separator } from '../components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from '../components/ui/avatar';
 import { FaMagnifyingGlass, FaUsers, FaBolt, FaDumbbell, FaXmark, FaStar, FaMedal, FaChevronDown } from 'react-icons/fa6';
 
 function SportDetailSheet({
@@ -103,6 +104,7 @@ export default function HomePage() {
   const [selectedSport, setSelectedSport] = useState<Sport | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { sessionUser } = useUser();
+  const firstName = (sessionUser?.name ?? currentUser.name).split(' ')[0];
 
   const userInterestedSports = sports
     .filter(sport => (sessionUser?.interestedSports ?? currentUser.interestedSports).includes(sport.id))
@@ -114,12 +116,36 @@ export default function HomePage() {
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-6 pb-6">
+      {/* Welcome banner */}
+      <section
+        className="px-2 pt-2 pb-0 relative overflow-hidden"
+        aria-labelledby="welcome-heading"
+      >
+        <div className="relative z-10 flex items-center justify-between">
+          <div>
+            <h2 id="welcome-heading" className="font-extrabold text-2xl leading-tight flex items-center gap-2">
+              Olá, {firstName}!
+            </h2>
+            <p className="text-sm font-medium text-muted-foreground mt-1">O que vais querer praticar?</p>
+          </div>
+          <Avatar className="w-12 h-12 shadow-sm border border-border/50">
+            <AvatarImage src={sessionUser?.avatar || currentUser.avatar} alt={firstName} />
+            <AvatarFallback className="text-lg font-bold bg-primary text-primary-foreground">
+              {firstName.charAt(0)}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+        
+        {/* Separator placed closely hereafter */}
+        <Separator className="w-16 h-1 mt-6 ml-2 bg-border/60 rounded-full" />
+      </section>
+
       {/* Favourites Section */}
       {
         userInterestedSports.length > 0 && (
-          <section aria-labelledby="fav-heading" className="mt-6">
-            <h3 id="fav-heading" className="text-xl font-bold mb-4 px-0.5 flex items-center gap-2">
+          <section aria-labelledby="fav-heading">
+            <h3 id="fav-heading" className="text-lg font-bold mb-3 px-0.5 flex items-center gap-2 text-gray-600">
               Desportos Favoritos
             </h3>
             <div className="grid grid-cols-2 gap-3" role="list">
@@ -128,7 +154,7 @@ export default function HomePage() {
                   key={sport.id}
                   role="listitem"
                   onClick={() => setSelectedSport(sport)}
-                  className="flex items-center gap-3 p-4 bg-card border-2 border-border/70 rounded-2xl hover:border-primary hover:bg-primary/5 transition-all text-left shadow-sm focus:outline-none focus:ring-2 focus:ring-primary min-h-[64px] active:scale-[0.98]"
+                  className="flex items-center gap-3 p-4 bg-card rounded-2xl transition-all text-left shadow-[0_4px_20px_rgba(0,0,0,0.1)] focus:outline-none focus:ring-2 focus:ring-primary min-h-[64px] active:scale-[0.98] border border-transparent hover:border-primary/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
                 >
                   <span className="text-3xl shrink-0" role="img">{sport.icon}</span>
                   <span className="text-base font-bold leading-tight">{sport.name}</span>
@@ -139,13 +165,13 @@ export default function HomePage() {
         )
       }
 
-      <section aria-labelledby="all-heading" className="mt-8">
-        <h3 id="all-heading" className="text-xl font-bold mb-5 px-0.5 flex items-center gap-2">
+      <section aria-labelledby="all-heading">
+        <h3 id="all-heading" className="text-lg font-bold mb-3 px-0.5 flex items-center gap-2 text-gray-600">
           Todos os desportos
         </h3>
 
         {/* Search */}
-        <div className="relative mb-6">
+        <div className="relative mb-3">
           <label htmlFor="sport-search" className="sr-only">Pesquisar outros desportos</label>
           <FaMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" aria-hidden="true" />
           <Input
@@ -174,7 +200,7 @@ export default function HomePage() {
                 key={sport.id}
                 role="listitem"
                 onClick={() => setSelectedSport(sport)}
-                className="flex flex-col items-center justify-center p-4 bg-card border-2 border-border/70 rounded-[1.5rem] hover:border-primary hover:bg-primary/5 transition-all shadow-sm active:scale-[0.96] focus:outline-none focus:ring-2 focus:ring-primary group min-h-[100px]"
+                className="flex flex-col items-center justify-center p-4 bg-card rounded-[1.5rem] transition-all shadow-[0_4px_20px_rgba(0,0,0,0.1)] active:scale-[0.96] focus:outline-none focus:ring-2 focus:ring-primary group min-h-[100px] border border-transparent hover:border-primary/20 hover:shadow-[0_8px_30px_rgba(0,0,0,0.15)]"
                 aria-label={`${sport.name} – toca para ver detalhes`}
               >
                 <span className="text-4xl mb-3 transform group-hover:scale-110 transition-transform duration-300" role="img" aria-label={sport.name}>{sport.icon}</span>
