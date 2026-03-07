@@ -8,20 +8,14 @@ import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import StickyBackButton from '../components/StickyBackButton';
 import {
-  FaArrowLeft,
   FaCalendarDays,
   FaLocationDot,
   FaUsers,
   FaClock,
-  FaEuroSign,
-  FaCircleExclamation,
-  FaCircleCheck,
-  FaChevronRight,
   FaDumbbell,
   FaBolt,
   FaShirt
 } from 'react-icons/fa6';
-import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 
@@ -31,15 +25,14 @@ export default function SportSelectionPage() {
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [equipmentOpen, setEquipmentOpen] = useState(false);
 
-  const mockEquipment = [
-    { name: 'Raquete', price: 2 },
-    { name: 'Bola', price: 1 },
-    { name: 'Coletes', price: 0.5 },
-    { name: 'Kit completo', price: 4 },
-  ];
-
   const { lobbies: allLobbies } = useLobbies();
   const sport = getSportById(sportId || '');
+
+  const mockEquipment = sport?.requiredMaterials.map((material, index) => ({
+    name: material,
+    price: index === 0 ? 2 : index === 1 ? 1 : 0.5
+  })) || [];
+
   const sessions = getSessionsBySport(sportId || '');
   const lobbies = allLobbies.filter(l => l.sportId === sportId);
 
@@ -63,7 +56,7 @@ export default function SportSelectionPage() {
     : lobbies.filter(l => l.level === selectedLevel || l.level === 'qualquer');
 
   return (
-    <div className="space-y-6" role="main" aria-label={`Página do desporto ${sport?.name}`}>
+    <main className="space-y-6" aria-label={`Página do desporto ${sport?.name}`}>
       <StickyBackButton to="/" />
 
       {/* Sport Header */}
@@ -270,16 +263,16 @@ export default function SportSelectionPage() {
             </SheetHeader>
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground mb-4">Equipamento disponível em {sport.name} por sessão:</p>
-              <div className="space-y-2" role="list" aria-label="Lista de equipamento disponível">
+              <ul className="space-y-2" aria-label="Lista de equipamento disponível">
                 {mockEquipment.map(e => (
-                  <div key={e.name} role="listitem" className="flex items-center justify-between p-4 bg-muted/40 border-2 border-border/50 rounded-2xl transition-colors hover:border-primary/20">
+                  <li key={e.name} className="flex items-center justify-between p-4 bg-muted/40 border-2 border-border/50 rounded-2xl transition-colors hover:border-primary/20">
                     <span className="font-bold text-sm">{e.name}</span>
                     <Badge variant="secondary" className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300 border-green-200 dark:border-green-800">
                       {e.price === 0 ? 'Grátis' : `${e.price.toFixed(2)}€/sessão`}
                     </Badge>
-                  </div>
+                  </li>
                 ))}
-              </div>
+              </ul>
               <p className="text-xs text-muted-foreground mt-4 italic font-medium">
                 * Reserva o equipamento no local antes da sessão começar.
               </p>
@@ -290,6 +283,6 @@ export default function SportSelectionPage() {
           </div>
         </SheetContent>
       </Sheet>
-    </div>
+    </main>
   );
 }
