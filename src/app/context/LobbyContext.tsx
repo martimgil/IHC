@@ -1,7 +1,94 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { Lobby, Player } from '../types';
-import { lobbies as initialLobbies } from '../data';
+import { lobbies as initialLobbies, sports, mockUsers } from '../data';
 import { useUser } from './UserContext';
+
+function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
+    const baseLobbies = currentLobbies.filter(l => !l.id.startsWith('auto-'));
+    const updatedLobbies = [...baseLobbies];
+    
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dateStr = tomorrow.toISOString().split('T')[0];
+
+    const generatedLocations = [
+        'Pavilhão Desportivo Municipal',
+        'Complexo Desportivo Local',
+        'Polidesportivo da Cidade',
+        'Centro de Treinos',
+        'Parque da Cidade'
+    ];
+
+    for (const sport of sports) {
+        const sportLobbies = updatedLobbies.filter(l => l.sportId === sport.id);
+        const hasUrgent = sportLobbies.some(l => l.isUrgent);
+        const hasNormal = sportLobbies.some(l => !l.isUrgent);
+
+        const availableUsers = mockUsers.slice(1, 12);
+        
+        const targetUrgentPlayersCount = Math.max(1, (sport.minPlayers || 4) - 1);
+        const urgentPlayers = availableUsers.slice(0, targetUrgentPlayersCount).map(u => ({
+            id: u.id,
+            name: u.name,
+            level: 'intermedio' as any,
+            skillRating: 6
+        }));
+        
+        const normalPlayers = availableUsers.slice(3, 5).map(u => ({
+            id: u.id,
+            name: u.name,
+            level: 'principiante' as any,
+            skillRating: 5
+        }));
+
+        const randomLocation = generatedLocations[sport.name.length % generatedLocations.length];
+
+        if (!hasUrgent) {
+            updatedLobbies.push({
+                id: `auto-urg-${sport.id}`,
+                sportId: sport.id,
+                locationName: randomLocation,
+                locationAddress: 'Morada disponível após confirmação',
+                scheduledDate: todayStr,
+                scheduledTime: '21:00',
+                level: 'qualquer',
+                currentPlayers: urgentPlayers,
+                minPlayers: sport.minPlayers || 2,
+                maxPlayers: sport.maxPlayers || 10,
+                pricePerPerson: 4.5,
+                status: 'waiting',
+                createdBy: urgentPlayers[0]?.id || 'sys',
+                isUrgent: true,
+                tags: ['Urgente', 'Falta 1!']
+            });
+        }
+
+        if (!hasNormal) {
+            updatedLobbies.push({
+                id: `auto-norm-${sport.id}`,
+                sportId: sport.id,
+                locationName: randomLocation,
+                locationAddress: 'Morada disponível após confirmação',
+                scheduledDate: dateStr,
+                scheduledTime: '19:00',
+                level: 'intermedio',
+                currentPlayers: normalPlayers,
+                minPlayers: sport.minPlayers || 2,
+                maxPlayers: sport.maxPlayers || 10,
+                pricePerPerson: 3,
+                status: 'waiting',
+                createdBy: normalPlayers[0]?.id || 'sys',
+                isUrgent: false,
+                tags: ['Amigável', 'Semanal']
+            });
+        }
+    }
+
+    return updatedLobbies;
+}
 
 interface LobbyContextType {
     lobbies: Lobby[];
@@ -21,9 +108,10 @@ export function LobbyProvider({ children }: { readonly children: ReactNode }) {
     const [lobbies, setLobbies] = useState<Lobby[]>(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY);
-            return saved ? JSON.parse(saved) : initialLobbies;
+            const parsed = saved ? JSON.parse(saved) : initialLobbies;
+            return ensureAllSportsHaveLobbies(parsed);
         } catch {
-            return initialLobbies;
+            return ensureAllSportsHaveLobbies(initialLobbies);
         }
     });
 
