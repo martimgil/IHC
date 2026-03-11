@@ -15,7 +15,6 @@ import {
 } from '../components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import {
-  FaArrowLeft,
   FaClock,
   FaCalendarDays,
   FaUsers,
@@ -50,8 +49,12 @@ export default function CreateUrgentEventPage() {
     level: 'intermedio' as ExperienceLevel,
     spotsNeeded: '1',
     notes: '',
-    isUltimaHora: false,
+    isUltimaHora: true,
   });
+
+  const selectedSport = sports.find(s => s.id === formData.sportId);
+  const minPlayersBySport = selectedSport?.minPlayers ?? 2;
+  const maxPlayersBySport = selectedSport?.maxPlayers ?? 12;
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -60,6 +63,18 @@ export default function CreateUrgentEventPage() {
     if (!formData.date) newErrors.date = 'Selecione uma data';
     if (!formData.time) newErrors.time = 'Selecione uma hora';
     if (!formData.location.trim()) newErrors.location = 'Indique o local';
+
+    const minParticipants = Number(formData.spotsNeeded);
+    if (Number.isNaN(minParticipants)) {
+      newErrors.spotsNeeded = 'Indique um número válido de participantes';
+    } else {
+      if (minParticipants < minPlayersBySport) {
+        newErrors.spotsNeeded = `Este desporto requer pelo menos ${minPlayersBySport} participantes`;
+      }
+      if (minParticipants > maxPlayersBySport) {
+        newErrors.spotsNeeded = `Este desporto permite no máximo ${maxPlayersBySport} participantes`;
+      }
+    }
 
     if (formData.date && formData.time) {
       const selectedDateTime = new Date(`${formData.date}T${formData.time}`);
@@ -112,13 +127,13 @@ export default function CreateUrgentEventPage() {
       scheduledTime: formData.time,
       level: formData.level,
       currentPlayers: [me],
-      minPlayers: 6, // default
-      maxPlayers: 12, // default
+      minPlayers: Number(formData.spotsNeeded),
+      maxPlayers: Math.max(Number(formData.spotsNeeded), maxPlayersBySport),
       pricePerPerson: 5, // default
       status: 'waiting',
       createdBy: me.id,
       isUrgent: formData.isUltimaHora,
-      tags: formData.isUltimaHora ? ['Urgente'] : []
+      tags: formData.isUltimaHora ? ['Urgente', 'Prioridade alta'] : []
     };
 
     addLobby(newLobby);
@@ -165,7 +180,7 @@ export default function CreateUrgentEventPage() {
                 </p>
                 <p><span className="text-gray-600">Data:</span> {new Date(formData.date).toLocaleDateString('pt-PT')} às {formData.time}</p>
                 <p><span className="text-gray-600">Local:</span> {formData.location}</p>
-                <p><span className="text-gray-600">Jogadores Necessários:</span> {formData.spotsNeeded}</p>
+                <p><span className="text-gray-600">Participantes mínimos:</span> {formData.spotsNeeded}</p>
               </div>
             </div>
 
@@ -284,14 +299,14 @@ export default function CreateUrgentEventPage() {
             {/* Location */}
             <div className="space-y-2">
               <Label htmlFor="location">
-                Local <span className="text-red-600" aria-label="obrigatório">*</span>
+                Localidade / Local <span className="text-red-600" aria-label="obrigatório">*</span>
               </Label>
               <div className="relative">
                 <FaMapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
                 <Input
                   id="location"
                   type="text"
-                  placeholder="Ex: Pavilhão Rosa Mota"
+                  placeholder="Ex: Aveiro, Pavilhão Rosa Mota"
                   value={formData.location}
                   onChange={(e) => handleChange('location', e.target.value)}
                   className={`pl-10 h-12 ${errors.location ? 'border-red-500' : ''}`}
@@ -332,24 +347,30 @@ export default function CreateUrgentEventPage() {
             {/* Spots Needed */}
             <div className="space-y-2">
               <Label htmlFor="spotsNeeded">
-                Número de Jogadores Necessários <span className="text-red-600" aria-label="obrigatório">*</span>
+                Participantes Mínimos para Confirmar Atividade <span className="text-red-600" aria-label="obrigatório">*</span>
               </Label>
               <div className="relative">
                 <FaUsers className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" aria-hidden="true" />
                 <Input
                   id="spotsNeeded"
                   type="number"
-                  min="1"
-                  max="10"
+                  min={String(minPlayersBySport)}
+                  max={String(maxPlayersBySport)}
                   value={formData.spotsNeeded}
                   onChange={(e) => handleChange('spotsNeeded', e.target.value)}
-                  className="pl-10 h-12"
+                  className={`pl-10 h-12 ${errors.spotsNeeded ? 'border-red-500' : ''}`}
                   required
-                  aria-describedby="spots-hint"
+                  aria-invalid={!!errors.spotsNeeded}
+                  aria-describedby={errors.spotsNeeded ? 'spots-error' : 'spots-hint'}
                 />
               </div>
+              {errors.spotsNeeded && (
+                <p id="spots-error" className="text-sm text-red-600" role="alert">
+                  {errors.spotsNeeded}
+                </p>
+              )}
               <p id="spots-hint" className="text-xs text-gray-500">
-                Indique quantos jogadores precisa para completar o grupo
+                Para {selectedSport?.name || 'este desporto'}: mínimo {minPlayersBySport} e máximo {maxPlayersBySport} participantes.
               </p>
             </div>
 
@@ -374,23 +395,28 @@ export default function CreateUrgentEventPage() {
               <div className="flex items-center gap-3 min-w-0">
                 <FaClock className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0" aria-hidden="true" />
                 <div className="min-w-0">
-                  <p className="font-semibold text-sm text-orange-900 dark:text-orange-100 truncate sm:whitespace-normal">Opção de Última Hora</p>
-                  <p className="text-xs text-orange-700 dark:text-orange-300 line-clamp-2 md:line-clamp-none">Notifica jogadores próximos imediatamente</p>
+                  <p className="font-semibold text-sm text-orange-900 dark:text-orange-100 truncate sm:whitespace-normal">Marcar como atividade urgente</p>
+                  <p className="text-xs text-orange-700 dark:text-orange-300 line-clamp-2 md:line-clamp-none">Ativado: entra com prioridade alta e notifica jogadores próximos.</p>
                 </div>
               </div>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={formData.isUltimaHora}
-                onClick={() => setFormData(prev => ({ ...prev, isUltimaHora: !prev.isUltimaHora }))}
-                className={`relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 shrink-0 ${formData.isUltimaHora ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-600'
-                  }`}
-              >
-                <span
-                  className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-200 ${formData.isUltimaHora ? 'translate-x-5' : 'translate-x-0'
+              <div className="flex items-center gap-3 shrink-0">
+                <span className={`text-xs font-semibold px-2 py-1 rounded-md ${formData.isUltimaHora ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-100'}`}>
+                  {formData.isUltimaHora ? 'Urgente: ON' : 'Urgente: OFF'}
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={formData.isUltimaHora}
+                  onClick={() => setFormData(prev => ({ ...prev, isUltimaHora: !prev.isUltimaHora }))}
+                  className={`relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 ${formData.isUltimaHora ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-600'
                     }`}
-                />
-              </button>
+                >
+                  <span
+                    className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-200 ${formData.isUltimaHora ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                  />
+                </button>
+              </div>
             </div>
 
             {/* Submit Button */}

@@ -185,6 +185,17 @@ export const sports: Sport[] = [
     difficulty: ['principiante', 'intermedio', 'avancado'],
   },
   {
+    id: 'atletismo',
+    name: 'Atletismo',
+    icon: createIcon(FaPersonRunning),
+    description: 'Treinos de pista e corrida com foco em técnica e resistência',
+    requiredMaterials: ['Sapatilhas de treino', 'Roupa desportiva', 'Garrafa de água'],
+    minPlayers: 1,
+    maxPlayers: 24,
+    recommendedPlayers: 10,
+    difficulty: ['principiante', 'intermedio', 'avancado'],
+  },
+  {
     id: 'corrida',
     name: 'Corrida',
     icon: createIcon(FaPersonRunning),

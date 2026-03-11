@@ -15,7 +15,7 @@ import { Input } from '../components/ui/input';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import {
-  FaArrowLeft, FaCalendarDay, FaMapPin, FaUsers, FaEuroSign, FaCircleCheck,
+  FaCalendarDay, FaMapPin, FaUsers, FaEuroSign, FaCircleCheck,
   FaClock, FaShieldHalved, FaCircleExclamation, FaPaperPlane, FaUserPlus, FaUserMinus,
   FaThumbsUp, FaStar, FaHeart, FaRightFromBracket, FaMessage, FaCircle
 } from 'react-icons/fa6';
@@ -51,7 +51,7 @@ function LobbyChat() {
 
   return (
     <div className="flex flex-col" style={{ height: '320px' }}>
-      <div className="flex-1 overflow-y-auto space-y-3 p-3 bg-muted/30 rounded-xl" role="log" aria-label="Mensagens do chat do grupo" aria-live="polite">
+      <div className="flex-1 overflow-y-auto space-y-3 p-3 bg-muted/30 rounded-xl" role="log" aria-label="Mensagens do chat da atividade" aria-live="polite">
         {msgs.map(m => (
           <div key={m.id} className={`flex ${m.isMe ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm ${m.isMe ? 'bg-primary text-primary-foreground rounded-br-sm' : 'bg-card border rounded-bl-sm'}`}>
@@ -206,7 +206,7 @@ export default function LobbyPage() {
                   <p className="text-xs text-primary font-medium mt-0.5">{l.scheduledDate} · {l.scheduledTime}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1 shrink-0">
-                  {l.isUrgent && <Badge variant="destructive" className="text-xs">Urgente</Badge>}
+                  {l.isUrgent && <Badge variant="destructive" className="text-xs font-bold">FLAG URGENTE</Badge>}
                   <span className="text-xs text-muted-foreground">{l.currentPlayers.length}/{l.maxPlayers} jogadores</span>
                 </div>
               </button>
@@ -236,12 +236,16 @@ export default function LobbyPage() {
 
   const spotsLeft = Math.max(0, lobby.maxPlayers - displayPlayers.length);
   const progressPercentage = Math.min(100, (displayPlayers.length / lobby.maxPlayers) * 100);
-  const canJoin = lobby.status !== 'full' && !hasJoined;
+  const canJoin = lobby.status !== 'full' && lobby.currentPlayers.length < lobby.maxPlayers && !hasJoined;
 
   const isCreator = !sessionUser && currentUser.id === lobby.createdBy;
 
   const handleJoin = async () => {
     if (!lobbyId || !lobby) return;
+    if (lobby.currentPlayers.length >= lobby.maxPlayers || lobby.status === 'full') {
+      toast.error('Esta atividade já está completa.');
+      return;
+    }
     setIsProcessing(true);
     await new Promise(r => setTimeout(r, 800));
     setIsProcessing(false);
@@ -276,7 +280,7 @@ export default function LobbyPage() {
       leaveLobby(lobbyId, sessionUser?.id || 'me');
     }
     setHasJoined(false);
-    toast.info('Saíste do grupo.');
+    toast.info('Saíste da atividade.');
   };
 
   const handleApprove = (id: string, name: string) => {
@@ -315,7 +319,7 @@ export default function LobbyPage() {
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              {lobby.isUrgent && <Badge variant="destructive">Urgente</Badge>}
+              {lobby.isUrgent && <Badge variant="destructive" className="font-bold">FLAG URGENTE</Badge>}
               {lobby.status === 'full' && <Badge variant="secondary">Completo</Badge>}
             </div>
           </div>
@@ -357,7 +361,7 @@ export default function LobbyPage() {
           <Button className="w-full h-12 text-sm md:text-base font-semibold" onClick={handleJoin} disabled={isProcessing}>
             {isProcessing
               ? <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />A enviar pedido...</>
-              : <><FaUserPlus className="w-5 h-5 mr-2" />Juntar-me ao Grupo</>}
+              : <><FaUserPlus className="w-5 h-5 mr-2" />Entrar nesta atividade</>}
           </Button>
         )}
 
@@ -378,12 +382,12 @@ export default function LobbyPage() {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="outline" className="flex-1 h-10 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/50 hover:bg-red-50 dark:hover:bg-red-950/40 text-xs md:text-sm font-semibold">
-                    <FaRightFromBracket className="w-4 h-4 mr-1.5" />Sair do Grupo
+                    <FaRightFromBracket className="w-4 h-4 mr-1.5" />Sair da Atividade
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Sair do grupo?</AlertDialogTitle>
+                    <AlertDialogTitle>Sair da atividade?</AlertDialogTitle>
                     <AlertDialogDescription>A tua vaga ficará disponível para os outros jogadores.</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -399,16 +403,16 @@ export default function LobbyPage() {
 
       {/* Alerts */}
       {lobby.isUrgent && (
-        <Alert className="border-orange-200 bg-orange-50 dark:bg-orange-950/40 dark:border-orange-800">
-          <FaClock className="h-4 w-4 text-orange-600" />
-          <AlertTitle className="text-orange-900 dark:text-orange-200">Jogo Urgente</AlertTitle>
-          <AlertDescription className="text-orange-800 dark:text-orange-300">Precisam de um substituto. Junta-te rapidamente!</AlertDescription>
+        <Alert className="border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-800">
+          <FaClock className="h-4 w-4 text-red-700" />
+          <AlertTitle className="text-red-900 dark:text-red-200">FLAG URGENTE ATIVA</AlertTitle>
+          <AlertDescription className="text-red-800 dark:text-red-300">Esta atividade é urgente e dá prioridade de entrada imediata.</AlertDescription>
         </Alert>
       )}
-      <Alert className="border-blue-200 bg-blue-50 dark:bg-blue-950/40 dark:border-blue-800">
-        <FaCircleExclamation className="h-4 w-4 text-blue-600" />
-        <AlertTitle className="text-blue-900 dark:text-blue-200">Material necessário</AlertTitle>
-        <AlertDescription className="text-blue-800 dark:text-blue-300">{sport.requiredMaterials.join(', ')}</AlertDescription>
+      <Alert className="border-amber-300 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-800">
+        <FaCircleExclamation className="h-4 w-4 text-amber-700" />
+        <AlertTitle className="text-amber-900 dark:text-amber-200">Material necessário (checklist)</AlertTitle>
+        <AlertDescription className="text-amber-800 dark:text-amber-300 font-medium">{sport.requiredMaterials.join(' · ')}</AlertDescription>
       </Alert>
 
       {/* Creator: pending approval requests (R06) */}
@@ -444,7 +448,7 @@ export default function LobbyPage() {
       {/* Players list (R19 - follow) */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-base">Jogadores no Grupo</CardTitle>
+          <CardTitle className="text-base">Jogadores na Atividade</CardTitle>
           <CardDescription>{displayPlayers.length} de {lobby.maxPlayers} vagas</CardDescription>
         </CardHeader>
         <CardContent>
@@ -525,7 +529,7 @@ export default function LobbyPage() {
             aria-controls="lobby-chat"
           >
             <FaMessage className="w-5 h-5 text-primary" aria-hidden="true" />
-            <CardTitle className="text-base">Chat do Grupo</CardTitle>
+            <CardTitle className="text-base">Chat da Atividade</CardTitle>
             <Badge variant="secondary" className="ml-auto text-xs">{initialMessages.length} msgs</Badge>
           </button>
         </CardHeader>

@@ -136,7 +136,7 @@ export default function SportSelectionPage() {
                     </div>
                     {lobby.isUrgent && (
                       <div className="flex flex-col items-end gap-1">
-                        <Badge variant="destructive" className="animate-pulse">URGENTE</Badge>
+                        <Badge variant="destructive" className="animate-pulse font-bold">FLAG URGENTE</Badge>
                         <FaBolt className="text-destructive w-4 h-4" />
                       </div>
                     )}
@@ -171,6 +171,15 @@ export default function SportSelectionPage() {
                     </div>
                     <Badge variant="outline" className="font-bold border-primary/20">{getLevelLabel(lobby.level)}</Badge>
                   </div>
+                  <Button
+                    className="w-full h-10 font-bold"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/lobby/${lobby.id}`);
+                    }}
+                  >
+                    Entrar na atividade
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -225,12 +234,12 @@ export default function SportSelectionPage() {
           <Card>
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground mb-4">
-                Não há salas disponíveis, pode{' '}
+                Não há atividades disponíveis, pode{' '}
                 <button
                   onClick={() => navigate(`/create-urgent?sport=${sportId}`)}
                   className="font-medium text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded px-0.5"
                 >
-                  criar uma
+                  criar uma atividade
                 </button>
                 .
               </p>

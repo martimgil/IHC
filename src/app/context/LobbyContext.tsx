@@ -29,7 +29,10 @@ function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
 
         const availableUsers = mockUsers.slice(1, 12);
         
-        const targetUrgentPlayersCount = Math.max(1, (sport.minPlayers || 4) - 1);
+        const targetUrgentPlayersCount = Math.min(
+            Math.max(1, (sport.maxPlayers || 10) - 1),
+            Math.max(1, (sport.minPlayers || 4) - 1)
+        );
         const urgentPlayers = availableUsers.slice(0, targetUrgentPlayersCount).map(u => ({
             id: u.id,
             name: u.name,
@@ -47,6 +50,7 @@ function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
         const randomLocation = generatedLocations[sport.name.length % generatedLocations.length];
 
         if (!hasUrgent) {
+            const missingForMin = Math.max(0, (sport.minPlayers || 2) - urgentPlayers.length);
             updatedLobbies.push({
                 id: `auto-urg-${sport.id}`,
                 sportId: sport.id,
@@ -62,7 +66,7 @@ function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
                 status: 'waiting',
                 createdBy: urgentPlayers[0]?.id || 'sys',
                 isUrgent: true,
-                tags: ['Urgente', 'Falta 1!']
+                tags: ['Urgente', missingForMin > 0 ? `Faltam ${missingForMin}` : 'Quase completo']
             });
         }
 
@@ -131,11 +135,21 @@ export function LobbyProvider({ children }: { readonly children: ReactNode }) {
                 if (lobby.currentPlayers.some(p => p.id === player.id || p.name === player.name)) {
                     return lobby;
                 }
+                // Enforce capacity so no lobby can exceed maxPlayers
+                if (lobby.currentPlayers.length >= lobby.maxPlayers || lobby.status === 'full') {
+                    return lobby;
+                }
                 const newPlayers = [...lobby.currentPlayers, player];
+                const nextStatus =
+                    newPlayers.length >= lobby.maxPlayers
+                        ? 'full'
+                        : newPlayers.length >= lobby.minPlayers
+                            ? 'confirmed'
+                            : 'waiting';
                 return {
                     ...lobby,
                     currentPlayers: newPlayers,
-                    status: newPlayers.length >= lobby.maxPlayers ? 'full' : lobby.status
+                    status: nextStatus
                 };
             }
             return lobby;
@@ -146,10 +160,16 @@ export function LobbyProvider({ children }: { readonly children: ReactNode }) {
         setLobbies(prev => prev.map(lobby => {
             if (lobby.id === lobbyId) {
                 const newPlayers = lobby.currentPlayers.filter(p => p.id !== playerId && p.name !== playerId);
+                const nextStatus =
+                    newPlayers.length >= lobby.maxPlayers
+                        ? 'full'
+                        : newPlayers.length >= lobby.minPlayers
+                            ? 'confirmed'
+                            : 'waiting';
                 return {
                     ...lobby,
                     currentPlayers: newPlayers,
-                    status: 'waiting' // Reset to waiting if someone leaves
+                    status: nextStatus
                 };
             }
             return lobby;

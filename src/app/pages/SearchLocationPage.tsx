@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
-import { FaArrowLeft, FaMapPin, FaMagnifyingGlass, FaCompass, FaCalendarDays, FaUsers, FaEuroSign, FaChevronRight } from 'react-icons/fa6';
+import { FaMapPin, FaMagnifyingGlass, FaCompass, FaCalendarDays, FaUsers, FaEuroSign, FaChevronRight } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
 
@@ -65,8 +65,8 @@ export default function SearchLocationPage() {
 
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold mb-2">Procurar por Local</h1>
-        <p className="text-muted-foreground">Encontre atividades desportivas perto de si</p>
+        <h1 className="text-2xl font-bold mb-2">Procurar por Localidade</h1>
+        <p className="text-muted-foreground">Escolha uma cidade/local e veja atividades desportivas perto de si</p>
       </div>
 
       {/* Search Bar */}
@@ -77,7 +77,7 @@ export default function SearchLocationPage() {
           <Input
             id="location-search"
             type="text"
-            placeholder="Pesquisar local..."
+            placeholder="Pesquisar localidade ou pavilhão..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10 h-12"
@@ -204,7 +204,7 @@ export default function SearchLocationPage() {
                       {/* Lobbies at location */}
                       {activities.lobbies.length > 0 && (
                         <div>
-                          <h4 className="font-semibold mb-2">Grupos Ativos</h4>
+                          <h4 className="font-semibold mb-2">Atividades de Grupo</h4>
                           <div className="space-y-2">
                             {activities.lobbies.map(lobby => (
                               <div
@@ -230,8 +230,20 @@ export default function SearchLocationPage() {
                                     )}
                                   </div>
                                 </div>
-                                {lobby.isUrgent && <Badge variant="destructive">Urgente</Badge>}
-                                <FaChevronRight className="w-4 h-4 text-muted-foreground ml-2" />
+                                <div className="flex items-center gap-2 ml-2">
+                                  {lobby.isUrgent && <Badge variant="destructive" className="font-bold">FLAG URGENTE</Badge>}
+                                  <Button
+                                    size="sm"
+                                    className="h-8"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      navigate(`/lobby/${lobby.id}`);
+                                    }}
+                                  >
+                                    Entrar
+                                  </Button>
+                                  <FaChevronRight className="w-4 h-4 text-muted-foreground" />
+                                </div>
                               </div>
                             ))}
                           </div>
