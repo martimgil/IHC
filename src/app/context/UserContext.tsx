@@ -145,7 +145,7 @@ export function UserProvider({ children }: { readonly children: ReactNode }) {
                 return acc;
             }, {} as Record<string, string>),
             activityHistory: [
-                { id: `act-new-1`, date: new Date(Date.now() - 86400000 * 2).toISOString(), type: interestedSports[0] ? interestedSports[0].charAt(0).toUpperCase() + interestedSports[0].slice(1) : 'Sessão Inicial', duration: 60, calories: 300, location: location || 'Aveiro' },
+                { id: `act-new-1`, date: new Date(Date.now() - 86400000 * 2).toISOString(), type: interestedSports[0] ? interestedSports[0].charAt(0).toUpperCase() + interestedSports[0].slice(1) : 'Atividade Inicial', duration: 60, calories: 300, location: location || 'Aveiro' },
             ],
             unlockedAchievements: ['first-session'],
             achievementProgress: { 'twenty-sessions': 1, 'five-lobbies': 0, 'all-sports': 1 }

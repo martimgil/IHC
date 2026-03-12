@@ -271,7 +271,7 @@ export default function SportSelectionPage() {
               </SheetTitle>
             </SheetHeader>
             <div className="space-y-4">
-              <p className="text-sm text-muted-foreground mb-4">Equipamento disponível em {sport.name} por sessão:</p>
+              <p className="text-sm text-muted-foreground mb-4">Equipamento disponível em {sport.name} por atividade:</p>
               <ul className="space-y-2" aria-label="Lista de equipamento disponível">
                 {mockEquipment.map(e => (
                   <li key={e.name} className="flex items-center justify-between p-4 bg-muted/40 border-2 border-border/50 rounded-2xl transition-colors hover:border-primary/20">

@@ -223,7 +223,7 @@ export default function MapPage() {
                                 </div>
                             </div>
                             {loc.price > 0 ? (
-                                <span className="text-xs font-semibold text-muted-foreground shrink-0">{loc.price}€/sessão</span>
+                                <span className="text-xs font-semibold text-muted-foreground shrink-0">{loc.price}€/atividade</span>
                             ) : (
                                 <span className="text-xs text-green-600 dark:text-green-400 font-semibold shrink-0">Grátis</span>
                             )}

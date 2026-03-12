@@ -424,7 +424,7 @@ export default function CreateUrgentEventPage() {
               type="submit"
               className="w-full h-14 text-lg"
               disabled={isCreating}
-              aria-label={isCreating ? 'A criar sessão' : 'Criar sessão'}
+              aria-label={isCreating ? 'A criar atividade' : 'Criar atividade'}
             >
               {isCreating ? (
                 <>
@@ -433,12 +433,12 @@ export default function CreateUrgentEventPage() {
                     role="status"
                     aria-label="A processar"
                   />
-                  A Criar Sessão...
+                  A Criar atividade...
                 </>
               ) : (
                 <>
                   <FaClock className="w-5 h-5 mr-2" aria-hidden="true" />
-                  Criar Sessão
+                  Criar atividade
                 </>
               )}
             </Button>

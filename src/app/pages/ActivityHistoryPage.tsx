@@ -172,7 +172,7 @@ export default function ActivityHistoryPage() {
                     <div className="text-center py-10 bg-card border rounded-xl shadow-sm text-muted-foreground">
                         <FaPersonRunning className="w-10 h-10 mx-auto opacity-20 mb-3" />
                         <p className="font-medium">Sem atividades recentes.</p>
-                        <p className="text-xs mt-1">Regista a tua primeira sessão para veres as tuas estatísticas.</p>
+                        <p className="text-xs mt-1">Regista a tua primeira atividade para veres as tuas estatísticas.</p>
                         <Button onClick={() => navigate('/map')} variant="outline" className="mt-4">Explorar Mapa</Button>
                     </div>
                 ) : (

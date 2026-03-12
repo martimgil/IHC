@@ -496,12 +496,12 @@ export const mockNotifications: Notification[] = [
   {
     id: 'notif-1',
     type: 'session-available',
-    title: 'Sessão Disponível!',
-    message: 'Há uma sessão de hidroginástica disponível no Pavilhão Rosa Mota às 19:00 hoje.',
+    title: 'Atividade Disponível!',
+    message: 'Há uma atividade de hidroginástica disponível no Pavilhão Rosa Mota às 19:00 hoje.',
     timestamp: new Date().toISOString(),
     read: false,
     actionUrl: '/booking?session=session-1',
-    actionLabel: 'Ver Sessão',
+    actionLabel: 'Ver Atividade',
     data: { sportId: 'hidroginastica' }
   },
   {

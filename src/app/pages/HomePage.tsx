@@ -87,9 +87,9 @@ function SportDetailSheet({
                 variant="outline"
                 className="flex-1 h-12 text-sm font-bold border-primary text-primary"
                 onClick={() => { onClose(); navigate(`/create-urgent?sport=${sport.id}`); }}
-                aria-label={`Criar nova sessão de ${sport.name}`}
+                aria-label={`Criar nova atividade de ${sport.name}`}
               >
-                Criar Sessão
+                Criar atividade
               </Button>
             </div>
           </div>

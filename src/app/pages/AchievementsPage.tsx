@@ -20,7 +20,7 @@ const achievementsData: Omit<Achievement, 'unlocked' | 'unlockedAt' | 'progress'
     // Atividade
     {
         id: 'first-session',
-        title: 'Primeira Sessão',
+        title: 'Primeira Atividade',
         description: 'Participaste na tua primeira atividade desportiva',
         icon: <FaStar className="w-6 h-6" />,
         category: 'Atividade',

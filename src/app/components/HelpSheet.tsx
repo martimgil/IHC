@@ -7,12 +7,12 @@ import {
 
 const faqs = [
     {
-        q: 'Como reservo uma sessão?',
-        a: 'Na página inicial, toca num desporto e seleciona uma sessão disponível. Depois confirma a reserva no ecrã de detalhe e efetua o pagamento para garantir a tua vaga.',
+        q: 'Como reservo um lugar numa atividade?',
+        a: 'Na página inicial, toca num desporto e seleciona uma atividade disponível. Depois confirma a reserva no ecrã de detalhe e efetua o pagamento para garantir a tua vaga.',
     },
     {
         q: 'O que é um Lobby?',
-        a: 'Um Lobby é um grupo informal onde qualquer pessoa pode juntar-se a uma atividade. Os organizadores criam o lobby e os outros jogadores inscrevem-se. Quando o número mínimo de jogadores é atingido, a atividade é confirmada.',
+        a: 'O Lobby de uma ativadade é um grupo informal onde qualquer pessoa pode juntar-se a uma atividade. Os organizadores criam o lobby e os outros jogadores inscrevem-se. Quando o número mínimo de jogadores é atingido, a atividade é confirmada.',
     },
     {
         q: 'Como encontro atividades perto de mim?',
@@ -48,7 +48,7 @@ const faqs = [
     },
     {
         q: 'Como funciona a avaliação de jogadores?',
-        a: 'Após uma sessão ou atividade de grupo, podes avaliar os outros jogadores em categorias como "Amigável", "Bom Colega" e "Habilidoso". Estas avaliações ajudam a comunidade a identificar bons companheiros de jogo.',
+        a: 'Após uma atividade de grupo, podes avaliar os outros jogadores em categorias como "Amigável", "Bom Colega" e "Habilidoso". Estas avaliações ajudam a comunidade a identificar bons companheiros de jogo.',
     },
     {
         q: 'Posso seguir outros jogadores?',

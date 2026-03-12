@@ -46,7 +46,7 @@ export default function BookingPage() {
   if (!session || !sport) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-500">Sessão não encontrada.</p>
+        <p className="text-gray-500">Atividade não encontrada.</p>
         <Button onClick={() => navigate('/')} className="mt-4">
           Voltar ao Início
         </Button>
@@ -170,7 +170,7 @@ export default function BookingPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-3" role="region" aria-label="Detalhes da sessão">
+          <div className="space-y-3" role="region" aria-label="Detalhes da atividade">
             <div className="flex items-start gap-3">
               <FaMapPin className="w-5 h-5 text-gray-600 mt-0.5 shrink-0" aria-hidden="true" />
               <div>
