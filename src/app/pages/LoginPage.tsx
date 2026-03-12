@@ -6,11 +6,10 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Separator } from '../components/ui/separator';
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaBolt, FaShieldHalved } from 'react-icons/fa6';
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa6';
 import { toast } from 'sonner';
 import { useTheme } from '../context/ThemeContext';
-import { FaSun, FaMoon, FaCircleQuestion, FaArrowLeft } from 'react-icons/fa6';
+import { FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
 import HelpSheet from '../components/HelpSheet';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -88,17 +87,18 @@ export default function LoginPage() {
         return Object.keys(e).length === 0;
     };
 
-    const handleLogin = async (e?: React.FormEvent, customUser?: { name: string, email: string }) => {
+    const handleLogin = async (e?: React.FormEvent) => {
         if (e) e.preventDefault();
+
+        if (!validate()) {
+            return;
+        }
 
         setIsLoading(true);
         // Simulação de delay de rede
         await new Promise(r => setTimeout(r, 1200));
 
-        const userEmail = customUser ? customUser.email : email;
-        const userPassword = customUser ? 'password123' : password; // default password for quick logins
-
-        const result = login(userEmail, userPassword);
+        const result = login(email, password);
 
         setIsLoading(false);
 

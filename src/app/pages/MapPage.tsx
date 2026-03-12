@@ -4,9 +4,9 @@ import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Input } from '../components/ui/input';
 import { Card, CardContent } from '../components/ui/card';
-import { FaArrowLeft, FaMapPin, FaMagnifyingGlass, FaCompass, FaClock, FaEuroSign, FaUsers } from 'react-icons/fa6';
+import { FaMapPin, FaMagnifyingGlass, FaCompass, FaEuroSign } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
-import { sports, sessions, getSportById } from '../data';
+import { sports, sessions } from '../data';
 
 // Mock locations with coordinates (relative positions in % for fake map)
 const locations = [

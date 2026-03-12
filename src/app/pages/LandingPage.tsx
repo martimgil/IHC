@@ -2,8 +2,8 @@ import { Link } from 'react-router';
 import { Button } from '../components/ui/button';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { useTheme } from '../context/ThemeContext';
-import { FaHeartPulse, FaPeopleGroup, FaTrophy, FaArrowRight, FaCalendarCheck, FaChartLine, FaSun, FaMoon, FaCircleQuestion, FaBars, FaXmark } from 'react-icons/fa6';
-import { useRef, useState, useEffect } from 'react';
+import { FaHeartPulse, FaPeopleGroup, FaArrowRight, FaCalendarCheck, FaChartLine, FaSun, FaMoon, FaCircleQuestion, FaBars, FaXmark } from 'react-icons/fa6';
+import { useRef, useState } from 'react';
 import HelpSheet from '../components/HelpSheet';
 
 export default function LandingPage() {
@@ -156,22 +156,25 @@ export default function LandingPage() {
                         <div className="grid md:grid-cols-3 gap-8">
                             {[
                                 {
+                                    id: 'feature-1',
                                     icon: <FaHeartPulse className="w-6 h-6 text-rose-500" aria-hidden="true" />,
                                     title: "Encontra o Match Perfeito",
                                     description: "Procuras parceiros para jogar Ténis ou Padel? O nosso lobby junta jogadores com o mesmo nível de experiência e disponibilidade."
                                 },
                                 {
+                                    id: 'feature-2',
                                     icon: <FaCalendarCheck className="w-6 h-6 text-blue-500" aria-hidden="true" />,
                                     title: "Marcações Simples",
                                     description: "Explora o mapa interativo, verifica a disponibilidade dos espaços em tempo real e faz a reserva num instante."
                                 },
                                 {
+                                    id: 'feature-3',
                                     icon: <FaChartLine className="w-6 h-6 text-green-500" aria-hidden="true" />,
                                     title: "Monitoriza e Evolui",
                                     description: "Regista as tuas atividades, observa o teu aumento de skill ao longo do tempo e ganha conquistas exclusivas."
                                 }
-                            ].map((feature, i) => (
-                                <div key={i} className="bg-card shadow-lg shadow-black/5 dark:shadow-white/5 border border-border/50 rounded-3xl p-8 hover:border-primary/50 transition-colors">
+                            ].map((feature) => (
+                                <div key={feature.id} className="bg-card shadow-lg shadow-black/5 dark:shadow-white/5 border border-border/50 rounded-3xl p-8 hover:border-primary/50 transition-colors">
                                     <div className="h-14 w-14 bg-background border border-border/50 rounded-2xl flex items-center justify-center mb-6 shadow-sm">
                                         {feature.icon}
                                     </div>

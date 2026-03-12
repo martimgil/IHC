@@ -168,7 +168,7 @@ export default function CreateUrgentEventPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="bg-white rounded-lg p-4 space-y-2" role="region" aria-label="Detalhes do evento">
+            <section className="bg-white rounded-lg p-4 space-y-2" aria-label="Detalhes do evento">
               <h3 className="font-semibold">Detalhes do Evento</h3>
               <div className="space-y-1 text-sm">
                 <p className="flex items-center gap-2">
@@ -182,7 +182,7 @@ export default function CreateUrgentEventPage() {
                 <p><span className="text-gray-600">Local:</span> {formData.location}</p>
                 <p><span className="text-gray-600">Participantes mínimos:</span> {formData.spotsNeeded}</p>
               </div>
-            </div>
+            </section>
 
             <Alert className="border-blue-200 bg-blue-50">
               <FaCircleExclamation className="h-4 w-4 text-blue-600" aria-hidden="true" />
@@ -430,10 +430,9 @@ export default function CreateUrgentEventPage() {
                 <>
                   <div
                     className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"
-                    role="status"
-                    aria-label="A processar"
+                    aria-hidden="true"
                   />
-                  A Criar atividade...
+                  <span aria-live="polite" aria-label="A processar">A Criar atividade...</span>
                 </>
               ) : (
                 <>

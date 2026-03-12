@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { currentUser, sports, getLevelLabel, lobbies, sessions, mockFollowing, mockFollowers, mockUsers } from '../data';
+import { currentUser, sports, getLevelLabel, lobbies, mockFollowing, mockFollowers, mockUsers } from '../data';
 import { User } from '../types';
 import { useNavigate } from 'react-router';
 import { useUser } from '../context/UserContext';
@@ -13,11 +13,11 @@ import { Separator } from '../components/ui/separator';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
+
 import {
-  FaArrowLeft, FaEnvelope, FaMapPin, FaCalendarDays, FaTrophy,
-  FaGear, FaHeart, FaCircleCheck, FaAward, FaBell,
-  FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaXmark, FaBolt, FaMagnifyingGlass, FaTrashCan, FaUserGroup, FaUserPlus, FaPersonRunning, FaChartLine
+  FaEnvelope, FaMapPin, FaCalendarDays,
+  FaGear, FaHeart, FaAward,
+  FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaBolt, FaMagnifyingGlass, FaTrashCan, FaUserGroup, FaUserPlus, FaPersonRunning, FaChartLine
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
@@ -446,9 +446,9 @@ export default function ProfilePage() {
               />
             </div>
 
-            <div className="space-y-3" role="list">
+            <ul className="space-y-3 list-none">
               {communityList.length === 0 && (
-                <div className="text-center py-10 opacity-60">
+                <li className="text-center py-10 opacity-60">
                   <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-3">
                     <FaMagnifyingGlass className="w-6 h-6" />
                   </div>
@@ -458,7 +458,7 @@ export default function ProfilePage() {
                       communityTab === 'followers' ? 'Ainda não tens seguidores.' : 'Nenhum utilizador disponível.'
                     )}
                   </p>
-                </div>
+                </li>
               )}
               {communityList.map(user => {
                 const userInterestedArr = user.interestedSports || [];
@@ -467,7 +467,7 @@ export default function ProfilePage() {
                 const userIsFollowing = isFollowing(user.id);
                 
                 return (
-                  <div key={user.id} role="listitem" className="flex items-center gap-4 p-3.5 bg-card border-2 border-border/40 rounded-2xl shadow-sm hover:border-primary/30 transition-all">
+                  <li key={user.id} className="flex items-center gap-4 p-3.5 bg-card border-2 border-border/40 rounded-2xl shadow-sm hover:border-primary/30 transition-all">
                     <Avatar className="w-12 h-12 border-2 border-primary/10 shadow-sm">
                       <AvatarFallback className="text-sm font-bold bg-primary/5 text-primary">
                         {uInitials}
@@ -513,10 +513,10 @@ export default function ProfilePage() {
                         Seguir
                       </Button>
                     )}
-                  </div>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </div>
         </SheetContent>
       </Sheet>

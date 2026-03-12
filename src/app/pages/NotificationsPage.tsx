@@ -43,7 +43,7 @@ export default function NotificationsPage() {
     announcement.textContent = 'Notificação eliminada';
     announcement.className = 'sr-only';
     document.body.appendChild(announcement);
-    setTimeout(() => document.body.removeChild(announcement), 1000);
+    setTimeout(() => announcement.remove(), 1000);
   };
 
   const getNotificationIcon = (notification: Notification) => {
@@ -119,30 +119,37 @@ export default function NotificationsPage() {
 
       {/* Notifications List */}
       {notifications.length > 0 ? (
-        <div
-          className="space-y-3"
-          role="list"
+        <ul
+          className="space-y-3 list-none"
           aria-label="Lista de notificações"
         >
           {notifications.map((notification) => (
-            <Card
+            <li
               key={notification.id}
-              className={`cursor-pointer transition-all active:scale-[0.99] ${!notification.read
-                ? 'border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-950/40 shadow-md'
-                : 'hover:shadow-md'
-                }`}
-              onClick={() => !notification.read && handleMarkAsRead(notification.id)}
-              role="listitem"
-              aria-label={`${notification.read ? 'Lida' : 'Não lida'}: ${notification.title}`}
             >
-              <CardContent className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 shrink-0">
-                    {getNotificationIcon(notification)}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <h3 className="font-semibold text-gray-900 dark:text-foreground">
+              <Card
+                className={`cursor-pointer transition-all active:scale-[0.99] ${!notification.read
+                  ? 'border-blue-300 bg-blue-50 dark:border-blue-700 dark:bg-blue-950/40 shadow-md'
+                  : 'hover:shadow-md'
+                  }`}
+                onClick={() => !notification.read && handleMarkAsRead(notification.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if ((e.key === 'Enter' || e.key === ' ') && !notification.read) {
+                    handleMarkAsRead(notification.id);
+                  }
+                }}
+                aria-label={`${notification.read ? 'Lida' : 'Não lida'}: ${notification.title}`}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="mt-1 shrink-0">
+                      {getNotificationIcon(notification)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h3 className="font-semibold text-gray-900 dark:text-foreground">
                         {notification.title}
                       </h3>
                       {!notification.read && (
@@ -194,8 +201,9 @@ export default function NotificationsPage() {
                 </div>
               </CardContent>
             </Card>
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
         <Card>
           <CardContent className="py-12 text-center">

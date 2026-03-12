@@ -9,14 +9,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
-import { Separator } from '../components/ui/separator';
+
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import { Input } from '../components/ui/input';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import {
   FaCalendarDay, FaMapPin, FaUsers, FaEuroSign, FaCircleCheck,
-  FaClock, FaShieldHalved, FaCircleExclamation, FaPaperPlane, FaUserPlus, FaUserMinus,
+  FaClock, FaShieldHalved, FaCircleExclamation, FaPaperPlane, FaUserPlus,
   FaThumbsUp, FaStar, FaHeart, FaRightFromBracket, FaMessage, FaCircle
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
@@ -419,7 +419,7 @@ export default function LobbyPage() {
       </Alert>
 
       {/* Creator: pending approval requests (R06) */}
-      {isCreator && pendingRequests.filter(r => !approvedIds.has(r.id)).length > 0 && (
+      {isCreator && pendingRequests.some(r => !approvedIds.has(r.id)) && (
         <Card className="border-amber-200 dark:border-amber-800">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
