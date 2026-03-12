@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { FaArrowLeft, FaCalendarDays, FaCircleCheck } from 'react-icons/fa6';
+import { FaArrowLeft, FaCalendarDays, FaCircleCheck, FaPlus, FaMapLocationDot } from 'react-icons/fa6';
 import { sports } from '../data';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -31,11 +31,23 @@ export default function BookingsPage() {
 
     return (
         <div className="max-w-4xl mx-auto space-y-5">
-            <div className="flex items-center gap-2 mb-2">
-                <Button variant="ghost" onClick={() => navigate(-1)} className="min-h-[44px] -ml-2 px-3">
-                    <FaArrowLeft className="w-5 h-5" />
-                </Button>
-                <h1 className="text-xl font-bold">As Minhas Reservas</h1>
+            <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                    <Button variant="ghost" onClick={() => navigate(-1)} className="min-h-[44px] -ml-2 px-3">
+                        <FaArrowLeft className="w-5 h-5" />
+                    </Button>
+                    <h1 className="text-xl font-bold">As Minhas Reservas</h1>
+                </div>
+                <div className="flex gap-2">
+                    <Button onClick={() => navigate('/map')} variant="outline" size="sm" className="gap-2">
+                        <FaMapLocationDot className="w-4 h-4" />
+                        Fazer Reserva
+                    </Button>
+                    <Button onClick={() => navigate('/create-urgent-event')} size="sm" className="gap-2">
+                        <FaPlus className="w-4 h-4" />
+                        Criar Evento
+                    </Button>
+                </div>
             </div>
 
             <Card>
@@ -57,8 +69,17 @@ export default function BookingsPage() {
                         <div className="text-center py-10">
                             <FaCalendarDays className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-20" />
                             <p className="text-sm font-medium">Sem reservas ativas.</p>
-                            <p className="text-xs text-muted-foreground mt-1">Regressa ao mapa para encontrar atividades!</p>
-                            <Button onClick={() => navigate('/')} className="mt-4" variant="outline">Procurar Atividades</Button>
+                            <p className="text-xs text-muted-foreground mt-1">Cria um evento urgente ou procura atividades no mapa!</p>
+                            <div className="flex gap-2 justify-center mt-4">
+                                <Button onClick={() => navigate('/map')} variant="outline" className="gap-2">
+                                    <FaMapLocationDot className="w-4 h-4" />
+                                    Fazer Reserva
+                                </Button>
+                                <Button onClick={() => navigate('/create-urgent-event')} className="gap-2">
+                                    <FaPlus className="w-4 h-4" />
+                                    Criar Evento
+                                </Button>
+                            </div>
                         </div>
                     )}
                     {bookings.map((booking, idx) => {

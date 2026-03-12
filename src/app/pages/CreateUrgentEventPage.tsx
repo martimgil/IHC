@@ -155,39 +155,39 @@ export default function CreateUrgentEventPage() {
   if (eventCreated) {
     return (
       <div className="max-w-2xl mx-auto space-y-6">
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-green-500/30 bg-green-50/30 dark:bg-green-950/20">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">
-              <div className="bg-green-100 rounded-full p-4" role="img" aria-label="Sucesso">
-                <FaCircleCheck className="w-12 h-12 text-green-600" aria-hidden="true" />
+              <div className="bg-green-100 dark:bg-green-900/30 rounded-full p-4" role="img" aria-label="Sucesso">
+                <FaCircleCheck className="w-12 h-12 text-green-600 dark:text-green-400" aria-hidden="true" />
               </div>
             </div>
-            <CardTitle className="text-2xl text-green-900">Evento Criado!</CardTitle>
-            <CardDescription className="text-green-800">
+            <CardTitle className="text-2xl text-green-900 dark:text-green-100">Evento Criado!</CardTitle>
+            <CardDescription className="text-green-800 dark:text-green-200">
               Estamos a procurar jogadores disponíveis na sua área.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <section className="bg-white rounded-lg p-4 space-y-2" aria-label="Detalhes do evento">
-              <h3 className="font-semibold">Detalhes do Evento</h3>
+            <section className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg p-4 space-y-2" aria-label="Detalhes do evento">
+              <h3 className="font-semibold text-gray-900 dark:text-white">Detalhes do Evento</h3>
               <div className="space-y-1 text-sm">
                 <p className="flex items-center gap-2">
-                  <span className="text-gray-600 font-medium whitespace-nowrap">Desporto:</span>
-                  <span className="flex items-center gap-1.5 font-semibold">
+                  <span className="text-gray-700 dark:text-gray-400 font-medium whitespace-nowrap">Desporto:</span>
+                  <span className="flex items-center gap-1.5 font-semibold text-gray-900 dark:text-white">
                     <span>{sports.find(s => s.id === formData.sportId)?.icon}</span>
                     <span>{sports.find(s => s.id === formData.sportId)?.name}</span>
                   </span>
                 </p>
-                <p><span className="text-gray-600">Data:</span> {new Date(formData.date).toLocaleDateString('pt-PT')} às {formData.time}</p>
-                <p><span className="text-gray-600">Local:</span> {formData.location}</p>
-                <p><span className="text-gray-600">Participantes mínimos:</span> {formData.spotsNeeded}</p>
+                <p className="text-gray-700 dark:text-gray-400"><span className="text-gray-900 dark:text-white font-medium">Data:</span> {new Date(formData.date).toLocaleDateString('pt-PT')} às {formData.time}</p>
+                <p className="text-gray-700 dark:text-gray-400"><span className="text-gray-900 dark:text-white font-medium">Local:</span> {formData.location}</p>
+                <p className="text-gray-700 dark:text-gray-400"><span className="text-gray-900 dark:text-white font-medium">Participantes mínimos:</span> {formData.spotsNeeded}</p>
               </div>
             </section>
 
-            <Alert className="border-blue-200 bg-blue-50">
-              <FaCircleExclamation className="h-4 w-4 text-blue-600" aria-hidden="true" />
-              <AlertTitle className="text-blue-900">Notificaremos Você</AlertTitle>
-              <AlertDescription className="text-blue-800">
+            <Alert className="border-blue-500/30 bg-blue-50/30 dark:bg-blue-950/20">
+              <FaCircleExclamation className="h-4 w-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+              <AlertTitle className="text-blue-900 dark:text-blue-100">Notificaremos Você</AlertTitle>
+              <AlertDescription className="text-blue-800 dark:text-blue-200">
                 Receberá uma notificação assim que jogadores aceitarem o convite.
               </AlertDescription>
             </Alert>
