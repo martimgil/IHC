@@ -79,9 +79,9 @@ function SportDetailSheet({
               <Button
                 className="flex-1 h-12 text-sm font-bold"
                 onClick={() => { onClose(); navigate(`/sport/${sport.id}`); }}
-                aria-label={`Ver sessões de ${sport.name}`}
+                aria-label={`Ver ativades de ${sport.name}`}
               >
-                Sessões Abertas
+                Atividades Abertas
               </Button>
               <Button
                 variant="outline"

@@ -319,7 +319,7 @@ export default function LobbyPage() {
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              {lobby.isUrgent && <Badge variant="destructive" className="font-bold">FLAG URGENTE</Badge>}
+              {lobby.isUrgent && <Badge variant="destructive" className="font-bold">URGENTE</Badge>}
               {lobby.status === 'full' && <Badge variant="secondary">Completo</Badge>}
             </div>
           </div>
@@ -408,7 +408,7 @@ export default function LobbyPage() {
       {lobby.isUrgent && (
         <Alert className="border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-800">
           <FaClock className="h-4 w-4 text-red-700" />
-          <AlertTitle className="text-red-900 dark:text-red-200">FLAG URGENTE ATIVA</AlertTitle>
+          <AlertTitle className="text-red-900 dark:text-red-200">URGENTE</AlertTitle>
           <AlertDescription className="text-red-800 dark:text-red-300">Esta atividade é urgente e dá prioridade de entrada imediata.</AlertDescription>
         </Alert>
       )}
