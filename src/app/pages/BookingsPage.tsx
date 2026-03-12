@@ -63,7 +63,7 @@ export default function BookingsPage() {
                         <div className="text-center py-10">
                             <FaCalendarDays className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-20" />
                             <p className="text-sm font-medium">Sem reservas ativas.</p>
-                            <p className="text-xs text-muted-foreground mt-1">Cria um evento urgente ou procura atividades no mapa!</p>
+                            <p className="text-xs text-muted-foreground mt-1">Cria uma atividade urgente ou procura atividades no mapa!</p>
                             <div className="flex gap-2 justify-center mt-4">
                                 <Button onClick={() => navigate('/create-urgent')} className="gap-2">
                                     <FaPlus className="w-4 h-4" />

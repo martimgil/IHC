@@ -149,7 +149,7 @@ export default function CreateUrgentEventPage() {
 
     setIsCreating(false);
     setEventCreated(true);
-    toast.success('Evento criado com sucesso!');
+    toast.success('A atividade foi criada com sucesso!');
   };
 
   if (eventCreated) {
@@ -162,14 +162,14 @@ export default function CreateUrgentEventPage() {
                 <FaCircleCheck className="w-12 h-12 text-green-600 dark:text-green-400" aria-hidden="true" />
               </div>
             </div>
-            <CardTitle className="text-2xl text-green-900 dark:text-green-100">Evento Criado!</CardTitle>
+            <CardTitle className="text-2xl text-green-900 dark:text-green-100">Atividade Criada!</CardTitle>
             <CardDescription className="text-green-800 dark:text-green-200">
               Estamos a procurar jogadores disponíveis na sua área.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <section className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg p-4 space-y-2" aria-label="Detalhes do evento">
-              <h3 className="font-semibold text-gray-900 dark:text-white">Detalhes do Evento</h3>
+            <section className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-lg p-4 space-y-2" aria-label="Detalhes da atividade">
+              <h3 className="font-semibold text-gray-900 dark:text-white">Detalhes da Atividade</h3>
               <div className="space-y-1 text-sm">
                 <p className="flex items-center gap-2">
                   <span className="text-gray-700 dark:text-gray-400 font-medium whitespace-nowrap">Desporto:</span>
