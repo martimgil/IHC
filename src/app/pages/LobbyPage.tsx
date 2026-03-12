@@ -12,7 +12,7 @@ import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import { Separator } from '../components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import { Input } from '../components/ui/input';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '../components/ui/sheet';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '../components/ui/alert-dialog';
 import {
   FaCalendarDay, FaMapPin, FaUsers, FaEuroSign, FaCircleCheck,
@@ -87,7 +87,7 @@ const RATING_CATS = [
   { key: 'skilled', label: 'Habilidoso', icon: <FaStar className="w-4 h-4" /> },
 ];
 
-function RatingSheet({ players, open, onClose }: { players: Lobby['currentPlayers'], open: boolean, onClose: () => void }) {
+function RatingSheet({ players, open, onClose }: { readonly players: Lobby['currentPlayers']; readonly open: boolean; readonly onClose: () => void }) {
   const [ratings, setRatings] = useState<Record<string, Record<string, boolean>>>({});
   const toggle = (pid: string, cat: string) =>
     setRatings(r => ({ ...r, [pid]: { ...(r[pid] || {}), [cat]: !(r[pid]?.[cat]) } }));
@@ -107,6 +107,7 @@ function RatingSheet({ players, open, onClose }: { players: Lobby['currentPlayer
               </div>
               Avaliar Jogadores
             </SheetTitle>
+            <SheetDescription>Avalia os teus colegas de atividade</SheetDescription>
           </SheetHeader>
           <div className="space-y-4">
             {players.map(p => (
@@ -206,7 +207,7 @@ export default function LobbyPage() {
                   <p className="text-xs text-primary font-medium mt-0.5">{l.scheduledDate} · {l.scheduledTime}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1 shrink-0">
-                  {l.isUrgent && <Badge variant="destructive" className="text-xs font-bold">FLAG URGENTE</Badge>}
+                  {l.isUrgent && <Badge variant="destructive" className="text-xs font-bold">URGENTE</Badge>}
                   <span className="text-xs text-muted-foreground">{l.currentPlayers.length}/{l.maxPlayers} jogadores</span>
                 </div>
               </button>
@@ -230,12 +231,11 @@ export default function LobbyPage() {
 
   // Inject the active user if they have joined the lobby.
   const displayPlayers = [...lobby.currentPlayers];
-  if (hasJoined && !displayPlayers.find(p => p.name.includes(myName))) {
+  if (hasJoined && !displayPlayers.some(p => p.name.includes(myName))) {
     displayPlayers.unshift({ id: 'me', name: `${myName} (Tu)`, level: 'intermedio', skillRating: 7 });
   }
 
   const spotsLeft = Math.max(0, lobby.maxPlayers - displayPlayers.length);
-  const progressPercentage = Math.min(100, (displayPlayers.length / lobby.maxPlayers) * 100);
   const canJoin = lobby.status !== 'full' && lobby.currentPlayers.length < lobby.maxPlayers && !hasJoined;
 
   const isCreator = !sessionUser && currentUser.id === lobby.createdBy;
@@ -339,9 +339,12 @@ export default function LobbyPage() {
               </div>
               <Badge variant="outline">{lobby.level}</Badge>
             </div>
-            <div className="bg-muted rounded-full h-2" role="progressbar" aria-valuenow={displayPlayers.length} aria-valuemin={0} aria-valuemax={lobby.maxPlayers} aria-label={`${displayPlayers.length} de ${lobby.maxPlayers} jogadores inscritos`}>
-              <div className="bg-primary h-2 rounded-full transition-all" style={{ width: `${progressPercentage}%` }} />
-            </div>
+            <progress
+              className="w-full h-2 rounded-full [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-muted [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-primary"
+              max={lobby.maxPlayers}
+              value={displayPlayers.length}
+              aria-label={`${displayPlayers.length} de ${lobby.maxPlayers} jogadores inscritos`}
+            />
             <p className="text-xs text-muted-foreground">
               {lobby.currentPlayers.length >= lobby.minPlayers
                 ? `✓ Mínimo atingido (${lobby.minPlayers})`
@@ -453,7 +456,7 @@ export default function LobbyPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {displayPlayers.map((player, idx) => (
+            {displayPlayers.map((player) => (
               <div key={player.id} className="flex items-center gap-3 py-1">
                 <Avatar className="w-9 h-9">
                   <AvatarFallback className="bg-primary/10 text-primary text-xs">
@@ -489,8 +492,8 @@ export default function LobbyPage() {
                 )}
               </div>
             ))}
-            {spotsLeft > 0 && Array.from({ length: Math.min(spotsLeft, 3) }).map((_, i) => (
-              <div key={`empty-${i}`} className="flex items-center gap-3 py-1 opacity-40">
+            {spotsLeft > 0 && Array.from({ length: Math.min(spotsLeft, 3) }, (_, i) => (
+              <div key={`empty-slot-${lobby.id}-${i}`} className="flex items-center gap-3 py-1 opacity-40">
                 <Avatar className="w-9 h-9"><AvatarFallback className="text-xs">?</AvatarFallback></Avatar>
                 <p className="text-sm text-muted-foreground">Vaga disponível</p>
               </div>

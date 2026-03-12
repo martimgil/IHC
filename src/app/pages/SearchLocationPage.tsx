@@ -231,7 +231,7 @@ export default function SearchLocationPage() {
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2 ml-2">
-                                  {lobby.isUrgent && <Badge variant="destructive" className="font-bold">FLAG URGENTE</Badge>}
+                                  {lobby.isUrgent && <Badge variant="destructive" className="font-bold">URGENTE</Badge>}
                                   <Button
                                     size="sm"
                                     className="h-8"

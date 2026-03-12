@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router';
-import { FaHouse, FaMapLocationDot, FaUser, FaRightFromBracket, FaBell, FaCircleQuestion, FaCircleUser, FaGear, FaBolt, FaArrowRight, FaXmark, FaCalendarDay, FaSun, FaMoon } from 'react-icons/fa6';
+import { FaHouse, FaMapLocationDot, FaUser, FaBell, FaCircleQuestion, FaCalendarDay, FaSun, FaMoon } from 'react-icons/fa6';
 import { Badge } from './components/ui/badge';
 import { useTheme } from './context/ThemeContext';
 import { useUser } from './context/UserContext';

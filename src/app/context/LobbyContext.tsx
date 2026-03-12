@@ -106,8 +106,26 @@ const LobbyContext = createContext<LobbyContextType | null>(null);
 
 const STORAGE_KEY = 'matchin_lobbies';
 
+function computeStatus(playersLen: number, minPlayers: number, maxPlayers: number): 'full' | 'confirmed' | 'waiting' {
+    if (playersLen >= maxPlayers) return 'full';
+    if (playersLen >= minPlayers) return 'confirmed';
+    return 'waiting';
+}
+
+function applyJoin(lobby: Lobby, player: Player): Lobby {
+    if (lobby.currentPlayers.some(p => p.id === player.id || p.name === player.name)) return lobby;
+    if (lobby.currentPlayers.length >= lobby.maxPlayers || lobby.status === 'full') return lobby;
+    const newPlayers = [...lobby.currentPlayers, player];
+    return { ...lobby, currentPlayers: newPlayers, status: computeStatus(newPlayers.length, lobby.minPlayers, lobby.maxPlayers) };
+}
+
+function applyLeave(lobby: Lobby, playerId: string): Lobby {
+    const newPlayers = lobby.currentPlayers.filter(p => p.id !== playerId && p.name !== playerId);
+    return { ...lobby, currentPlayers: newPlayers, status: computeStatus(newPlayers.length, lobby.minPlayers, lobby.maxPlayers) };
+}
+
 export function LobbyProvider({ children }: { readonly children: ReactNode }) {
-    const { sessionUser } = useUser();
+    useUser(); // ensure inside UserProvider
 
     const [lobbies, setLobbies] = useState<Lobby[]>(() => {
         try {
@@ -129,51 +147,15 @@ export function LobbyProvider({ children }: { readonly children: ReactNode }) {
     }, []);
 
     const joinLobby = useCallback((lobbyId: string, player: Player) => {
-        setLobbies(prev => prev.map(lobby => {
-            if (lobby.id === lobbyId) {
-                // Avoid duplicates
-                if (lobby.currentPlayers.some(p => p.id === player.id || p.name === player.name)) {
-                    return lobby;
-                }
-                // Enforce capacity so no lobby can exceed maxPlayers
-                if (lobby.currentPlayers.length >= lobby.maxPlayers || lobby.status === 'full') {
-                    return lobby;
-                }
-                const newPlayers = [...lobby.currentPlayers, player];
-                const nextStatus =
-                    newPlayers.length >= lobby.maxPlayers
-                        ? 'full'
-                        : newPlayers.length >= lobby.minPlayers
-                            ? 'confirmed'
-                            : 'waiting';
-                return {
-                    ...lobby,
-                    currentPlayers: newPlayers,
-                    status: nextStatus
-                };
-            }
-            return lobby;
-        }));
+        setLobbies(prev => prev.map(lobby =>
+            lobby.id === lobbyId ? applyJoin(lobby, player) : lobby
+        ));
     }, []);
 
     const leaveLobby = useCallback((lobbyId: string, playerId: string) => {
-        setLobbies(prev => prev.map(lobby => {
-            if (lobby.id === lobbyId) {
-                const newPlayers = lobby.currentPlayers.filter(p => p.id !== playerId && p.name !== playerId);
-                const nextStatus =
-                    newPlayers.length >= lobby.maxPlayers
-                        ? 'full'
-                        : newPlayers.length >= lobby.minPlayers
-                            ? 'confirmed'
-                            : 'waiting';
-                return {
-                    ...lobby,
-                    currentPlayers: newPlayers,
-                    status: nextStatus
-                };
-            }
-            return lobby;
-        }));
+        setLobbies(prev => prev.map(lobby =>
+            lobby.id === lobbyId ? applyLeave(lobby, playerId) : lobby
+        ));
     }, []);
 
     const getLobbyById = useCallback((id: string) => {

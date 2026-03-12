@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { FaArrowLeft, FaPersonRunning, FaFire, FaStopwatch, FaCalendarDays, FaBolt, FaTrophy } from 'react-icons/fa6';
+import { FaPersonRunning, FaFire, FaStopwatch, FaCalendarDays, FaBolt, FaTrophy } from 'react-icons/fa6';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -41,7 +41,7 @@ export default function ActivityHistoryPage() {
 
     historyData.forEach(act => {
         const d = new Date(act.date);
-        const diffTime = Math.abs(new Date().getTime() - d.getTime());
+        const diffTime = Math.abs(Date.now() - d.getTime());
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
         if (diffDays <= 7) {
@@ -164,7 +164,7 @@ export default function ActivityHistoryPage() {
             {/* Activity List */}
             <div className="space-y-3">
                 <h2 className="text-lg font-bold flex items-center justify-between">
-                    Desempenho Recente
+                    <span>Desempenho Recente</span>
                     <span className="text-sm font-normal text-muted-foreground">{historyData.length} sessões listadas</span>
                 </h2>
 

@@ -136,7 +136,7 @@ export default function SportSelectionPage() {
                     </div>
                     {lobby.isUrgent && (
                       <div className="flex flex-col items-end gap-1">
-                        <Badge variant="destructive" className="animate-pulse font-bold">FLAG URGENTE</Badge>
+                        <Badge variant="destructive" className="animate-pulse font-bold">URGENTE</Badge>
                         <FaBolt className="text-destructive w-4 h-4" />
                       </div>
                     )}

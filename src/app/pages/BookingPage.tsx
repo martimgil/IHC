@@ -9,7 +9,6 @@ import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert';
 import {
-  FaArrowLeft,
   FaCalendarDays,
   FaMapPin,
   FaUsers,
@@ -93,7 +92,7 @@ export default function BookingPage() {
     announcement.textContent = 'Reserva confirmada com sucesso!';
     announcement.className = 'sr-only';
     document.body.appendChild(announcement);
-    setTimeout(() => document.body.removeChild(announcement), 1000);
+    announcement.remove();
   };
 
   if (bookingConfirmed) {
@@ -113,7 +112,7 @@ export default function BookingPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <Separator />
-            <div className="space-y-3" role="region" aria-label="Detalhes da reserva">
+            <section aria-label="Detalhes da reserva" className="space-y-3">
               <div className="flex items-center gap-2">
                 <FaMapPin className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
                 <div>
@@ -129,7 +128,7 @@ export default function BookingPage() {
                 <FaClock className="w-5 h-5 text-muted-foreground" aria-hidden="true" />
                 <span>{session.duration} minutos</span>
               </div>
-            </div>
+            </section>
             <Separator />
             <div className="space-y-2">
               <Button
@@ -170,7 +169,7 @@ export default function BookingPage() {
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-3" role="region" aria-label="Detalhes da atividade">
+          <section aria-label="Detalhes da atividade" className="space-y-3">
             <div className="flex items-start gap-3">
               <FaMapPin className="w-5 h-5 text-gray-600 mt-0.5 shrink-0" aria-hidden="true" />
               <div>
@@ -199,18 +198,16 @@ export default function BookingPage() {
               <div className="flex-1">
                 <span>{session.availableSpots} vaga(s) disponível(eis) de {session.totalSpots}</span>
                 <div className="flex items-center gap-2 mt-1">
-                  <div className="flex-1 bg-gray-200 rounded-full h-2" role="progressbar" aria-valuenow={session.totalSpots - session.availableSpots} aria-valuemin={0} aria-valuemax={session.totalSpots} aria-label={`${session.totalSpots - session.availableSpots} de ${session.totalSpots} vagas ocupadas`}>
-                    <div
-                      className="bg-blue-600 h-2 rounded-full transition-all"
-                      style={{
-                        width: `${((session.totalSpots - session.availableSpots) / session.totalSpots) * 100}%`
-                      }}
+                  <progress
+                      className="w-full h-2 rounded-full [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-gray-200 [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-blue-600"
+                      max={session.totalSpots}
+                      value={session.totalSpots - session.availableSpots}
+                      aria-label={`${session.totalSpots - session.availableSpots} de ${session.totalSpots} vagas ocupadas`}
                     />
-                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </section>
 
           <Separator />
 
@@ -318,9 +315,8 @@ export default function BookingPage() {
         >
           {isProcessing ? (
             <>
-              <div
+              <output
                 className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"
-                role="status"
                 aria-label="A processar"
               />
               A Processar...
