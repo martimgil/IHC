@@ -5,7 +5,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { UserProvider } from './context/UserContext';
 import { NotificationProvider } from './context/NotificationContext';
 import { BookingProvider } from './context/BookingContext';
-import { LobbyProvider } from './context/LobbyContext';
+import { AtividadeProvider } from './context/AtividadeContext';
 
 
 export default function App() {
@@ -13,12 +13,12 @@ export default function App() {
     <ThemeProvider>
       <UserProvider>
         <NotificationProvider>
-          <LobbyProvider>
+          <AtividadeProvider>
             <BookingProvider>
               <RouterProvider router={router} />
               <Toaster position="top-right" richColors closeButton />
             </BookingProvider>
-          </LobbyProvider>
+          </AtividadeProvider>
         </NotificationProvider>
       </UserProvider>
     </ThemeProvider>

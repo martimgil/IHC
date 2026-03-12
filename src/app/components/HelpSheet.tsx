@@ -11,8 +11,8 @@ const faqs = [
         a: 'Na página inicial, toca num desporto e seleciona uma atividade disponível. Depois confirma a reserva no ecrã de detalhe e efetua o pagamento para garantir a tua vaga.',
     },
     {
-        q: 'O que é um Lobby?',
-        a: 'O Lobby de uma ativadade é um grupo informal onde qualquer pessoa pode juntar-se a uma atividade. Os organizadores criam o lobby e os outros jogadores inscrevem-se. Quando o número mínimo de jogadores é atingido, a atividade é confirmada.',
+        q: 'O que é uma Atividade?',
+        a: 'A Atividade é um grupo informal onde qualquer pessoa pode juntar-se a uma atividade. Os organizadores criam a atividade e os outros jogadores inscrevem-se. Quando o número mínimo de jogadores é atingido, a atividade é confirmada.',
     },
     {
         q: 'Como encontro atividades perto de mim?',
@@ -32,7 +32,7 @@ const faqs = [
     },
     {
         q: 'Como são formadas as equipas equilibradas?',
-        a: 'O sistema analisa o nível de experiência e a classificação de habilidade de cada jogador e organiza automaticamente equipas equilibradas. Podes ver a sugestão de equipas na página do Lobby quando o grupo está completo.',
+        a: 'O sistema analisa o nível de experiência e a classificação de habilidade de cada jogador e organiza automaticamente equipas equilibradas. Podes ver a sugestão de equipas na página da Atividade quando o grupo está completo.',
     },
     {
         q: 'E se não tiver o material necessário?',

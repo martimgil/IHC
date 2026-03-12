@@ -1,11 +1,11 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
-import { Lobby, Player } from '../types';
-import { lobbies as initialLobbies, sports, mockUsers } from '../data';
+import { Atividade, Player } from '../types';
+import { atividades as initialAtividades, sports, mockUsers } from '../data';
 import { useUser } from './UserContext';
 
-function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
-    const baseLobbies = currentLobbies.filter(l => !l.id.startsWith('auto-'));
-    const updatedLobbies = [...baseLobbies];
+function ensureAllSportsHaveAtividades(currentAtividades: Atividade[]): Atividade[] {
+    const baseAtividades = currentAtividades.filter(l => !l.id.startsWith('auto-'));
+    const updatedAtividades = [...baseAtividades];
     
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
@@ -23,9 +23,9 @@ function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
     ];
 
     for (const sport of sports) {
-        const sportLobbies = updatedLobbies.filter(l => l.sportId === sport.id);
-        const hasUrgent = sportLobbies.some(l => l.isUrgent);
-        const hasNormal = sportLobbies.some(l => !l.isUrgent);
+        const sportAtividades = updatedAtividades.filter(l => l.sportId === sport.id);
+        const hasUrgent = sportAtividades.some(l => l.isUrgent);
+        const hasNormal = sportAtividades.some(l => !l.isUrgent);
 
         const availableUsers = mockUsers.slice(1, 12);
         
@@ -51,7 +51,7 @@ function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
 
         if (!hasUrgent) {
             const missingForMin = Math.max(0, (sport.minPlayers || 2) - urgentPlayers.length);
-            updatedLobbies.push({
+            updatedAtividades.push({
                 id: `auto-urg-${sport.id}`,
                 sportId: sport.id,
                 locationName: randomLocation,
@@ -71,7 +71,7 @@ function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
         }
 
         if (!hasNormal) {
-            updatedLobbies.push({
+            updatedAtividades.push({
                 id: `auto-norm-${sport.id}`,
                 sportId: sport.id,
                 locationName: randomLocation,
@@ -91,20 +91,20 @@ function ensureAllSportsHaveLobbies(currentLobbies: Lobby[]): Lobby[] {
         }
     }
 
-    return updatedLobbies;
+    return updatedAtividades;
 }
 
-interface LobbyContextType {
-    lobbies: Lobby[];
-    addLobby: (lobby: Lobby) => void;
-    joinLobby: (lobbyId: string, player: Player) => void;
-    leaveLobby: (lobbyId: string, playerId: string) => void;
-    getLobbyById: (id: string) => Lobby | undefined;
+interface AtividadeContextType {
+    atividades: Atividade[];
+    adicionarAtividade: (atividade: Atividade) => void;
+    juntarAtividade: (atividadeId: string, player: Player) => void;
+    sairAtividade: (atividadeId: string, playerId: string) => void;
+    getAtividadeById: (id: string) => Atividade | undefined;
 }
 
-const LobbyContext = createContext<LobbyContextType | null>(null);
+const AtividadeContext = createContext<AtividadeContextType | null>(null);
 
-const STORAGE_KEY = 'matchin_lobbies';
+const STORAGE_KEY = 'matchin_atividades';
 
 function computeStatus(playersLen: number, minPlayers: number, maxPlayers: number): 'full' | 'confirmed' | 'waiting' {
     if (playersLen >= maxPlayers) return 'full';
@@ -112,73 +112,73 @@ function computeStatus(playersLen: number, minPlayers: number, maxPlayers: numbe
     return 'waiting';
 }
 
-function applyJoin(lobby: Lobby, player: Player): Lobby {
-    if (lobby.currentPlayers.some(p => p.id === player.id || p.name === player.name)) return lobby;
-    if (lobby.currentPlayers.length >= lobby.maxPlayers || lobby.status === 'full') return lobby;
-    const newPlayers = [...lobby.currentPlayers, player];
-    return { ...lobby, currentPlayers: newPlayers, status: computeStatus(newPlayers.length, lobby.minPlayers, lobby.maxPlayers) };
+function applyJoin(atividade: Atividade, player: Player): Atividade {
+    if (atividade.currentPlayers.some(p => p.id === player.id || p.name === player.name)) return atividade;
+    if (atividade.currentPlayers.length >= atividade.maxPlayers || atividade.status === 'full') return atividade;
+    const newPlayers = [...atividade.currentPlayers, player];
+    return { ...atividade, currentPlayers: newPlayers, status: computeStatus(newPlayers.length, atividade.minPlayers, atividade.maxPlayers) };
 }
 
-function applyLeave(lobby: Lobby, playerId: string): Lobby {
-    const newPlayers = lobby.currentPlayers.filter(p => p.id !== playerId && p.name !== playerId);
-    return { ...lobby, currentPlayers: newPlayers, status: computeStatus(newPlayers.length, lobby.minPlayers, lobby.maxPlayers) };
+function applyLeave(atividade: Atividade, playerId: string): Atividade {
+    const newPlayers = atividade.currentPlayers.filter(p => p.id !== playerId && p.name !== playerId);
+    return { ...atividade, currentPlayers: newPlayers, status: computeStatus(newPlayers.length, atividade.minPlayers, atividade.maxPlayers) };
 }
 
-export function LobbyProvider({ children }: { readonly children: ReactNode }) {
+export function AtividadeProvider({ children }: { readonly children: ReactNode }) {
     useUser(); // ensure inside UserProvider
 
-    const [lobbies, setLobbies] = useState<Lobby[]>(() => {
+    const [atividades, setAtividades] = useState<Atividade[]>(() => {
         try {
             const saved = localStorage.getItem(STORAGE_KEY);
-            const parsed = saved ? JSON.parse(saved) : initialLobbies;
-            return ensureAllSportsHaveLobbies(parsed);
+            const parsed = saved ? JSON.parse(saved) : initialAtividades;
+            return ensureAllSportsHaveAtividades(parsed);
         } catch {
-            return ensureAllSportsHaveLobbies(initialLobbies);
+            return ensureAllSportsHaveAtividades(initialAtividades);
         }
     });
 
-    // Save to localStorage whenever lobbies change
+    // Save to localStorage whenever atividades change
     useEffect(() => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(lobbies));
-    }, [lobbies]);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(atividades));
+    }, [atividades]);
 
-    const addLobby = useCallback((lobby: Lobby) => {
-        setLobbies(prev => [...prev, lobby]);
+    const adicionarAtividade = useCallback((atividade: Atividade) => {
+        setAtividades(prev => [...prev, atividade]);
     }, []);
 
-    const joinLobby = useCallback((lobbyId: string, player: Player) => {
-        setLobbies(prev => prev.map(lobby =>
-            lobby.id === lobbyId ? applyJoin(lobby, player) : lobby
+    const juntarAtividade = useCallback((atividadeId: string, player: Player) => {
+        setAtividades(prev => prev.map(atividade =>
+            atividade.id === atividadeId ? applyJoin(atividade, player) : atividade
         ));
     }, []);
 
-    const leaveLobby = useCallback((lobbyId: string, playerId: string) => {
-        setLobbies(prev => prev.map(lobby =>
-            lobby.id === lobbyId ? applyLeave(lobby, playerId) : lobby
+    const sairAtividade = useCallback((atividadeId: string, playerId: string) => {
+        setAtividades(prev => prev.map(atividade =>
+            atividade.id === atividadeId ? applyLeave(atividade, playerId) : atividade
         ));
     }, []);
 
-    const getLobbyById = useCallback((id: string) => {
-        return lobbies.find(l => l.id === id);
-    }, [lobbies]);
+    const getAtividadeById = useCallback((id: string) => {
+        return atividades.find(l => l.id === id);
+    }, [atividades]);
 
     const contextValue = useMemo(() => ({
-        lobbies,
-        addLobby,
-        joinLobby,
-        leaveLobby,
-        getLobbyById
-    }), [lobbies, addLobby, joinLobby, leaveLobby, getLobbyById]);
+        atividades,
+        adicionarAtividade,
+        juntarAtividade,
+        sairAtividade,
+        getAtividadeById
+    }), [atividades, adicionarAtividade, juntarAtividade, sairAtividade, getAtividadeById]);
 
     return (
-        <LobbyContext.Provider value={contextValue}>
+        <AtividadeContext.Provider value={contextValue}>
             {children}
-        </LobbyContext.Provider>
+        </AtividadeContext.Provider>
     );
 }
 
-export function useLobbies() {
-    const ctx = useContext(LobbyContext);
-    if (!ctx) throw new Error('useLobbies must be used inside LobbyProvider');
+export function useAtividades() {
+    const ctx = useContext(AtividadeContext);
+    if (!ctx) throw new Error('useAtividades must be used inside AtividadeProvider');
     return ctx;
 }

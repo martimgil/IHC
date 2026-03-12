@@ -20,7 +20,7 @@ export default function WelcomePage() {
         {
             icon: <FaHeart className="w-8 h-8 text-rose-500" aria-hidden="true" />,
             title: 'Junta-te à comunidade',
-            description: 'Encontra parceiros de jogo, junta-te a lobbies ou organiza partidas de última hora.',
+            description: 'Encontra parceiros de jogo, junta-te a atividades ou organiza partidas de última hora.',
         },
         {
             icon: <FaTrophy className="w-8 h-8 text-amber-500" aria-hidden="true" />,

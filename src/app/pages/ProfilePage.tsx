@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { currentUser, sports, getLevelLabel, lobbies, mockFollowing, mockFollowers, mockUsers } from '../data';
+import { currentUser, sports, getLevelLabel, atividades, mockFollowing, mockFollowers, mockUsers } from '../data';
 import { User } from '../types';
 import { useNavigate } from 'react-router';
 import { useUser } from '../context/UserContext';
@@ -25,7 +25,7 @@ import { toast } from 'sonner';
 // Suggested activities from user's interested sports (R17)
 function SuggestionsSection() {
   const navigate = useNavigate();
-  const suggested = lobbies
+  const suggested = atividades
     .filter(l => currentUser.interestedSports.includes(l.sportId) && l.status !== 'full')
     .slice(0, 3);
   if (suggested.length === 0) return null;
@@ -43,7 +43,7 @@ function SuggestionsSection() {
           return (
             <button
               key={l.id}
-              onClick={() => navigate(`/lobby/${l.id}`)}
+              onClick={() => navigate(`/atividade/${l.id}`)}
               className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-primary/10 transition-colors text-left"
               aria-label={`${s?.name} em ${l.locationName}`}
             >

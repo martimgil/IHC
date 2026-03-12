@@ -64,7 +64,7 @@ export default function NotificationsPage() {
         return <FaBell className="w-5 h-5 text-blue-600" aria-hidden="true" />;
       case 'urgent-match':
         return <FaClock className="w-5 h-5 text-orange-600" aria-hidden="true" />;
-      case 'lobby-full':
+      case 'atividade-full':
         return <FaCircleCheck className="w-5 h-5 text-green-600" aria-hidden="true" />;
       case 'reminder':
         return <FaCalendarDays className="w-5 h-5 text-purple-600" aria-hidden="true" />;

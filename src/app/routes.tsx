@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router";
 import HomePage from "./pages/HomePage";
 import SportSelectionPage from "./pages/SportSelectionPage";
 import BookingPage from "./pages/BookingPage";
-import LobbyPage from "./pages/LobbyPage";
+import AtividadePage from "./pages/AtividadePage";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationsPage from "./pages/NotificationsPage";
 import SearchLocationPage from "./pages/SearchLocationPage";
@@ -29,8 +29,8 @@ export const router = createBrowserRouter([
       { index: true, Component: HomePage },
       { path: "sport/:sportId", Component: SportSelectionPage },
       { path: "booking", Component: BookingPage },
-      { path: "lobby/:lobbyId", Component: LobbyPage },
-      { path: "lobby", Component: LobbyPage },
+      { path: "atividade/:atividadeId", Component: AtividadePage },
+      { path: "atividade", Component: AtividadePage },
       { path: "profile", Component: ProfilePage },
       { path: "notifications", Component: NotificationsPage },
       { path: "search-location", Component: SearchLocationPage },

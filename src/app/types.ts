@@ -35,7 +35,7 @@ export type Session = {
   tags?: string[];
 };
 
-export type Lobby = {
+export type Atividade = {
   id: string;
   sportId: string;
   locationName: string;
@@ -65,7 +65,7 @@ export type Player = {
 
 export type Notification = {
   id: string;
-  type: 'session-available' | 'lobby-full' | 'booking-failed' | 'alternative-suggestion' | 'urgent-match' | 'reminder';
+  type: 'session-available' | 'atividade-full' | 'booking-failed' | 'alternative-suggestion' | 'urgent-match' | 'reminder';
   title: string;
   message: string;
   timestamp: string;
@@ -89,7 +89,7 @@ export type Booking = {
   id: string;
   userId: string;
   sessionId?: string;
-  lobbyId?: string;
+  atividadeId?: string;
   date: string;
   status: 'pending' | 'confirmed' | 'cancelled';
   paymentStatus: 'pending' | 'paid' | 'refunded';

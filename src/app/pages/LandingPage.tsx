@@ -159,7 +159,7 @@ export default function LandingPage() {
                                     id: 'feature-1',
                                     icon: <FaHeartPulse className="w-6 h-6 text-rose-500" aria-hidden="true" />,
                                     title: "Encontra o Match Perfeito",
-                                    description: "Procuras parceiros para jogar Ténis ou Padel? O nosso lobby junta jogadores com o mesmo nível de experiência e disponibilidade."
+                                    description: "Procuras parceiros para jogar Ténis ou Padel? O nosso sistema junta jogadores com o mesmo nível de experiência e disponibilidade."
                                 },
                                 {
                                     id: 'feature-2',

@@ -40,7 +40,7 @@ export default function BookingsPage() {
                 </div>
                 <Button onClick={() => navigate('/create-urgent')} size="sm" className="gap-2">
                     <FaPlus className="w-4 h-4" />
-                    Criar Evento
+                    Criar Atividade
                 </Button>
             </div>
 
@@ -67,7 +67,7 @@ export default function BookingsPage() {
                             <div className="flex gap-2 justify-center mt-4">
                                 <Button onClick={() => navigate('/create-urgent')} className="gap-2">
                                     <FaPlus className="w-4 h-4" />
-                                    Criar Evento
+                                    Criar Atividade
                                 </Button>
                                 <Button onClick={() => navigate('/')} variant="outline">Procurar Atividades</Button>
                             </div>
@@ -84,7 +84,7 @@ export default function BookingsPage() {
                                         if (booking.id.startsWith('session-')) {
                                             navigate(`/booking?session=${booking.id}`);
                                         } else {
-                                            navigate(`/lobby/${booking.id}`);
+                                            navigate(`/atividade/${booking.id}`);
                                         }
                                     }}
                                 >

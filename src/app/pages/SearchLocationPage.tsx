@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { sports, lobbies, sessions } from '../data';
+import { sports, atividades, sessions } from '../data';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -55,8 +55,8 @@ export default function SearchLocationPage() {
 
   const getActivitiesAtLocation = (locationName: string) => {
     const locationSessions = sessions.filter(s => s.locationName === locationName);
-    const locationLobbies = lobbies.filter(l => l.locationName === locationName);
-    return { sessions: locationSessions, lobbies: locationLobbies };
+    const locationAtividades = atividades.filter(l => l.locationName === locationName);
+    return { sessions: locationSessions, atividades: locationAtividades };
   };
 
   return (
@@ -101,7 +101,7 @@ export default function SearchLocationPage() {
           <div className="space-y-3">
             {filteredLocations.map((location) => {
               const activities = getActivitiesAtLocation(location.name);
-              const totalActivities = activities.sessions.length + activities.lobbies.length;
+              const totalActivities = activities.sessions.length + activities.atividades.length;
               const isExpanded = selectedLocation === location.id;
 
               return (
@@ -201,43 +201,43 @@ export default function SearchLocationPage() {
                         </div>
                       )}
 
-                      {/* Lobbies at location */}
-                      {activities.lobbies.length > 0 && (
+                      {/* Atividades at location */}
+                      {activities.atividades.length > 0 && (
                         <div>
                           <h4 className="font-semibold mb-2">Atividades de Grupo</h4>
                           <div className="space-y-2">
-                            {activities.lobbies.map(lobby => (
+                            {activities.atividades.map(atividade => (
                               <div
-                                key={lobby.id}
+                                key={atividade.id}
                                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
-                                onClick={() => navigate(`/lobby/${lobby.id}`)}
+                                onClick={() => navigate(`/atividade/${atividade.id}`)}
                               >
                                 <div className="flex-1">
                                   <p className="font-semibold text-sm flex items-center gap-2">
-                                    <span>{sports.find(s => s.id === lobby.sportId)?.icon}</span>
-                                    <span>{sports.find(s => s.id === lobby.sportId)?.name}</span>
+                                    <span>{sports.find(s => s.id === atividade.sportId)?.icon}</span>
+                                    <span>{sports.find(s => s.id === atividade.sportId)?.name}</span>
                                   </p>
                                   <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
                                     <span className="flex items-center gap-1">
                                       <FaUsers className="w-3 h-3" />
-                                      {lobby.currentPlayers.length}/{lobby.maxPlayers}
+                                      {atividade.currentPlayers.length}/{atividade.maxPlayers}
                                     </span>
-                                    {lobby.scheduledDate && (
+                                    {atividade.scheduledDate && (
                                       <span className="flex items-center gap-1">
                                         <FaCalendarDays className="w-3 h-3" />
-                                        {new Date(lobby.scheduledDate).toLocaleDateString('pt-PT')}
+                                        {new Date(atividade.scheduledDate).toLocaleDateString('pt-PT')}
                                       </span>
                                     )}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2 ml-2">
-                                  {lobby.isUrgent && <Badge variant="destructive" className="font-bold">URGENTE</Badge>}
+                                  {atividade.isUrgent && <Badge variant="destructive" className="font-bold">URGENTE</Badge>}
                                   <Button
                                     size="sm"
                                     className="h-8"
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      navigate(`/lobby/${lobby.id}`);
+                                      navigate(`/atividade/${atividade.id}`);
                                     }}
                                   >
                                     Entrar

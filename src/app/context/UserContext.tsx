@@ -92,7 +92,7 @@ export function UserProvider({ children }: { readonly children: ReactNode }) {
                     { id: 'act-4', date: '2026-02-20T19:00:00Z', type: 'Hidroginástica', duration: 60, calories: 300, location: 'Pavilhão Rosa Mota' },
                 ],
                 unlockedAchievements: ['first-session', 'three-sports', 'early-bird'],
-                achievementProgress: { 'twenty-sessions': 4, 'five-lobbies': 2, 'all-sports': 4 }
+                achievementProgress: { 'twenty-sessions': 4, 'five-atividades': 2, 'all-sports': 4 }
             }, {
                 id: 'p4',
                 name: 'Eduardo OrangeTree',
@@ -146,7 +146,7 @@ export function UserProvider({ children }: { readonly children: ReactNode }) {
                 { id: `act-new-1`, date: new Date(Date.now() - 86400000 * 2).toISOString(), type: interestedSports[0] ? interestedSports[0].charAt(0).toUpperCase() + interestedSports[0].slice(1) : 'Atividade Inicial', duration: 60, calories: 300, location: location || 'Aveiro' },
             ],
             unlockedAchievements: ['first-session'],
-            achievementProgress: { 'twenty-sessions': 1, 'five-lobbies': 0, 'all-sports': 1 }
+            achievementProgress: { 'twenty-sessions': 1, 'five-atividades': 0, 'all-sports': 1 }
         };
 
         users.push(newUser);

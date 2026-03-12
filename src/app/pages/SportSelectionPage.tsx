@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { getSportById, getSessionsBySport, getLevelLabel } from '../data';
-import { useLobbies } from '../context/LobbyContext';
+import { useAtividades } from '../context/AtividadeContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -25,7 +25,7 @@ export default function SportSelectionPage() {
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [equipmentOpen, setEquipmentOpen] = useState(false);
 
-  const { lobbies: allLobbies } = useLobbies();
+  const { atividades: allAtividades } = useAtividades();
   const sport = getSportById(sportId || '');
 
   const mockEquipment = sport?.requiredMaterials.map((material, index) => ({
@@ -34,7 +34,7 @@ export default function SportSelectionPage() {
   })) || [];
 
   const sessions = getSessionsBySport(sportId || '');
-  const lobbies = allLobbies.filter(l => l.sportId === sportId);
+  const atividades = allAtividades.filter(l => l.sportId === sportId);
 
   if (!sport) {
     return (
@@ -51,9 +51,9 @@ export default function SportSelectionPage() {
     ? sessions
     : sessions.filter(s => s.level === selectedLevel);
 
-  const filteredLobbies = selectedLevel === 'all'
-    ? lobbies
-    : lobbies.filter(l => l.level === selectedLevel || l.level === 'qualquer');
+  const filteredAtividades = selectedLevel === 'all'
+    ? atividades
+    : atividades.filter(l => l.level === selectedLevel || l.level === 'qualquer');
 
   return (
     <main className="space-y-6" aria-label={`Página do desporto ${sport?.name}`}>
@@ -115,26 +115,26 @@ export default function SportSelectionPage() {
           </div>
         </div>
 
-        {[...filteredSessions, ...filteredLobbies].length > 0 ? (
+        {[...filteredSessions, ...filteredAtividades].length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Lobbies - Grouped first since they involve players */}
-            {filteredLobbies.map((lobby) => (
+            {/* Atividades - Grouped first since they involve players */}
+            {filteredAtividades.map((atividade) => (
               <Card
-                key={lobby.id}
+                key={atividade.id}
                 className="cursor-pointer hover:shadow-lg transition-all border-l-4 border-l-blue-500 active:scale-[0.98]"
-                onClick={() => navigate(`/lobby/${lobby.id}`)}
+                onClick={() => navigate(`/atividade/${atividade.id}`)}
               >
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <CardTitle className="text-lg">{lobby.locationName}</CardTitle>
+                      <CardTitle className="text-lg">{atividade.locationName}</CardTitle>
                       <CardDescription className="flex items-center gap-1 mt-0.5">
                         <FaLocationDot className="w-3 h-3" />
-                        {lobby.locationAddress}
+                        {atividade.locationAddress}
                       </CardDescription>
                       <Badge variant="secondary" className="mt-2 text-[10px] uppercase font-extrabold tracking-wider bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">Grupo de Jogadores</Badge>
                     </div>
-                    {lobby.isUrgent && (
+                    {atividade.isUrgent && (
                       <div className="flex flex-col items-end gap-1">
                         <Badge variant="destructive" className="animate-pulse font-bold">URGENTE</Badge>
                         <FaBolt className="text-destructive w-4 h-4" />
@@ -147,7 +147,7 @@ export default function SportSelectionPage() {
                     <div className="p-2 bg-muted rounded-lg">
                       <FaCalendarDays className="w-4 h-4 text-primary" />
                     </div>
-                    <span>{new Date(lobby.scheduledDate!).toLocaleDateString('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' })} às {lobby.scheduledTime}</span>
+                    <span>{new Date(atividade.scheduledDate!).toLocaleDateString('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' })} às {atividade.scheduledTime}</span>
                   </div>
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between text-xs font-bold text-muted-foreground uppercase tracking-tight">
@@ -155,27 +155,27 @@ export default function SportSelectionPage() {
                         <FaUsers className="w-3.5 h-3.5" />
                         <span>Inscritos</span>
                       </div>
-                      <span>{lobby.currentPlayers.length} / {lobby.maxPlayers}</span>
+                      <span>{atividade.currentPlayers.length} / {atividade.maxPlayers}</span>
                     </div>
                     <div className="h-2 bg-muted rounded-full overflow-hidden">
                       <div
                         className="h-full bg-blue-500 transition-all duration-500"
-                        style={{ width: `${(lobby.currentPlayers.length / lobby.maxPlayers) * 100}%` }}
+                        style={{ width: `${(atividade.currentPlayers.length / atividade.maxPlayers) * 100}%` }}
                       />
                     </div>
                   </div>
                   <div className="flex items-center justify-between pt-1">
                     <div className="flex flex-col">
                       <span className="text-[10px] text-muted-foreground font-bold uppercase">Preço p/ pessoa</span>
-                      <span className="font-extrabold text-lg text-primary">{lobby.pricePerPerson.toFixed(2)}€</span>
+                      <span className="font-extrabold text-lg text-primary">{atividade.pricePerPerson.toFixed(2)}€</span>
                     </div>
-                    <Badge variant="outline" className="font-bold border-primary/20">{getLevelLabel(lobby.level)}</Badge>
+                    <Badge variant="outline" className="font-bold border-primary/20">{getLevelLabel(atividade.level)}</Badge>
                   </div>
                   <Button
                     className="w-full h-10 font-bold"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/lobby/${lobby.id}`);
+                      navigate(`/atividade/${atividade.id}`);
                     }}
                   >
                     Entrar na atividade

@@ -1,4 +1,4 @@
-import { Sport, Session, Lobby, User, Notification } from './types';
+import { Sport, Session, Atividade, User, Notification } from './types';
 import { FaPersonSwimming, FaVolleyball, FaBasketball, FaTableTennisPaddleBall, FaPersonHiking, FaFutbol, FaPersonRunning, FaFootball, FaPersonBiking, FaPersonWalking } from 'react-icons/fa6';
 import { GiTennisRacket, GiRollerSkate, GiSoccerField } from 'react-icons/gi';
 import { MdSurfing, MdSportsHandball, MdSportsTennis } from 'react-icons/md';
@@ -391,10 +391,10 @@ export const sessions: Session[] = [
   },
 ];
 
-// Mock lobbies data
-export const lobbies: Lobby[] = [
+// Mock atividades data
+export const atividades: Atividade[] = [
   {
-    id: 'lobby-1',
+    id: 'atividade-1',
     sportId: 'voleibol',
     locationName: 'Pavilhão Universitário',
     locationAddress: 'Universidade de Aveiro',
@@ -413,7 +413,7 @@ export const lobbies: Lobby[] = [
     createdBy: 'p1',
   },
   {
-    id: 'lobby-2',
+    id: 'atividade-2',
     sportId: 'voleibol',
     locationName: 'Pavilhão Central',
     locationAddress: 'Rua do Pavilhão, Aveiro',
@@ -436,7 +436,7 @@ export const lobbies: Lobby[] = [
     tags: ['Urgente', 'Substituto'],
   },
   {
-    id: 'lobby-3',
+    id: 'atividade-3',
     sportId: 'voleibol',
     locationName: 'Pavilhão Rosa Mota',
     locationAddress: 'Rua Rosa Mota, Aveiro',
@@ -453,7 +453,7 @@ export const lobbies: Lobby[] = [
     createdBy: 'p9',
   },
   {
-    id: 'lobby-alice-hydro',
+    id: 'atividade-alice-hydro',
     sportId: 'hidroginastica',
     locationName: 'Pavilhão Rosa Mota',
     locationAddress: 'Rua Rosa Mota, Aveiro',
@@ -468,7 +468,7 @@ export const lobbies: Lobby[] = [
     createdBy: 'sys',
   },
   {
-    id: 'lobby-eduardo-vacation',
+    id: 'atividade-eduardo-vacation',
     sportId: 'voleibol',
     locationName: 'Pavilhão de Peniche',
     locationAddress: 'Peniche, Portugal',
@@ -524,16 +524,16 @@ export function getSessionById(id: string): Session | undefined {
   return sessions.find(s => s.id === id);
 }
 
-export function getLobbyById(id: string): Lobby | undefined {
-  return lobbies.find(l => l.id === id);
+export function getAtividadeById(id: string): Atividade | undefined {
+  return atividades.find(l => l.id === id);
 }
 
 export function getSessionsBySport(sportId: string): Session[] {
   return sessions.filter(s => s.sportId === sportId);
 }
 
-export function getLobbiesBySport(sportId: string): Lobby[] {
-  return lobbies.filter(l => l.sportId === sportId);
+export function getAtividadesBySport(sportId: string): Atividade[] {
+  return atividades.filter(l => l.sportId === sportId);
 }
 
 export function getLevelLabel(level: string): string {

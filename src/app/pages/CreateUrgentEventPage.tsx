@@ -23,16 +23,16 @@ import {
   FaCircleCheck
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
-import { useLobbies } from '../context/LobbyContext';
+import { useAtividades } from '../context/AtividadeContext';
 import { useBookings } from '../context/BookingContext';
 import { useUser } from '../context/UserContext';
-import { Lobby, Player, ExperienceLevel } from '../types';
+import { Atividade, Player, ExperienceLevel } from '../types';
 import { toast } from 'sonner';
 
 export default function CreateUrgentEventPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { addLobby } = useLobbies();
+  const { adicionarAtividade } = useAtividades();
   const { addBooking } = useBookings();
   const { sessionUser } = useUser();
   const [isCreating, setIsCreating] = useState(false);
@@ -109,8 +109,8 @@ export default function CreateUrgentEventPage() {
     setIsCreating(true);
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Create the lobby object
-    const newLobbyId = `lobby-${Date.now()}`;
+    // Create the atividade object
+    const novaAtividadeId = `atividade-${Date.now()}`;
     const me: Player = {
       id: sessionUser?.id || 'me',
       name: sessionUser?.name || 'Tu',
@@ -118,8 +118,8 @@ export default function CreateUrgentEventPage() {
       skillRating: 7
     };
 
-    const newLobby: Lobby = {
-      id: newLobbyId,
+    const novaAtividade: Atividade = {
+      id: novaAtividadeId,
       sportId: formData.sportId,
       locationName: formData.location,
       locationAddress: formData.location, // simplified
@@ -136,11 +136,11 @@ export default function CreateUrgentEventPage() {
       tags: formData.isUltimaHora ? ['Urgente', 'Prioridade alta'] : []
     };
 
-    addLobby(newLobby);
+    adicionarAtividade(novaAtividade);
 
     // Also add to bookings so it shows in "Reservas"
     addBooking({
-      id: newLobbyId,
+      id: novaAtividadeId,
       sportId: formData.sportId,
       location: formData.location,
       date: formData.date,
@@ -391,16 +391,16 @@ export default function CreateUrgentEventPage() {
             </div>
 
             {/* Última Hora Toggle */}
-            <div className="flex items-center justify-between p-4 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40 gap-4 overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 rounded-xl border-2 border-orange-200 bg-orange-50 dark:border-orange-800 dark:bg-orange-950/40 gap-4 overflow-hidden">
               <div className="flex items-center gap-3 min-w-0">
                 <FaClock className="w-5 h-5 text-orange-600 dark:text-orange-400 shrink-0" aria-hidden="true" />
                 <div className="min-w-0">
                   <p className="font-semibold text-sm text-orange-900 dark:text-orange-100 truncate sm:whitespace-normal">Marcar como atividade urgente</p>
-                  <p className="text-xs text-orange-700 dark:text-orange-300 line-clamp-2 md:line-clamp-none">Ativado: entra com prioridade alta e notifica jogadores próximos.</p>
+                  <p className="text-xs text-orange-700 dark:text-orange-300 line-clamp-2 md:line-clamp-none">Prioridade alta e notificação automática.</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
-                <span className={`text-xs font-semibold px-2 py-1 rounded-md ${formData.isUltimaHora ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-100'}`}>
+                <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${formData.isUltimaHora ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-100'}`}>
                   {formData.isUltimaHora ? 'Urgente: ON' : 'Urgente: OFF'}
                 </span>
                 <button
@@ -408,12 +408,20 @@ export default function CreateUrgentEventPage() {
                   role="switch"
                   aria-checked={formData.isUltimaHora}
                   onClick={() => setFormData(prev => ({ ...prev, isUltimaHora: !prev.isUltimaHora }))}
-                  className={`relative w-12 h-7 rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-orange-400 ${formData.isUltimaHora ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-600'
+                  className={`relative transition-colors duration-200 focus:outline-none ${formData.isUltimaHora ? 'bg-orange-500' : 'bg-gray-300 dark:bg-gray-600'
                     }`}
+                  style={{ width: '25px', height: '15px', borderRadius: '10px', minWidth: '20px', minHeight: '10px', padding: '0', border: 'none' }}
                 >
                   <span
-                    className={`absolute top-0.5 left-0.5 w-6 h-6 bg-white rounded-full shadow-md transition-transform duration-200 ${formData.isUltimaHora ? 'translate-x-5' : 'translate-x-0'
+                    className={`absolute bg-white rounded-full shadow-md transition-transform duration-200 ${formData.isUltimaHora ? '' : ''
                       }`}
+                    style={{ 
+                      width: '8px', 
+                      height: '8px', 
+                      top: '3.5px', 
+                      left: '2px',
+                      transform: formData.isUltimaHora ? 'translateX(13px)' : 'translateX(0)' 
+                    }}
                   />
                 </button>
               </div>

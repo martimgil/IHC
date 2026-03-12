@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 import { getSportById, currentUser } from '../data';
 import { useUser } from '../context/UserContext';
 import { useBookings } from '../context/BookingContext';
-import { useLobbies } from '../context/LobbyContext';
+import { useAtividades } from '../context/AtividadeContext';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -21,7 +21,7 @@ import {
 } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 import { toast } from 'sonner';
-import { Lobby, Player } from '../types';
+import { Atividade, Player } from '../types';
 
 // ── Chat ──────────────────────────────────────────────────────────────
 interface ChatMsg { readonly id: string; readonly sender: string; readonly text: string; readonly time: string; readonly isMe: boolean; }
@@ -30,7 +30,7 @@ const initialMessages: ChatMsg[] = [
   { id: '2', sender: 'Ana Oliveira', text: 'Estou a caminho, chego em 5 min!', time: '18:46', isMe: false },
 ];
 
-function LobbyChat() {
+function AtividadeChat() {
   const [msgs, setMsgs] = useState<ChatMsg[]>(initialMessages);
   const [text, setText] = useState('');
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -87,7 +87,7 @@ const RATING_CATS = [
   { key: 'skilled', label: 'Habilidoso', icon: <FaStar className="w-4 h-4" /> },
 ];
 
-function RatingSheet({ players, open, onClose }: { readonly players: Lobby['currentPlayers']; readonly open: boolean; readonly onClose: () => void }) {
+function RatingSheet({ players, open, onClose }: { readonly players: Atividade['currentPlayers']; readonly open: boolean; readonly onClose: () => void }) {
   const [ratings, setRatings] = useState<Record<string, Record<string, boolean>>>({});
   const toggle = (pid: string, cat: string) =>
     setRatings(r => ({ ...r, [pid]: { ...(r[pid] || {}), [cat]: !(r[pid]?.[cat]) } }));
@@ -149,28 +149,28 @@ function RatingSheet({ players, open, onClose }: { readonly players: Lobby['curr
 }
 
 // ── Main Page ──────────────────────────────────────────────────────────
-export default function LobbyPage() {
-  const { lobbyId } = useParams<{ lobbyId: string }>();
+export default function AtividadePage() {
+  const { atividadeId } = useParams<{ atividadeId: string }>();
   const navigate = useNavigate();
   const { sessionUser } = useUser();
   const { bookings, cancelBooking, addBooking } = useBookings();
-  const { lobbies, getLobbyById, joinLobby, leaveLobby } = useLobbies();
+  const { atividades, getAtividadeById, juntarAtividade, sairAtividade } = useAtividades();
 
-  const [hasJoined, setHasJoined] = useState(() => bookings.some(b => b.id === lobbyId));
+  const [hasJoined, setHasJoined] = useState(() => bookings.some(b => b.id === atividadeId));
   const [isProcessing, setIsProcessing] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [showRating, setShowRating] = useState(false);
   const [followed, setFollowed] = useState<Set<string>>(new Set());
 
-  // Sync state when navigating between lobbies
+  // Sync state when navigating between atividades
   useEffect(() => {
-    setHasJoined(bookings.some(b => b.id === lobbyId));
+    setHasJoined(bookings.some(b => b.id === atividadeId));
     setShowChat(false);
     setShowRating(false);
-  }, [lobbyId, bookings]);
+  }, [atividadeId, bookings]);
 
   const [pendingRequests, setPendingRequests] = useState(() =>
-    lobbyId === 'lobby-1'
+    atividadeId === 'atividade-1'
       ? [
         { id: 'req-1', name: 'Marta Rodrigues', level: 'intermedio', skillRating: 6 },
         { id: 'req-2', name: 'Tiago Ferreira', level: 'avancado', skillRating: 8 },
@@ -179,11 +179,11 @@ export default function LobbyPage() {
   );
   const [approvedIds, setApprovedIds] = useState<Set<string>>(new Set());
 
-  // If no lobbyId, show list of lobbies
-  const lobby = lobbyId ? getLobbyById(lobbyId) : null;
-  const sport = lobby ? getSportById(lobby.sportId) : null;
+  // If no atividadeId, show list of atividades
+  const atividade = atividadeId ? getAtividadeById(atividadeId) : null;
+  const sport = atividade ? getSportById(atividade.sportId) : null;
 
-  if (!lobbyId) {
+  if (!atividadeId) {
     return (
       <div className="max-w-3xl mx-auto space-y-4">
         <StickyBackButton />
@@ -191,12 +191,12 @@ export default function LobbyPage() {
           <FaUsers className="w-5 h-5 text-primary" aria-hidden="true" />Atividades de Última Hora
         </h1>
         <div className="space-y-3">
-          {lobbies.map(l => {
+          {atividades.map(l => {
             const s = getSportById(l.sportId);
             return (
               <button
                 key={l.id}
-                onClick={() => navigate(`/lobby/${l.id}`)}
+                onClick={() => navigate(`/atividade/${l.id}`)}
                 className="w-full flex items-center gap-3 p-4 bg-card border rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left focus:outline-none focus:ring-2 focus:ring-primary"
                 aria-label={`${s?.name} em ${l.locationName}, ${l.currentPlayers.length} de ${l.maxPlayers} jogadores${l.isUrgent ? ', urgente' : ''}`}
               >
@@ -218,10 +218,10 @@ export default function LobbyPage() {
     );
   }
 
-  if (!lobby || !sport) {
+  if (!atividade || !sport) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Lobby não encontrado.</p>
+        <p className="text-muted-foreground">Atividade não encontrada.</p>
         <Button onClick={() => navigate('/')} className="mt-4">Voltar ao Início</Button>
       </div>
     );
@@ -229,20 +229,20 @@ export default function LobbyPage() {
 
   const myName = sessionUser?.name || currentUser.name;
 
-  // Inject the active user if they have joined the lobby.
-  const displayPlayers = [...lobby.currentPlayers];
+  // Inject the active user if they have joined the atividade.
+  const displayPlayers = [...atividade.currentPlayers];
   if (hasJoined && !displayPlayers.some(p => p.name.includes(myName))) {
     displayPlayers.unshift({ id: 'me', name: `${myName} (Tu)`, level: 'intermedio', skillRating: 7 });
   }
 
-  const spotsLeft = Math.max(0, lobby.maxPlayers - displayPlayers.length);
-  const canJoin = lobby.status !== 'full' && lobby.currentPlayers.length < lobby.maxPlayers && !hasJoined;
+  const spotsLeft = Math.max(0, atividade.maxPlayers - displayPlayers.length);
+  const canJoin = atividade.status !== 'full' && atividade.currentPlayers.length < atividade.maxPlayers && !hasJoined;
 
-  const isCreator = !sessionUser && currentUser.id === lobby.createdBy;
+  const isCreator = !sessionUser && currentUser.id === atividade.createdBy;
 
   const handleJoin = async () => {
-    if (!lobbyId || !lobby) return;
-    if (lobby.currentPlayers.length >= lobby.maxPlayers || lobby.status === 'full') {
+    if (!atividadeId || !atividade) return;
+    if (atividade.currentPlayers.length >= atividade.maxPlayers || atividade.status === 'full') {
       toast.error('Esta atividade já está completa.');
       return;
     }
@@ -253,21 +253,21 @@ export default function LobbyPage() {
     const me: Player = {
       id: sessionUser?.id || 'me',
       name: sessionUser?.name || 'Tu',
-      level: sessionUser?.experienceLevels?.[lobby.sportId] as any || 'intermedio',
+      level: sessionUser?.experienceLevels?.[atividade.sportId] as any || 'intermedio',
       skillRating: 7
     };
 
-    joinLobby(lobbyId, me);
+    juntarAtividade(atividadeId, me);
     addBooking({
-      id: lobbyId,
-      sportId: lobby.sportId,
-      location: lobby.locationName,
-      date: lobby.scheduledDate || new Date().toISOString().split('T')[0],
-      time: lobby.scheduledTime || '00:00'
+      id: atividadeId,
+      sportId: atividade.sportId,
+      location: atividade.locationName,
+      date: atividade.scheduledDate || new Date().toISOString().split('T')[0],
+      time: atividade.scheduledTime || '00:00'
     });
 
     setHasJoined(true);
-    if (lobby.isUrgent) {
+    if (atividade.isUrgent) {
       toast.success('Entraste no jogo!', { description: 'Sendo uma atividade urgente, a entrada é imediata.' });
     } else {
       toast.success('Pedido enviado!', { description: 'O criador irá aprovar a tua entrada.' });
@@ -275,9 +275,9 @@ export default function LobbyPage() {
   };
 
   const handleLeave = () => {
-    if (lobbyId) {
-      cancelBooking(lobbyId);
-      leaveLobby(lobbyId, sessionUser?.id || 'me');
+    if (atividadeId) {
+      cancelBooking(atividadeId);
+      sairAtividade(atividadeId, sessionUser?.id || 'me');
     }
     setHasJoined(false);
     toast.info('Saíste da atividade.');
@@ -293,13 +293,13 @@ export default function LobbyPage() {
   };
 
   const generateTeams = () => {
-    if (displayPlayers.length < lobby.minPlayers) return null;
+    if (displayPlayers.length < atividade.minPlayers) return null;
     const sorted = [...displayPlayers].sort((a, b) => (b.skillRating || 0) - (a.skillRating || 0));
     const t1: typeof displayPlayers = [], t2: typeof displayPlayers = [];
     sorted.forEach((p, i) => { if (i % 2 === 0) t1.push(p); else t2.push(p); });
     return { t1, t2 };
   };
-  const teams = lobby.status === 'confirmed' || lobby.status === 'full' ? generateTeams() : null;
+  const teams = atividade.status === 'confirmed' || atividade.status === 'full' ? generateTeams() : null;
 
   return (
     <div className="max-w-3xl mx-auto space-y-4">
@@ -314,46 +314,46 @@ export default function LobbyPage() {
               <div>
                 <CardTitle className="text-xl">{sport.name}</CardTitle>
                 <CardDescription className="flex items-center gap-1 mt-0.5">
-                  <FaMapPin className="w-3 h-3" aria-hidden="true" />{lobby.locationName}
+                  <FaMapPin className="w-3 h-3" aria-hidden="true" />{atividade.locationName}
                 </CardDescription>
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              {lobby.isUrgent && <Badge variant="destructive" className="font-bold">URGENTE</Badge>}
-              {lobby.status === 'full' && <Badge variant="secondary">Completo</Badge>}
+              {atividade.isUrgent && <Badge variant="destructive" className="font-bold">URGENTE</Badge>}
+              {atividade.status === 'full' && <Badge variant="secondary">Completo</Badge>}
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {lobby.scheduledDate && (
+          {atividade.scheduledDate && (
             <div className="flex items-center gap-2 text-sm">
               <FaCalendarDay className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
-              <span>{new Date(lobby.scheduledDate).toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' })} às {lobby.scheduledTime}</span>
+              <span>{new Date(atividade.scheduledDate).toLocaleDateString('pt-PT', { weekday: 'long', day: 'numeric', month: 'long' })} às {atividade.scheduledTime}</span>
             </div>
           )}
           <div className="space-y-1">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2">
                 <FaUsers className="w-4 h-4 text-muted-foreground" aria-hidden="true" />
-                <span className="font-semibold">{lobby.currentPlayers.length}/{lobby.maxPlayers} jogadores</span>
+                <span className="font-semibold">{atividade.currentPlayers.length}/{atividade.maxPlayers} jogadores</span>
               </div>
-              <Badge variant="outline">{lobby.level}</Badge>
+              <Badge variant="outline">{atividade.level}</Badge>
             </div>
             <progress
               className="w-full h-2 rounded-full [&::-webkit-progress-bar]:rounded-full [&::-webkit-progress-bar]:bg-muted [&::-webkit-progress-value]:rounded-full [&::-webkit-progress-value]:bg-primary"
-              max={lobby.maxPlayers}
+              max={atividade.maxPlayers}
               value={displayPlayers.length}
-              aria-label={`${displayPlayers.length} de ${lobby.maxPlayers} jogadores inscritos`}
+              aria-label={`${displayPlayers.length} de ${atividade.maxPlayers} jogadores inscritos`}
             />
             <p className="text-xs text-muted-foreground">
-              {lobby.currentPlayers.length >= lobby.minPlayers
-                ? `✓ Mínimo atingido (${lobby.minPlayers})`
-                : `Faltam ${lobby.minPlayers - lobby.currentPlayers.length} para o mínimo`}
+              {atividade.currentPlayers.length >= atividade.minPlayers
+                ? `✓ Mínimo atingido (${atividade.minPlayers})`
+                : `Faltam ${atividade.minPlayers - atividade.currentPlayers.length} para o mínimo`}
             </p>
           </div>
           <div className="flex items-center gap-2 bg-green-50 dark:bg-green-950/40 border border-green-200 dark:border-green-800 rounded-lg p-2.5">
             <FaEuroSign className="w-4 h-4 text-green-600" aria-hidden="true" />
-            <p className="text-sm font-bold text-green-700 dark:text-green-300">{lobby.pricePerPerson.toFixed(2)}€ por pessoa</p>
+            <p className="text-sm font-bold text-green-700 dark:text-green-300">{atividade.pricePerPerson.toFixed(2)}€ por pessoa</p>
           </div>
         </CardContent>
       </Card>
@@ -370,12 +370,12 @@ export default function LobbyPage() {
 
         {hasJoined && (
           <>
-            {displayPlayers.length >= lobby.minPlayers && (
+            {displayPlayers.length >= atividade.minPlayers && (
               <Button className="w-full h-12 text-sm md:text-base font-semibold bg-green-600 hover:bg-green-700 text-white" onClick={() => {
                 toast.success('Pagamento confirmado!', { description: 'Vaga garantida!' });
                 navigate('/');
               }}>
-                <FaEuroSign className="w-5 h-5 mr-2" />Confirmar Pagamento ({lobby.pricePerPerson.toFixed(2)}€)
+                <FaEuroSign className="w-5 h-5 mr-2" />Confirmar Pagamento ({atividade.pricePerPerson.toFixed(2)}€)
               </Button>
             )}
             <div className="flex gap-2">
@@ -405,7 +405,7 @@ export default function LobbyPage() {
       </div>
 
       {/* Alerts */}
-      {lobby.isUrgent && (
+      {atividade.isUrgent && (
         <Alert className="border-red-300 bg-red-50 dark:bg-red-950/40 dark:border-red-800">
           <FaClock className="h-4 w-4 text-red-700" />
           <AlertTitle className="text-red-900 dark:text-red-200">URGENTE</AlertTitle>
@@ -452,7 +452,7 @@ export default function LobbyPage() {
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Jogadores na Atividade</CardTitle>
-          <CardDescription>{displayPlayers.length} de {lobby.maxPlayers} vagas</CardDescription>
+          <CardDescription>{displayPlayers.length} de {atividade.maxPlayers} vagas</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -467,12 +467,12 @@ export default function LobbyPage() {
                   <p className="font-semibold text-sm truncate">{player.name}</p>
                   <p className="text-xs text-muted-foreground flex items-center">{player.level}{player.skillRating ? <><span className="mx-1.5 text-[10px] text-muted-foreground/30">•</span><FaStar className="w-3 h-3 text-amber-500 mr-1" />{player.skillRating}/10</> : null}</p>
                 </div>
-                {player.id === lobby.createdBy && (
+                {player.id === atividade.createdBy && (
                   <Badge variant="outline" className="text-xs shrink-0 border-amber-300 text-amber-700">
                     <FaShieldHalved className="w-3 h-3 mr-1" />Criador
                   </Badge>
                 )}
-                {player.id !== lobby.createdBy && player.id !== 'me' && (
+                {player.id !== atividade.createdBy && player.id !== 'me' && (
                   <button
                     onClick={() => {
                       setFollowed(prev => {
@@ -493,7 +493,7 @@ export default function LobbyPage() {
               </div>
             ))}
             {spotsLeft > 0 && Array.from({ length: Math.min(spotsLeft, 3) }, (_, i) => (
-              <div key={`empty-slot-${lobby.id}-${i}`} className="flex items-center gap-3 py-1 opacity-40">
+              <div key={`empty-slot-${atividade.id}-${i}`} className="flex items-center gap-3 py-1 opacity-40">
                 <Avatar className="w-9 h-9"><AvatarFallback className="text-xs">?</AvatarFallback></Avatar>
                 <p className="text-sm text-muted-foreground">Vaga disponível</p>
               </div>
@@ -529,7 +529,7 @@ export default function LobbyPage() {
             className="flex items-center gap-2 w-full text-left"
             onClick={() => setShowChat(v => !v)}
             aria-expanded={showChat}
-            aria-controls="lobby-chat"
+            aria-controls="atividade-chat"
           >
             <FaMessage className="w-5 h-5 text-primary" aria-hidden="true" />
             <CardTitle className="text-base">Chat da Atividade</CardTitle>
@@ -537,8 +537,8 @@ export default function LobbyPage() {
           </button>
         </CardHeader>
         {showChat && (
-          <CardContent id="lobby-chat" className="pt-0">
-            <LobbyChat />
+          <CardContent id="atividade-chat" className="pt-0">
+            <AtividadeChat />
           </CardContent>
         )}
       </Card>

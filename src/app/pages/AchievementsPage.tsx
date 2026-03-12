@@ -1,6 +1,6 @@
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
-import { FaTrophy, FaLock, FaStar, FaFire, FaBolt, FaHeart, FaMapPin, FaUsers, FaCalendarDays } from 'react-icons/fa6';
+import { FaTrophy, FaLock, FaStar, FaFire, FaBolt, FaHeart, FaMapPin, FaUsers, FaComments } from 'react-icons/fa6';
 import StickyBackButton from '../components/StickyBackButton';
 
 interface Achievement {
@@ -29,7 +29,7 @@ const achievementsData: Omit<Achievement, 'unlocked' | 'unlockedAt' | 'progress'
     {
         id: 'five-sessions',
         title: 'Veterano',
-        description: 'Completa 5 sessões desportivas',
+        description: 'Completa 5 atividades desportivas',
         icon: <FaFire className="w-6 h-6" />,
         category: 'Atividade',
         rarity: 'comum',
@@ -38,7 +38,7 @@ const achievementsData: Omit<Achievement, 'unlocked' | 'unlockedAt' | 'progress'
     {
         id: 'ten-sessions',
         title: 'Entusiasta',
-        description: 'Completa 10 sessões desportivas',
+        description: 'Completa 10 atividades desportivas',
         icon: <FaBolt className="w-6 h-6" />,
         category: 'Atividade',
         rarity: 'raro',
@@ -47,7 +47,7 @@ const achievementsData: Omit<Achievement, 'unlocked' | 'unlockedAt' | 'progress'
     {
         id: 'twenty-sessions',
         title: 'Maratonista',
-        description: 'Completa 20 sessões desportivas',
+        description: 'Completa 20 atividades desportivas',
         icon: <FaTrophy className="w-6 h-6" />,
         category: 'Atividade',
         rarity: 'épico',
@@ -55,29 +55,29 @@ const achievementsData: Omit<Achievement, 'unlocked' | 'unlockedAt' | 'progress'
     },
     // Social
     {
-        id: 'first-lobby',
+        id: 'first-activity-join',
         title: 'Espírito de Equipa',
-        description: 'Juntaste-te ao teu primeiro lobby',
+        description: 'Juntaste-te à tua primeira atividade',
         icon: <FaUsers className="w-6 h-6" />,
         category: 'Social',
         rarity: 'comum',
     },
     {
-        id: 'five-lobbies',
-        title: 'Jogador de Equipa',
-        description: 'Participa em 5 lobbies diferentes',
-        icon: <FaUsers className="w-6 h-6" />,
+        id: 'first-chat-message',
+        title: 'Quebra-gelo',
+        description: 'Enviaste a tua primeira mensagem no chat de uma atividade',
+        icon: <FaComments className="w-6 h-6" />,
         category: 'Social',
-        rarity: 'raro',
-        progressTotal: 5,
+        rarity: 'comum',
     },
     {
-        id: 'create-lobby',
-        title: 'Organizador',
-        description: 'Cria o teu próprio lobby',
-        icon: <FaCalendarDays className="w-6 h-6" />,
+        id: 'ten-chat-messages',
+        title: 'Comunicador',
+        description: 'Envia 10 mensagens no chat de atividades',
+        icon: <FaComments className="w-6 h-6" />,
         category: 'Social',
         rarity: 'raro',
+        progressTotal: 10,
     },
     // Exploração
     {
