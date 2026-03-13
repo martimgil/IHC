@@ -19,8 +19,8 @@ const faqs = [
         a: 'Usa o botão "Procurar por Local" na página inicial ou o separador "Locais" na barra de navegação inferior. Podes também ativar a localização automática para ver os locais mais próximos de ti.',
     },
     {
-        q: 'Posso cancelar uma reserva?',
-        a: 'Sim. Vai ao teu Perfil → Próximas Reservas e carrega na reserva para ver as opções de cancelamento. Se cancelares com mais de 24h de antecedência, serás reembolsado a 100%.',
+        q: 'Posso cancelar a participação numa atividade?',
+        a: 'Sim. Vai ao teu Perfil → Próximas Atividades e carrega na atividade para ver as opções de cancelamento. Se cancelares com mais de 24h de antecedência, serás reembolsado a 100%.',
     },
     {
         q: 'O que é "Atividade de Última Hora"?',

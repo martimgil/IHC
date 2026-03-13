@@ -35,7 +35,7 @@ export default function BookingsPage() {
                     <Button variant="ghost" onClick={() => navigate(-1)} className="min-h-[44px] -ml-2 px-3">
                         <FaArrowLeft className="w-5 h-5" />
                     </Button>
-                    <h1 className="text-xl font-bold">As Minhas Reservas</h1>
+                    <h1 className="text-xl font-bold">As Minhas Atividades</h1>
                 </div>
                 <Button onClick={() => navigate('/create-urgent')} size="sm" className="gap-2">
                     <FaPlus className="w-4 h-4" />
@@ -48,7 +48,7 @@ export default function BookingsPage() {
                     <div className="flex items-center justify-between">
                         <div>
                             <CardTitle className="text-base flex items-center gap-2">
-                                <FaCalendarDays className="w-5 h-5 text-primary" />Próximas Reservas
+                                <FaCalendarDays className="w-5 h-5 text-primary" />Próximas Atividades
                             </CardTitle>
                             <CardDescription>Gerir atividades em agenda</CardDescription>
                         </div>

@@ -142,7 +142,7 @@ export default function BookingPage() {
                 className="w-full h-12"
                 onClick={() => navigate('/profile')}
               >
-                Ver as minhas reservas
+                Ver as minhas atividades
               </Button>
             </div>
           </CardContent>

@@ -144,11 +144,11 @@ export default function Root() {
             <Link
               to="/bookings"
               className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors min-h-[48px] min-w-[60px] focus:outline-none focus:ring-2 focus:ring-primary ${isActive('/bookings') ? 'text-primary bg-primary/10' : 'text-muted-foreground'}`}
-              aria-label="Minhas Reservas"
+              aria-label="Minhas Atividades"
               aria-current={isActive('/bookings') ? 'page' : undefined}
             >
               <FaCalendarDay className="w-5 h-5 mb-0.5" aria-hidden="true" />
-              <span className="text-[10px] font-medium leading-none">Reservas</span>
+              <span className="text-[10px] font-medium leading-none">Atividades</span>
             </Link>
             <Link
               to="/notifications"

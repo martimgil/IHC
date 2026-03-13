@@ -169,9 +169,10 @@ export default function SearchLocationPage() {
                           <h4 className="font-semibold mb-2">Sessões Disponíveis</h4>
                           <div className="space-y-2">
                             {activities.sessions.map(session => (
-                              <div
+                              <button
                                 key={session.id}
-                                className="flex items-center justify-between p-3 bg-muted/40 rounded-lg hover:bg-muted/60 transition-colors cursor-pointer"
+                                type="button"
+                                className="w-full flex items-center justify-between p-3 bg-muted/40 rounded-lg hover:bg-muted/60 transition-colors text-left"
                                 onClick={() => navigate(`/booking?session=${session.id}`)}
                               >
                                 <div className="flex-1">
@@ -195,7 +196,7 @@ export default function SearchLocationPage() {
                                   </div>
                                 </div>
                                 <FaChevronRight className="w-4 h-4 text-muted-foreground" />
-                              </div>
+                              </button>
                             ))}
                           </div>
                         </div>
@@ -207,9 +208,10 @@ export default function SearchLocationPage() {
                           <h4 className="font-semibold mb-2">Atividades de Grupo</h4>
                           <div className="space-y-2">
                             {activities.atividades.map(atividade => (
-                              <div
+                              <button
                                 key={atividade.id}
-                                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+                                type="button"
+                                className="w-full flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors text-left"
                                 onClick={() => navigate(`/atividade/${atividade.id}`)}
                               >
                                 <div className="flex-1">
@@ -244,7 +246,7 @@ export default function SearchLocationPage() {
                                   </Button>
                                   <FaChevronRight className="w-4 h-4 text-muted-foreground" />
                                 </div>
-                              </div>
+                              </button>
                             ))}
                           </div>
                         </div>
