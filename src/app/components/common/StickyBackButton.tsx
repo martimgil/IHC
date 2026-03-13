@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { FaArrowLeft } from 'react-icons/fa6';
 
 /**

@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { useTheme } from '../context/ThemeContext';
 import { FaHeart, FaMapLocationDot, FaTrophy, FaArrowRight, FaSun, FaMoon, FaCircleQuestion, FaArrowLeft } from 'react-icons/fa6';
 import { useState } from 'react';
-import HelpSheet from '../components/HelpSheet';
+import HelpSheet from '../components/common/HelpSheet';
 
 export default function WelcomePage() {
     const navigate = useNavigate();

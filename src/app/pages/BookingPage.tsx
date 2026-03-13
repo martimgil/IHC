@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
-import { getSessionById, getSportById, currentUser, getLevelLabel } from '../data';
+import { getSessionById, getSportById, currentUser, getLevelLabel } from '../lib/data';
 import { useUser } from '../context/UserContext';
 import { useBookings } from '../context/BookingContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
@@ -22,7 +22,7 @@ import {
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 import { toast } from 'sonner';
 
 export default function BookingPage() {

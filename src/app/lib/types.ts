@@ -1,4 +1,5 @@
 // Types for the sports booking application
+import type { ReactElement } from 'react';
 
 export type ExperienceLevel =
   | 'principiante'
@@ -10,7 +11,7 @@ export type ExperienceLevel =
 export type Sport = {
   id: string;
   name: string;
-  icon: any;
+  icon: ReactElement;
   description: string;
   requiredMaterials: string[];
   minPlayers: number;
@@ -72,7 +73,7 @@ export type Notification = {
   read: boolean;
   actionUrl?: string;
   actionLabel?: string;
-  data?: any;
+  data?: Record<string, unknown>;
 };
 
 export type User = {

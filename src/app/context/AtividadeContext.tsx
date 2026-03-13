@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useMemo, useCallback } from 'react';
-import { Atividade, Player } from '../types';
-import { atividades as initialAtividades, sports, mockUsers } from '../data';
+import { Atividade, Player, ExperienceLevel } from '../lib/types';
+import { atividades as initialAtividades, sports, mockUsers } from '../lib/data';
 import { useUser } from './UserContext';
 
 function ensureAllSportsHaveAtividades(currentAtividades: Atividade[]): Atividade[] {
@@ -36,14 +36,14 @@ function ensureAllSportsHaveAtividades(currentAtividades: Atividade[]): Atividad
         const urgentPlayers = availableUsers.slice(0, targetUrgentPlayersCount).map(u => ({
             id: u.id,
             name: u.name,
-            level: 'intermedio' as any,
+            level: 'intermedio' as ExperienceLevel,
             skillRating: 6
         }));
         
         const normalPlayers = availableUsers.slice(3, 5).map(u => ({
             id: u.id,
             name: u.name,
-            level: 'principiante' as any,
+            level: 'principiante' as ExperienceLevel,
             skillRating: 5
         }));
 

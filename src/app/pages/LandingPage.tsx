@@ -4,7 +4,7 @@ import { motion, useScroll, useTransform } from 'motion/react';
 import { useTheme } from '../context/ThemeContext';
 import { FaHeartPulse, FaPeopleGroup, FaArrowRight, FaCalendarCheck, FaChartLine, FaSun, FaMoon, FaCircleQuestion, FaBars, FaXmark } from 'react-icons/fa6';
 import { useRef, useState } from 'react';
-import HelpSheet from '../components/HelpSheet';
+import HelpSheet from '../components/common/HelpSheet';
 
 export default function LandingPage() {
     const { theme, toggleTheme } = useTheme();

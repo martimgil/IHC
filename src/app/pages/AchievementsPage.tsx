@@ -1,7 +1,7 @@
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { FaTrophy, FaLock, FaStar, FaFire, FaBolt, FaHeart, FaMapPin, FaUsers, FaComments } from 'react-icons/fa6';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 
 interface Achievement {
     id: string;

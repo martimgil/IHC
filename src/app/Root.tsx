@@ -5,9 +5,9 @@ import { Badge } from './components/ui/badge';
 import { useTheme } from './context/ThemeContext';
 import { useUser } from './context/UserContext';
 import { useNotifications } from './context/NotificationContext';
-import HelpSheet from './components/HelpSheet';
-import OnboardingTutorial from './components/OnboardingTutorial';
-import ScrollBounce from './components/ScrollBounce';
+import HelpSheet from './components/common/HelpSheet';
+import OnboardingTutorial from './components/common/OnboardingTutorial';
+import ScrollBounce from './components/common/ScrollBounce';
 
 export default function Root() {
   const location = useLocation();

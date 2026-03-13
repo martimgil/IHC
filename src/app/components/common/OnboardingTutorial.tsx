@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Dialog, DialogContent } from './ui/dialog';
-import { Button } from './ui/button';
+import { Dialog, DialogContent } from '../ui/dialog';
+import { Button } from '../ui/button';
 import { FaHouse, FaMapPin, FaUsers, FaBell, FaBolt, FaRocket } from 'react-icons/fa6';
 
 const steps = [

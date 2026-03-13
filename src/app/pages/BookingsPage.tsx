@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { FaArrowLeft, FaCalendarDays, FaCircleCheck, FaPlus } from 'react-icons/fa6';
-import { sports } from '../data';
+import { sports } from '../lib/data';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
@@ -54,7 +53,7 @@ export default function BookingsPage() {
                             <CardDescription>Gerir atividades em agenda</CardDescription>
                         </div>
                         <Badge className="bg-green-600 text-white min-h-[24px]">
-                            {bookings.length} ativa{bookings.length !== 1 ? 's' : ''}
+                            {bookings.length} ativa{bookings.length === 1 ? '' : 's'}
                         </Badge>
                     </div>
                 </CardHeader>
@@ -73,20 +72,23 @@ export default function BookingsPage() {
                             </div>
                         </div>
                     )}
-                    {bookings.map((booking, idx) => {
+                    {bookings.map((booking) => {
                         const sport = sports.find(s => s.id === booking.sportId);
                         const dateLabel = new Date(booking.date).toLocaleDateString('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' });
+                        const handleNavigate = () => {
+                            if (booking.id.startsWith('session-')) {
+                                navigate(`/booking?session=${booking.id}`);
+                            } else {
+                                navigate(`/atividade/${booking.id}`);
+                            }
+                        };
                         return (
-                            <div key={booking.id}>
-                                <div
-                                    className="flex items-center gap-3 p-3 rounded-xl hover:bg-muted/40 transition-colors bg-card border shadow-sm cursor-pointer"
-                                    onClick={() => {
-                                        if (booking.id.startsWith('session-')) {
-                                            navigate(`/booking?session=${booking.id}`);
-                                        } else {
-                                            navigate(`/atividade/${booking.id}`);
-                                        }
-                                    }}
+                            <div key={booking.id} className="flex items-center gap-3 p-3 rounded-xl bg-card border shadow-sm hover:bg-muted/40 transition-colors">
+                                <button
+                                    type="button"
+                                    className="flex items-center gap-3 flex-1 min-w-0 text-left"
+                                    onClick={handleNavigate}
+                                    aria-label={`Ver reserva de ${sport?.name} em ${booking.location}`}
                                 >
                                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl shrink-0">{sport?.icon}</div>
                                     <div className="flex-1 min-w-0 py-1">
@@ -101,35 +103,34 @@ export default function BookingsPage() {
                                             </Badge>
                                         </div>
                                     </div>
-                                    <div className="flex flex-col items-end gap-2 shrink-0">
-                                        <FaCircleCheck className="w-5 h-5 text-green-500" />
-                                        <AlertDialog>
-                                            <AlertDialogTrigger asChild>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    className="h-8 px-2 text-xs text-destructive hover:bg-destructive/10"
-                                                    onClick={(e) => e.stopPropagation()}
-                                                >
-                                                    Cancelar
-                                                </Button>
-                                            </AlertDialogTrigger>
-                                            <AlertDialogContent>
-                                                <AlertDialogHeader>
-                                                    <AlertDialogTitle>Cancelar reserva?</AlertDialogTitle>
-                                                    <AlertDialogDescription>
-                                                        Cancelas a reserva de <strong className="text-foreground">{sport?.name}</strong> em {booking.location} no dia {dateLabel}. Serás reembolsado em 100% se cancelares com 24h+ de antecedência.
-                                                    </AlertDialogDescription>
-                                                </AlertDialogHeader>
-                                                <AlertDialogFooter>
-                                                    <AlertDialogCancel>Manter Reserva</AlertDialogCancel>
-                                                    <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => cancelBooking(booking.id)}>
-                                                        Confirmar Cancelamento
-                                                    </AlertDialogAction>
-                                                </AlertDialogFooter>
-                                            </AlertDialogContent>
-                                        </AlertDialog>
-                                    </div>
+                                </button>
+                                <div className="flex flex-col items-end gap-2 shrink-0">
+                                    <FaCircleCheck className="w-5 h-5 text-green-500" />
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                className="h-8 px-2 text-xs text-destructive hover:bg-destructive/10"
+                                            >
+                                                Cancelar
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Cancelar reserva?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    Cancelas a reserva de <strong className="text-foreground">{sport?.name}</strong> em {booking.location} no dia {dateLabel}. Serás reembolsado em 100% se cancelares com 24h+ de antecedência.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Manter Reserva</AlertDialogCancel>
+                                                <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={() => cancelBooking(booking.id)}>
+                                                    Confirmar Cancelamento
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </div>
                             </div>
                         );

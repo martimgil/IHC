@@ -6,11 +6,11 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa6';
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaArrowLeft, FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
 import { toast } from 'sonner';
+import { Separator } from '../components/ui/separator';
 import { useTheme } from '../context/ThemeContext';
-import { FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
-import HelpSheet from '../components/HelpSheet';
+import HelpSheet from '../components/common/HelpSheet';
 import { motion, AnimatePresence } from 'motion/react';
 
 function ForgotPasswordSheet({ open, onClose }: { open: boolean, onClose: () => void }) {

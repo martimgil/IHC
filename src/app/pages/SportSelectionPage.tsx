@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { getSportById, getSessionsBySport, getLevelLabel } from '../data';
+import { getSportById, getSessionsBySport, getLevelLabel } from '../lib/data';
 import { useAtividades } from '../context/AtividadeContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
 import { Separator } from '../components/ui/separator';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 import {
   FaCalendarDays,
   FaLocationDot,

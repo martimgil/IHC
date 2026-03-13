@@ -4,7 +4,7 @@ import { FaPersonRunning, FaFire, FaStopwatch, FaCalendarDays, FaBolt, FaTrophy 
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 import {
     Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid
 } from 'recharts';

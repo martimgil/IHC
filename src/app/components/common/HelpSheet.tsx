@@ -1,6 +1,6 @@
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from './ui/sheet';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion';
-import { Separator } from './ui/separator';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { Separator } from '../ui/separator';
 import {
     FaHeadset, FaEnvelope, FaPhone, FaUniversalAccess
 } from 'react-icons/fa6';

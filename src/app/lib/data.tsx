@@ -4,7 +4,7 @@ import { GiTennisRacket, GiRollerSkate, GiSoccerField } from 'react-icons/gi';
 import { MdSurfing, MdSportsHandball, MdSportsTennis } from 'react-icons/md';
 import React from 'react';
 
-const createIcon = (IconComponent: any) => <IconComponent className="w-[1em] h-[1em]" />;
+const createIcon = (IconComponent: React.ComponentType<{ className?: string }>) => <IconComponent className="w-[1em] h-[1em]" />;
 
 // Mock sports data
 export const sports: Sport[] = [

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { sports, atividades, sessions } from '../data';
+import { sports, atividades, sessions } from '../lib/data';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Badge } from '../components/ui/badge';
 import { FaMapPin, FaMagnifyingGlass, FaCompass, FaCalendarDays, FaUsers, FaEuroSign, FaChevronRight } from 'react-icons/fa6';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 import { toast } from 'sonner';
 
 export default function SearchLocationPage() {

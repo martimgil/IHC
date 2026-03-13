@@ -5,11 +5,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../co
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { FaEnvelope, FaLock, FaUser, FaCircleCheck, FaMapPin, FaEye, FaEyeSlash, FaArrowLeft, FaSun, FaMoon, FaCircleQuestion } from 'react-icons/fa6';
+import { FaEnvelope, FaLock, FaUser, FaCircleCheck, FaMapPin, FaEye, FaEyeSlash, FaArrowLeft, FaSun, FaMoon, FaCircleQuestion, FaRocket } from 'react-icons/fa6';
+import { Separator } from '../components/ui/separator';
 import { toast } from 'sonner';
-import { sports } from '../data';
+import { sports } from '../lib/data';
 import { useTheme } from '../context/ThemeContext';
-import HelpSheet from '../components/HelpSheet';
+import HelpSheet from '../components/common/HelpSheet';
 
 export default function RegisterPage() {
     const navigate = useNavigate();

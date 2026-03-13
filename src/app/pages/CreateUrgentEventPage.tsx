@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
-import { sports, getLevelLabel } from '../data';
+import { sports, getLevelLabel } from '../lib/data';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -22,11 +22,11 @@ import {
   FaCircleExclamation,
   FaCircleCheck
 } from 'react-icons/fa6';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 import { useAtividades } from '../context/AtividadeContext';
 import { useBookings } from '../context/BookingContext';
 import { useUser } from '../context/UserContext';
-import { Atividade, Player, ExperienceLevel } from '../types';
+import { Atividade, Player, ExperienceLevel } from '../lib/types';
 import { toast } from 'sonner';
 
 export default function CreateUrgentEventPage() {

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { getSportById, currentUser } from '../data';
+import { getSportById, currentUser } from '../lib/data';
 import { useUser } from '../context/UserContext';
 import { useBookings } from '../context/BookingContext';
 import { useAtividades } from '../context/AtividadeContext';
@@ -19,9 +19,9 @@ import {
   FaClock, FaShieldHalved, FaCircleExclamation, FaPaperPlane, FaUserPlus,
   FaThumbsUp, FaStar, FaHeart, FaRightFromBracket, FaMessage, FaCircle
 } from 'react-icons/fa6';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 import { toast } from 'sonner';
-import { Atividade, Player } from '../types';
+import { Atividade, ExperienceLevel, Player } from '../lib/types';
 
 // ── Chat ──────────────────────────────────────────────────────────────
 interface ChatMsg { readonly id: string; readonly sender: string; readonly text: string; readonly time: string; readonly isMe: boolean; }
@@ -253,7 +253,7 @@ export default function AtividadePage() {
     const me: Player = {
       id: sessionUser?.id || 'me',
       name: sessionUser?.name || 'Tu',
-      level: sessionUser?.experienceLevels?.[atividade.sportId] as any || 'intermedio',
+      level: (sessionUser?.experienceLevels?.[atividade.sportId] ?? 'intermedio') as ExperienceLevel,
       skillRating: 7
     };
 

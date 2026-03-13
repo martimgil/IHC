@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { sports } from '../data';
+import { sports } from '../lib/data';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Badge } from '../components/ui/badge';
@@ -13,10 +13,10 @@ import {
   FaCalendarDays,
   FaTrashCan
 } from 'react-icons/fa6';
-import { Notification } from '../types';
+import { Notification } from '../lib/types';
 import { toast } from 'sonner';
 import { useNotifications } from '../context/NotificationContext';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 
 export default function NotificationsPage() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { currentUser, sports, getLevelLabel, atividades, mockFollowing, mockFollowers, mockUsers } from '../data';
-import { User } from '../types';
+import { currentUser, sports, getLevelLabel, atividades, mockFollowing, mockFollowers, mockUsers } from '../lib/data';
+import { User } from '../lib/types';
 import { useNavigate } from 'react-router';
 import { useUser } from '../context/UserContext';
 import { useBookings } from '../context/BookingContext';
@@ -19,7 +19,7 @@ import {
   FaGear, FaHeart, FaAward,
   FaChevronRight, FaPlus, FaRightFromBracket, FaStar, FaPenToSquare, FaBolt, FaMagnifyingGlass, FaTrashCan, FaUserGroup, FaUserPlus, FaPersonRunning, FaChartLine
 } from 'react-icons/fa6';
-import StickyBackButton from '../components/StickyBackButton';
+import StickyBackButton from '../components/common/StickyBackButton';
 import { toast } from 'sonner';
 
 // Suggested activities from user's interested sports (R17)
@@ -129,7 +129,7 @@ function EditSportsSheet({ open, onClose }: { open: boolean; onClose: () => void
       setInterests([...(sessionUser?.interestedSports ?? currentUser.interestedSports)]);
       setLevels({ ...currentUser.experienceLevels });
     }
-  }, [open, sessionUser?.interestedSports]);
+  }, [open, sessionUser?.interestedSports, sessionUser]);
 
   const toggleSport = (id: string) =>
     setInterests(prev => prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]);
@@ -462,7 +462,7 @@ export default function ProfilePage() {
               )}
               {communityList.map(user => {
                 const userInterestedArr = user.interestedSports || [];
-                const uSports = userInterestedArr.map(sid => sports.find(s => s.id === sid)).filter(Boolean);
+                const uSports = userInterestedArr.map(sid => sports.find(s => s.id === sid)).filter((s): s is NonNullable<typeof s> => s !== undefined);
                 const uInitials = user.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
                 const userIsFollowing = isFollowing(user.id);
                 
@@ -484,7 +484,7 @@ export default function ProfilePage() {
                       <div className="flex items-center gap-1.5 mt-1.5">
                         <div className="flex -space-x-1">
                           {uSports.slice(0, 3).map(s => (
-                            <span key={s!.id} className="text-sm p-1 bg-muted rounded-full ring-2 ring-card" title={s!.name}>{s!.icon}</span>
+                            <span key={s.id} className="text-sm p-1 bg-muted rounded-full ring-2 ring-card" title={s.name}>{s.icon}</span>
                           ))}
                         </div>
                         {userInterestedArr.length > 3 && <span className="text-[10px] text-muted-foreground">+{userInterestedArr.length - 3}</span>}

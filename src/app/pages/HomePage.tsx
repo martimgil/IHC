@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { sports, currentUser } from '../data';
+import { sports, currentUser } from '../lib/data';
 import { useUser } from '../context/UserContext';
-import { Sport } from '../types';
+import { Sport } from '../lib/types';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
