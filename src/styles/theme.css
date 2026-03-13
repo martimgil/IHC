@@ -50,19 +50,20 @@
 }
 
 .dark {
-  --background: oklch(0.20 0.015 255);
+  /* Base surfaces — spread across a wider L range for clear hierarchy */
+  --background: oklch(0.15 0.015 255);      /* Was 0.20 — darker base for more contrast */
   --foreground: oklch(0.95 0 0);
-  --card: oklch(0.23 0.015 255);
+  --card: oklch(0.22 0.015 255);            /* Was 0.23 — now clearly stands out from bg (ΔL=0.07) */
   --card-foreground: oklch(0.95 0 0);
-  --popover: oklch(0.23 0.015 255);
+  --popover: oklch(0.22 0.015 255);         /* Was 0.23 */
   --popover-foreground: oklch(0.95 0 0);
   --primary: oklch(0.72 0.14 255);
   --primary-foreground: oklch(0.18 0.015 255);
-  --secondary: oklch(0.28 0.02 255);
+  --secondary: oklch(0.30 0.02 255);        /* Was 0.28 — now distinct from muted */
   --secondary-foreground: oklch(0.95 0 0);
-  --muted: oklch(0.28 0.02 255);
+  --muted: oklch(0.26 0.015 255);           /* Was 0.28 (identical to secondary) — now separate */
   --muted-foreground: oklch(0.72 0.01 255);
-  --accent: oklch(0.30 0.02 255);
+  --accent: oklch(0.35 0.025 255);          /* Was 0.30 (identical to border) — visible hover state */
   --accent-foreground: oklch(0.95 0 0);
   --destructive: oklch(0.65 0.22 28);
   --destructive-foreground: oklch(1 0 0);
@@ -70,23 +71,23 @@
   --success-foreground: oklch(0.10 0.01 145);
   --warning: oklch(0.86 0.15 75);
   --warning-foreground: oklch(0.10 0.01 65);
-  --border: oklch(0.30 0.02 255);
-  --input: oklch(0.28 0.02 255);
-  --input-background: oklch(0.25 0.015 255);
-  --switch-background: oklch(0.35 0.02 255);
+  --border: oklch(0.40 0.02 255);           /* Was 0.30 (identical to accent) — borders now clearly visible */
+  --input: oklch(0.35 0.02 255);            /* Was 0.28 — border of input fields, more visible */
+  --input-background: oklch(0.20 0.015 255);/* Was 0.25 — distinct from card (ΔL=0.02 vs bg, 0.02 vs card) */
+  --switch-background: oklch(0.42 0.02 255);/* Was 0.35 — unchecked switch more distinguishable */
   --ring: oklch(0.72 0.14 255);
   --chart-1: oklch(0.60 0.20 265);
   --chart-2: oklch(0.65 0.18 165);
   --chart-3: oklch(0.75 0.18 75);
   --chart-4: oklch(0.65 0.22 305);
   --chart-5: oklch(0.65 0.20 15);
-  --sidebar: oklch(0.22 0.015 255);
+  --sidebar: oklch(0.18 0.015 255);         /* Was 0.22 — sidebar between bg and card */
   --sidebar-foreground: oklch(0.95 0 0);
   --sidebar-primary: oklch(0.72 0.14 255);
   --sidebar-primary-foreground: oklch(0.95 0 0);
-  --sidebar-accent: oklch(0.28 0.02 255);
+  --sidebar-accent: oklch(0.30 0.02 255);   /* Was 0.28 — consistent with secondary */
   --sidebar-accent-foreground: oklch(0.95 0 0);
-  --sidebar-border: oklch(0.30 0.02 255);
+  --sidebar-border: oklch(0.38 0.02 255);   /* Was 0.30 — visible sidebar borders */
   --sidebar-ring: oklch(0.72 0.14 255);
 }
 
